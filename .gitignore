@@ -1,0 +1,11 @@
+*.class
+.idea
+out
+docs
+*.swp
+*.iml
+/.gradle/
+build
+~*
+/epm-wl-docs/gvedit.lnk
+*.lnk
