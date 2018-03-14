@@ -6,5 +6,4 @@ docs
 *.iml
 /target
 ~*
-/epm-wl-docs/gvedit.lnk
 *.lnk
