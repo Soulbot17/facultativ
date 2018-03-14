@@ -4,8 +4,7 @@ out
 docs
 *.swp
 *.iml
-/.gradle/
-build
+/target
 ~*
 /epm-wl-docs/gvedit.lnk
 *.lnk
