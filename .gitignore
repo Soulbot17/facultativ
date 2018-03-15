@@ -7,4 +7,4 @@ docs
 /target
 ~*
 *.lnk
-/test
+/logging
