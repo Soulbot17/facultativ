@@ -14,11 +14,15 @@ create table courses(
   status varchar(45));
 
 create table student_course(
-  id int primary key auto_increment,
+  id int auto_increment,
   courseId int not null,
   studentId int not null,
   studentMark int,
-  studentFeedback varchar(255));
+  studentFeedback varchar(255),
+  PRIMARY KEY (id),
+  FOREIGN KEY (studentId) REFERENCES users(id),
+  FOREIGN KEY (courseId) REFERENCES courses(id)
+);
 
 insert into users(email, pass, name, lastName, role)
 values('s1@mail.ru','asd123','Ivan','Ivanov','student'),
