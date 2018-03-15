@@ -1,18 +1,21 @@
 create table users(
-  id int primary key AUTO_INCREMENT,
+  userId int AUTO_INCREMENT,
   email varchar(45) not null,
   pass varchar(45) not null,
   name varchar(45),
   lastName varchar(45),
-  role varchar(45) not null);
+  role varchar(45) not null,
+  PRIMARY KEY (userId)
+);
 
 create table courses(
-  id int primary key AUTO_INCREMENT,
+  courseId int AUTO_INCREMENT,
   name varchar(45) not null,
-  tutorId int,
+  tutorId int not null,
   annotation varchar(255),
   status varchar(45),
-  FOREIGN KEY (tutorId) REFERENCES users(id)
+  PRIMARY KEY (courseId),
+  FOREIGN KEY (tutorId) REFERENCES users(userId)
 );
 
 create table student_course(
@@ -22,7 +25,7 @@ create table student_course(
   studentMark int,
   studentFeedback varchar(255),
   PRIMARY KEY (id),
-  FOREIGN KEY (studentId) REFERENCES users(id),
-  FOREIGN KEY (courseId) REFERENCES courses(id)
+  FOREIGN KEY (studentId) REFERENCES users(userId),
+  FOREIGN KEY (courseId) REFERENCES courses(courseId)
 );
 
