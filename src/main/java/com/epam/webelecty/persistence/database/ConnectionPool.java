@@ -2,6 +2,7 @@ package com.epam.webelecty.persistence.database;
 
 import lombok.extern.log4j.Log4j2;
 
+import javax.annotation.PreDestroy;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,7 +14,6 @@ public class ConnectionPool {
     private static ConnectionPool instance;
 
     private BlockingQueue<Connection> connectionQueue;
-
     private String driverName;
     private String url;
     private String user;
@@ -30,10 +30,14 @@ public class ConnectionPool {
         return connection;
     }
 
-    public static void dispose() throws SQLException {
-        if (instance != null) {
-            instance.clearConnectionQueue();
-            instance = null;
+    @PreDestroy
+    public void dispose() throws SQLException {
+        Connection connection;
+        while ((connection = connectionQueue.poll()) != null) {
+            if (!connection.getAutoCommit()) {
+                connection.commit();
+            }
+            connection.close();
         }
     }
 
@@ -66,16 +70,6 @@ public class ConnectionPool {
             } catch (SQLException e) {
                 log.error(e);
             }
-        }
-    }
-
-    private void clearConnectionQueue() throws SQLException {
-        Connection connection;
-        while ((connection = connectionQueue.poll()) != null) {
-            if (!connection.getAutoCommit()) {
-                connection.commit();
-            }
-            connection.close();
         }
     }
 

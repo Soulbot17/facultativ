@@ -17,30 +17,23 @@
         <constructor-arg name="driverName">
             <value>${db.driver}</value>
         </constructor-arg>
-
+        <constructor-arg name="password">
+            <value>${db.password}</value>
+        </constructor-arg>
+        <constructor-arg name="poolSize">
+            <value>${db.poolsize}</value>
+        </constructor-arg>
         <constructor-arg name="url">
             <value>${db.url}</value>
         </constructor-arg>
-
         <constructor-arg name="user">
-            <value>${db.driver}</value>
+            <value>${db.user}</value>
         </constructor-arg>
-
-        <constructor-arg name="password">
-            <value>${db.driver}</value>
-        </constructor-arg>
-
-        <constructor-arg name="poolSize">
-            <value>${db.driver}</value>
-        </constructor-arg>
-
     </bean>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location">
             <value>classpath:db.properties</value>
         </property>
-
     </bean>
-
 </beans>
