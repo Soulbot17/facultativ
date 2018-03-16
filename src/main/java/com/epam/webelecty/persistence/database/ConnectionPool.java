@@ -10,8 +10,6 @@ import java.util.concurrent.BlockingQueue;
 
 @Log4j2
 public class ConnectionPool {
-    private static ConnectionPool instance;
-
     private BlockingQueue<Connection> connectionQueue;
     private String driverName;
     private String url;
@@ -30,7 +28,6 @@ public class ConnectionPool {
     }
 
     public void dispose() throws SQLException {
-        System.out.println("pre destroy custom method");
         Connection connection;
         while ((connection = connectionQueue.poll()) != null) {
             if (!connection.getAutoCommit()) {
