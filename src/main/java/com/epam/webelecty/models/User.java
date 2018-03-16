@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class User {
     private int userId;
