@@ -13,7 +13,9 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="connectionPool" class="com.epam.webelecty.persistence.database.ConnectionPool">
+    <bean id="connectionPool" class="com.epam.webelecty.persistence.database.ConnectionPool"
+          destroy-method="dispose">
+
         <constructor-arg name="driverName">
             <value>${db.driver}</value>
         </constructor-arg>

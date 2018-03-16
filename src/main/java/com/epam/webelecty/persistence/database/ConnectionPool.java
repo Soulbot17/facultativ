@@ -2,7 +2,6 @@ package com.epam.webelecty.persistence.database;
 
 import lombok.extern.log4j.Log4j2;
 
-import javax.annotation.PreDestroy;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -30,8 +29,8 @@ public class ConnectionPool {
         return connection;
     }
 
-    @PreDestroy
     public void dispose() throws SQLException {
+        System.out.println("pre destroy custom method");
         Connection connection;
         while ((connection = connectionQueue.poll()) != null) {
             if (!connection.getAutoCommit()) {
@@ -72,5 +71,4 @@ public class ConnectionPool {
             }
         }
     }
-
 }
