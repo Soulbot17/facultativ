@@ -1,39 +1,47 @@
 package com.epam.webelecty.persistence.database;
 
-import lombok.SneakyThrows;
+import org.junit.Assert;
 import org.junit.Test;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ConnectionPoolTest {
-
+    private static final int EXPECTED_POOL_SIZE = 5;
 
     @Test
-    @SneakyThrows
+    public void testConnectionPoolGetInstance() throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
 
-    public void getConnection1() {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11226348",
-                "sql11226348", "N7XThNApKx");
-        ResultSet resultSet = connection.prepareStatement("select * from users").executeQuery();
-        while (resultSet.next()) {
-            System.out.println(resultSet.getString("name"));
-            System.out.println(resultSet.getString("lastName"));
-        }
+        Assert.assertEquals(EXPECTED_POOL_SIZE, pool.connectionQueue.size());
+
     }
-    @Test
-    @SneakyThrows
 
-    public void getConnection2() {
+    @Test
+    public void testGetConnectionFromPool() throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
-        ResultSet resultSet = connection.prepareStatement("select * from users").executeQuery();
-        while (resultSet.next()) {
-            System.out.println(resultSet.getString("name"));
-            System.out.println(resultSet.getString("lastName"));
-        }
-        pool.releaseConnection(connection);
+
+        Assert.assertTrue("connection wasn`t opened", !connection.isClosed());
+        Assert.assertEquals(EXPECTED_POOL_SIZE - 1, pool.connectionQueue.size());
+
+        safeCloseConnection(connection);
     }
 
+    @Test
+    public void testReleaseConnectionToPool() throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        pool.releaseConnection(connection);
+
+        Assert.assertEquals(EXPECTED_POOL_SIZE, pool.connectionQueue.size());
+
+        safeCloseConnection(connection);
+    }
+
+    private static void safeCloseConnection(Connection connection) throws SQLException {
+        if (!connection.getAutoCommit()) {
+            connection.commit();
+        }
+        connection.close();
+    }
 }
