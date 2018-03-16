@@ -1,21 +1,23 @@
 package com.epam.webelecty.models;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @NoArgsConstructor
-@AllArgsConstructor
-@Accessors(chain = true)
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Course {
-    int courseId;
-    String courseName;
-    int tutorId;
-    String annotation;
-    CourseStatus status;
+    private int courseId;
+    private String courseName;
+    private int tutorId;
+    private String annotation;
+    private CourseStatus status;
+
+    public Course(String courseName, int tutorId, String annotation, CourseStatus status) {
+        this.courseName = courseName;
+        this.tutorId = tutorId;
+        this.annotation = annotation;
+        this.status = status;
+    }
 }
