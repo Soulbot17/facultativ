@@ -12,4 +12,35 @@
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+    <bean id="connectionPool" class="com.epam.webelecty.persistence.database.ConnectionPool">
+        <constructor-arg name="driverName">
+            <value>${db.driver}</value>
+        </constructor-arg>
+
+        <constructor-arg name="url">
+            <value>${db.url}</value>
+        </constructor-arg>
+
+        <constructor-arg name="user">
+            <value>${db.driver}</value>
+        </constructor-arg>
+
+        <constructor-arg name="password">
+            <value>${db.driver}</value>
+        </constructor-arg>
+
+        <constructor-arg name="poolSize">
+            <value>${db.driver}</value>
+        </constructor-arg>
+
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:db.properties</value>
+        </property>
+
+    </bean>
+
 </beans>
