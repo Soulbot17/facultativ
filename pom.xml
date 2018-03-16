@@ -87,7 +87,7 @@
           <version>2.2</version>
           <configuration>
             <server>tomcat-development-server</server>
-            <port>8080</port>
+            <port>8082</port>
             <path>/</path>
           </configuration>
         </plugin>

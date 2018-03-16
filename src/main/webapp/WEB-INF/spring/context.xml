@@ -13,9 +13,11 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="connectionPool" class="com.epam.webelecty.persistence.database.ConnectionPool"
-          destroy-method="dispose">
+    <bean id="testController" class="com.epam.webelecty.controllers.TestController">
+        <property name="connectionPool" ref="connectionPool"/>
+    </bean>
 
+    <bean id="connectionPool" class="com.epam.webelecty.persistence.database.ConnectionPool">
         <constructor-arg name="driverName">
             <value>${db.driver}</value>
         </constructor-arg>
