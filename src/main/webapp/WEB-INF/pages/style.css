@@ -1,0 +1,50 @@
+h1{
+    font-family: sans-serif;
+    font-weight: 900;
+    color: #fff;
+}
+body{
+    margin: 0;
+    background-color: dodgerblue;
+}
+.left_main_area{
+    float: left;
+    width: 700px;
+    height: 400px;
+}
+.right_main_area{
+    float: left;
+    width: 324px;
+    height: 400px;
+}
+.center_main_area{
+    width: 1024px;
+    margin: auto;
+}
+.signin_area{
+    margin-top: 200px;
+    height: 200px;
+}
+p{
+    color: #fff;
+    font-family: sans-serif;
+    font-weight: 600;
+}
+.login_fields{
+    display: block;
+    width: 200px;
+    margin-bottom: 10px;
+    height: 20px;
+}
+.login_buttons{
+    width: 100px;
+    background-color: #fff;
+    border: 0;
+    height: 25px;
+}
+.login_buttons:hover{
+    cursor: pointer;
+}
+.logo{
+    margin-top: 250px;
+}
