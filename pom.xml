@@ -76,7 +76,15 @@
       <artifactId>log4j-slf4j-impl</artifactId>
       <version>2.1</version>
     </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>6.0.6</version>
+    </dependency>
+
   </dependencies>
+
 
   <build>
     <finalName>facultativ</finalName>
@@ -87,7 +95,7 @@
           <version>2.2</version>
           <configuration>
             <server>tomcat-development-server</server>
-            <port>8080</port>
+            <port>8082</port>
             <path>/</path>
           </configuration>
         </plugin>

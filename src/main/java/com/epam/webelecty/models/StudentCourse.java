@@ -1,13 +1,15 @@
 package com.epam.webelecty.models;
 
-import lombok.*;
-import lombok.experimental.Accessors;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class StudentCourse {
     private int id;
     private int courseId;
