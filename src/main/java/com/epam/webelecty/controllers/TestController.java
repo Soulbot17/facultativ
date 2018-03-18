@@ -17,10 +17,4 @@ public class TestController {
     public ModelAndView getUserPage(){
         return new ModelAndView("user");
     }
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView getLoginPage(){
-        return new ModelAndView("login1");
-    }
-
 }

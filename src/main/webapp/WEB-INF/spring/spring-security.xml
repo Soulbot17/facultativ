@@ -8,8 +8,7 @@
 		http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true">
-        <!--<csrf disabled="true"/>-->
-        <intercept-url pattern="/" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
+        <intercept-url pattern="/user" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
 
         <form-login
                 login-page="/index"
@@ -18,6 +17,7 @@
                 username-parameter="username"
                 password-parameter="password" />
         <logout logout-success-url="/index?logout"  />
+
         <!-- enable csrf protection -->
         <csrf/>
     </http>
