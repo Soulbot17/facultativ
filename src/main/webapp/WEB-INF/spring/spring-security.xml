@@ -14,7 +14,7 @@
                 login-page="/index"
                 default-target-url="/user"
                 authentication-failure-url="/index?error"
-                username-parameter="username"
+                username-parameter="email"
                 password-parameter="password" />
         <logout logout-success-url="/index?logout"  />
 
@@ -23,11 +23,11 @@
     </http>
 
     <authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="user" password="user" authorities="ROLE_USER"/>
-                <user name="admin" password="admin" authorities="ROLE_ADMIN"/>
-            </user-service>
-        </authentication-provider>
+        <authentication-provider user-service-ref="userDetailServiceImplementation"/>
     </authentication-manager>
+
+    <beans:bean id="userDetailServiceImplementation" class="com.epam.webelecty.services.UserDetailServiceImplementation">
+        <beans:property name="userDao" ref="userDao"/>
+    </beans:bean>
+
 </beans:beans>

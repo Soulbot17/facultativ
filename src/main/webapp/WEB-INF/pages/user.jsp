@@ -11,6 +11,7 @@
     <title>UserPage</title>
 </head>
 <body>
-    <h1>Users info</h1>
+    <h1>User info</h1>
+    <h4 class="text-center"><a href="${contextPath}/index?logout">Log out</a></h4>
 </body>
 </html>

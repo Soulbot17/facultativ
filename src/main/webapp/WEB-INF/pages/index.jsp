@@ -23,11 +23,11 @@
                   action="<c:url value='${contextPath}/login' />" method='POST'>
 
                 <div class="form-group">
-                    <input name="username" type="text" class="form-control" placeholder="Username"/>
+                    <input name="email" type="text" class="form-control" placeholder="Username"/>
                     <input name="password" type="password" class="form-control" placeholder="Password"/>
                     <button class="btn " type="submit">Sign in</button>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <h4 class="text-center"><a href="${contextPath}/registration">Sign up</a></h4>
+                    <%--<h4 class="text-center"><a href="${contextPath}/registration">Sign up</a></h4>--%>
                 </div>
 
             </form>

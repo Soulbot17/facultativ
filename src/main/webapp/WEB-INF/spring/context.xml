@@ -12,4 +12,6 @@
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+    <bean id="userDao" class="com.epam.webelecty.persistence.database.dao.UserDao"/>
 </beans>
