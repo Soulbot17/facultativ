@@ -13,5 +13,34 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="userDao" class="com.epam.webelecty.persistence.database.dao.UserDao"/>
+    <bean id="testController" class="com.epam.webelecty.controllers.TestController">
+    </bean>
+
+    <bean id="connectionPool" class="com.epam.webelecty.persistence.database.ConnectionPool">
+        <constructor-arg name="driverName">
+            <value>${db.driver}</value>
+        </constructor-arg>
+        <constructor-arg name="password">
+            <value>${db.password}</value>
+        </constructor-arg>
+        <constructor-arg name="poolSize">
+            <value>${db.poolsize}</value>
+        </constructor-arg>
+        <constructor-arg name="url">
+            <value>${db.url}</value>
+        </constructor-arg>
+        <constructor-arg name="user">
+            <value>${db.user}</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="userDao" class="com.epam.webelecty.persistence.dao.UserDAOImpl">
+        <constructor-arg name="connectionPool" ref="connectionPool"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:db.properties</value>
+        </property>
+    </bean>
 </beans>
