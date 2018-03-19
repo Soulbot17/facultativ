@@ -12,6 +12,9 @@
 </head>
 <body>
     <h1>User info</h1>
-    <h4 class="text-center"><a href="${contextPath}/index?logout">Log out</a></h4>
+    <form id="logoutForm" method="POST" action="${contextPath}/logout">
+        <button class="btn " type="submit">Logout</button>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
 </body>
 </html>
