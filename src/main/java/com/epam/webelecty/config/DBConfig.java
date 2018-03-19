@@ -23,10 +23,9 @@ public class DBConfig {
 
     @Bean
     public ConnectionPool connectionPool() {
-
         return new ConnectionPool(
                 driverName, url, user, password, poolSize);
     }
-    
-    
+
+
 }
