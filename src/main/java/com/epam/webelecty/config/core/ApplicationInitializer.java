@@ -18,22 +18,16 @@ public class ApplicationInitializer implements WebApplicationInitializer {
 
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 
-        // Registers annotated configurations class
         ctx.register(AppConfig.class);
 
-        // Sets ContextLoaderListener to servletContext
         servletContext.addListener(new ContextLoaderListener(ctx));
 
-        // Passes servlet context to context instance
         ctx.setServletContext(servletContext);
 
-        //Registers dispatch servlet and passes context instance
         ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
 
-        //Maps URL pattern
         servlet.addMapping("/");
 
-        //Sets creation priority
         servlet.setLoadOnStartup(1);
 
     }
