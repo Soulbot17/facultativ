@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j2;
 
 import javax.annotation.PreDestroy;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;

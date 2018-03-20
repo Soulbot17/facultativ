@@ -4,6 +4,8 @@ import com.epam.webelecty.models.User;
 import com.epam.webelecty.models.UserRole;
 import com.epam.webelecty.persistence.database.ConnectionPool;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
+@Component
 public class UserDAOImpl implements UserDAO {
-
+    @Autowired
     private ConnectionPool connectionPool;
 
     public UserDAOImpl(ConnectionPool connectionPool) {

@@ -1,15 +1,10 @@
 package com.epam.webelecty.config;
 
-import com.epam.webelecty.persistence.dao.UserDAO;
-import com.epam.webelecty.persistence.dao.UserDAOImpl;
-import com.epam.webelecty.persistence.database.ConnectionPool;
-import com.epam.webelecty.services.UserDetailServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,13 +12,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import javax.annotation.Resource;
+
 @Configuration
 @EnableWebSecurity
 @Import({DBConfig.class})
+@ComponentScan(basePackages = {"com.epam.webelecty.services"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    ConnectionPool connectionPool;
+
+    @Resource(name = "userDetailServiceImplementation")
+    UserDetailsService userDetailService;
 
 
 
@@ -43,13 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf();
     }
 
-    @Bean
-    public UserDetailServiceImplementation userDetailServiceImplementation(){
-        UserDetailServiceImplementation userDetailServiceImplementation = new UserDetailServiceImplementation();
-        userDetailServiceImplementation.setUserDao(userDAO());
-        return userDetailServiceImplementation;
-    }
-
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
@@ -59,14 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider
                 = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailServiceImplementation());
+        authProvider.setUserDetailsService(userDetailService);
         return authProvider;
     }
-
-    @Bean
-    public UserDAO userDAO(){
-        return new UserDAOImpl(connectionPool);
-    }
-
-
 }
