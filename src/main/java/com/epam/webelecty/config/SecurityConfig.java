@@ -1,5 +1,8 @@
 package com.epam.webelecty.config;
 
+import com.epam.webelecty.persistence.dao.UserDAO;
+import com.epam.webelecty.persistence.dao.UserDAOImpl;
+import com.epam.webelecty.persistence.database.ConnectionPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,14 +20,12 @@ import javax.annotation.Resource;
 @Configuration
 @EnableWebSecurity
 @Import({DBConfig.class})
-@ComponentScan(basePackages = {"com.epam.webelecty.services"})
+@ComponentScan(basePackages = {"com.epam.webelecty"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Resource(name = "userDetailServiceImplementation")
-    UserDetailsService userDetailService;
-
-
+    private UserDetailsService userDetailService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -54,4 +55,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setUserDetailsService(userDetailService);
         return authProvider;
     }
+
 }

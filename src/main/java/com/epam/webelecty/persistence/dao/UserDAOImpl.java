@@ -27,7 +27,7 @@ public class UserDAOImpl implements UserDAO {
 
     public List<User> getAllUsers() {
         Connection connection = connectionPool.getConnection();
-        String sql = "SELECT * FROM sql11226348.users";
+        String sql = "SELECT * FROM sql11227746.users";
         List<User> users = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -46,7 +46,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserByEmail(String email) {
         Connection connection = connectionPool.getConnection();
-        String sql = "SELECT * FROM sql11226348.users WHERE email=(?)";
+        String sql = "SELECT * FROM sql11227746.users WHERE email=(?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, email);
@@ -62,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void updateUserInfo(int id, User user) {
         Connection connection = connectionPool.getConnection();
-        String sql = "UPDATE sql11226348.users SET email=(?), pass=(?), name=(?), lastName=(?), role=(?) WHERE userId=(?)";
+        String sql = "UPDATE sql11227746.users SET email=(?), pass=(?), name=(?), lastName=(?), role=(?) WHERE userId=(?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, user.getEmail());
@@ -81,7 +81,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void removeUserById(int id) {
         Connection connection = connectionPool.getConnection();
-        String sql = "DELETE FROM sql11226348.users WHERE userId=(?)";
+        String sql = "DELETE FROM sql11227746.users WHERE userId=(?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
@@ -95,7 +95,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void insert(User user) {
         Connection connection = connectionPool.getConnection();
-        String sql = "INSERT INTO sql11226348.users(email, pass, role) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO sql11227746.users(email, pass, role) VALUES(?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, user.getEmail());
@@ -112,7 +112,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserById(int id) {
         Connection connection = connectionPool.getConnection();
-        String sql = "SELECT * FROM sql11226348.users WHERE userId=(?)";
+        String sql = "SELECT * FROM sql11227746.users WHERE userId=(?)";
         User user = null;
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
