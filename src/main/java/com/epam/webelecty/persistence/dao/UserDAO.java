@@ -12,14 +12,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Log4j2
 @Component
 public class UserDAO implements DAO<User> {
 
-    @Value("${db.table}")
+    @Value("${db.name}")
     private String databaseName;
 
     private ConnectionPool connectionPool;
@@ -30,35 +30,33 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public List<User> getAllEntries() {
+    public Set<User> getAllEntries() {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("SELECT userId, email, pass, name, lastName, role FROM %s.users", databaseName);
-        List<User> users = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+        Set<User> userSet = new HashSet<>();
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()){
             while (rs.next()) {
                 User user = parseUser(rs);
-                if (user != null) users.add(user);
+                if (user != null) userSet.add(user);
             }
         } catch (SQLException e) {
             log.error(e);
+            throw new RuntimeException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
-        return users;
+        return userSet;
     }
 
     public User getUserByEmail(String email) {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("SELECT userId, email, pass, name, lastName, role FROM %s.users WHERE email='%s'",
                 databaseName, email);
-        try {
-            ResultSet rs = connection.prepareStatement(sql).executeQuery();
-            User user = parseUser(rs);
-            if (user != null) return user;
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()){
+            if (rs.next()) return parseUser(rs);
         } catch (SQLException e) {
             log.error(e);
+            throw new RuntimeException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -66,45 +64,30 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public void updateById(int id, User entry) {
+    public User updateEntry(User entry) {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("UPDATE %s.users SET email='%s', pass='%s', name='%s', lastName='%s', role='%s' WHERE userId=%d",
-                databaseName, entry.getEmail(), entry.getPassword(), entry.getName(), entry.getLastName(), entry.getRole().name(), id);
-        try {
-            connection.prepareStatement(sql).execute();
-        } catch (SQLException e) {
-            log.error(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
+                databaseName, entry.getEmail(), entry.getPassword(), entry.getName(),
+                entry.getLastName(), entry.getRole().name(), entry.getUserId());
+        executeSqlStatement(connection, sql);
+        return entry;
     }
 
     @Override
     public void removeById(int id) {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("DELETE FROM %s.users WHERE userId=%d", databaseName, id);
-        try {
-            connection.prepareStatement(sql).execute();
-        } catch (SQLException e) {
-            log.error(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
+        executeSqlStatement(connection, sql);
     }
 
     @Override
-    public void insert(User user) {
+    public User insert(User user) {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("INSERT INTO %s.users(email, pass, role, name, lastName) VALUES('%s', '%s', '%s', '%s', '%s')",
                 databaseName, user.getEmail(), user.getPassword(), user.getRole().name()
-                ,user.getName() == null ? "Empty" : user.getName(), user.getLastName() == null ? "Empty" : user.getLastName());
-        try {
-            connection.prepareStatement(sql).executeUpdate();
-        } catch (SQLException e) {
-            log.error(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
+                , user.getName() == null ? "Empty" : user.getName(), user.getLastName() == null ? "Empty" : user.getLastName());
+        executeSqlStatement(connection, sql);
+        return user;
     }
 
     @Override
@@ -113,11 +96,11 @@ public class UserDAO implements DAO<User> {
         String sql = String.format("SELECT userId, email, pass, name, lastName, role FROM %s.users WHERE userId=%d",
                 databaseName, id);
         User user = null;
-        try {
-            ResultSet rs = connection.prepareStatement(sql).executeQuery();
-            user = parseUser(rs);
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()){
+            if (rs.next()) user = parseUser(rs);
         } catch (SQLException e) {
             log.error(e);
+            throw new RuntimeException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -125,28 +108,38 @@ public class UserDAO implements DAO<User> {
     }
 
     public static User parseUser(ResultSet rs) {
-        User user = null;
+        User user;
         try {
-            if (rs.next()) {
-                int id = rs.getInt("userId");
-                String email = rs.getString("email");
-                String pass = rs.getString("pass");
-                String name = rs.getString("name");
-                String lastName = rs.getString("lastName");
-                UserRole role = rs.getString("role").toLowerCase().equals("tutor") ?
-                        UserRole.TUTOR : UserRole.STUDENT;
-                user = User.builder()
-                        .userId(id)
-                        .email(email)
-                        .password(pass)
-                        .name(name)
-                        .lastName(lastName)
-                        .role(role)
-                        .build();
-            }
+            int id = rs.getInt("userId");
+            String email = rs.getString("email");
+            String pass = rs.getString("pass");
+            String name = rs.getString("name");
+            String lastName = rs.getString("lastName");
+            UserRole role = "tutor".equalsIgnoreCase(rs.getString("role")) ?
+                    UserRole.TUTOR : UserRole.STUDENT;
+            user = User.builder()
+                    .userId(id)
+                    .email(email)
+                    .password(pass)
+                    .name(name)
+                    .lastName(lastName)
+                    .role(role)
+                    .build();
         } catch (SQLException e) {
             log.error(e);
+            throw new RuntimeException(e);
         }
         return user;
+    }
+
+    private void executeSqlStatement(Connection connection, String sql) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            log.error(e);
+            throw new RuntimeException(e);
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
     }
 }

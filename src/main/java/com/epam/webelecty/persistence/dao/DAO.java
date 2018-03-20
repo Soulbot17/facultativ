@@ -1,11 +1,11 @@
 package com.epam.webelecty.persistence.dao;
 
-import java.util.List;
+import java.util.Set;
 
 public interface DAO<P> {
-    List<P> getAllEntries();
-    void updateById(int id, P entry);
+    Set<P> getAllEntries();
+    P updateEntry(P entry);
     void removeById(int id);
-    void insert(P entry);
+    P insert(P entry);
     P getById(int id);
 }
