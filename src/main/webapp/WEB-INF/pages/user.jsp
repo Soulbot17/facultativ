@@ -11,6 +11,7 @@
     <title>UserPage</title>
 </head>
 <body>
+    ${UserName}
     <h1>User info</h1>
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
         <button class="btn " type="submit">Logout</button>
