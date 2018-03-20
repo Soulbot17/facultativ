@@ -1,13 +1,10 @@
 package com.epam.webelecty.config;
 
-import com.epam.webelecty.persistence.dao.UserDAO;
-import com.epam.webelecty.persistence.dao.UserDAOImpl;
-import com.epam.webelecty.persistence.database.ConnectionPool;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,8 +16,8 @@ import javax.annotation.Resource;
 
 @Configuration
 @EnableWebSecurity
-@Import({DBConfig.class})
 @ComponentScan(basePackages = {"com.epam.webelecty"})
+@Log4j2
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
@@ -44,8 +41,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
+    public void configure(AuthenticationManagerBuilder auth) {
+        try {
+            auth.authenticationProvider(authenticationProvider());
+        }catch (Exception e){
+            log.error(e);
+        }
     }
 
     @Bean

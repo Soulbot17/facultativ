@@ -17,9 +17,10 @@ import java.util.List;
 @Log4j2
 @Component
 public class UserDAOImpl implements UserDAO {
-    @Autowired
+
     private ConnectionPool connectionPool;
 
+    @Autowired
     public UserDAOImpl(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }

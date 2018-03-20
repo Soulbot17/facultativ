@@ -16,8 +16,13 @@ import java.util.Set;
 @Setter
 @Service
 public class UserDetailServiceImplementation implements UserDetailsService {
-    @Autowired
+
     private UserDAO userDao;
+
+    @Autowired
+    public UserDetailServiceImplementation(UserDAO userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
