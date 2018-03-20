@@ -1,4 +1,4 @@
-package com.epam.webelecty.config.core;
+package com.epam.webelecty.core;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 public class SpringSecurityInitializer extends AbstractSecurityWebApplicationInitializer {
