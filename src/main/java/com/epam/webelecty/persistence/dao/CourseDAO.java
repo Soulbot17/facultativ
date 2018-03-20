@@ -50,26 +50,23 @@ public class CourseDAO implements DAO<Course> {
 
     @Override
     public Course updateEntry(Course entry) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("UPDATE %s.courses SET name='%s', tutorId='%d', annotation='%s', status='%s' WHERE courseId=%d",
                 databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name(), entry.getCourseId());
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
         return entry;
     }
 
     @Override
     public void removeById(int id) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("DELETE FROM %s.courses WHERE courseId=%d", databaseName, id);
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
     }
 
     @Override
     public Course insert(Course entry) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("INSERT INTO %s.courses(name, tutorId, annotation, status) VALUES('%s', %d, '%s', '%s')",
                 databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name());
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
         return entry;
     }
 
@@ -87,17 +84,6 @@ public class CourseDAO implements DAO<Course> {
             connectionPool.releaseConnection(connection);
         }
         return course;
-    }
-
-    private void executeSqlStatement(Connection connection, String sql) {
-        try (PreparedStatement ps = connection.prepareStatement(sql)){
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            log.error(e);
-            throw new RuntimeException(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
     }
 
     public static Course parseCourse(ResultSet rs) {

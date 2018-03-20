@@ -65,28 +65,25 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public User updateEntry(User entry) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("UPDATE %s.users SET email='%s', pass='%s', name='%s', lastName='%s', role='%s' WHERE userId=%d",
                 databaseName, entry.getEmail(), entry.getPassword(), entry.getName(),
                 entry.getLastName(), entry.getRole().name(), entry.getUserId());
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
         return entry;
     }
 
     @Override
     public void removeById(int id) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("DELETE FROM %s.users WHERE userId=%d", databaseName, id);
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
     }
 
     @Override
     public User insert(User user) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("INSERT INTO %s.users(email, pass, role, name, lastName) VALUES('%s', '%s', '%s', '%s', '%s')",
                 databaseName, user.getEmail(), user.getPassword(), user.getRole().name()
                 , user.getName() == null ? "Empty" : user.getName(), user.getLastName() == null ? "Empty" : user.getLastName());
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
         return user;
     }
 
@@ -130,16 +127,5 @@ public class UserDAO implements DAO<User> {
             throw new RuntimeException(e);
         }
         return user;
-    }
-
-    private void executeSqlStatement(Connection connection, String sql) {
-        try (PreparedStatement ps = connection.prepareStatement(sql)){
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            log.error(e);
-            throw new RuntimeException(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
     }
 }

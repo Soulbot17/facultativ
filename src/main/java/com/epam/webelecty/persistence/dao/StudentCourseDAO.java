@@ -92,35 +92,31 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
 
     @Override
     public StudentCourse updateEntry(StudentCourse entry) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("UPDATE %s.student_course SET courseId=%d, studentId=%d, studentMark=%d, studentFeedback='%s' WHERE id=%d",
                 databaseName, entry.getCourseId(), entry.getStudentId(), entry.getStudentMark(),
                 entry.getStudentFeedback(), entry.getId());
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
         return entry;
     }
 
     @Override
     public void removeById(int id) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("DELETE FROM %s.student_course WHERE id=%d", databaseName, id);
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
     }
 
     @Override
     public StudentCourse insert(StudentCourse entry) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("INSERT INTO %s.student_course(courseId, studentId, studentMark, studentFeedback) VALUES(%d, %d, %d, '%s')",
                 databaseName, entry.getCourseId(), entry.getStudentId(), entry.getStudentMark(), entry.getStudentFeedback() != null ? entry.getStudentFeedback() : "No feedback yet.");
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
         return entry;
     }
 
     public void insert(User student, Course course) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("INSERT INTO %s.student_course(courseId, studentId) VALUES(%d, %d)",
                 databaseName, course.getCourseId(), student.getUserId());
-        executeSqlStatement(connection, sql);
+        executeSqlStatement(connectionPool, sql);
     }
 
     @Override
@@ -182,17 +178,6 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
                     courseSet.add(CourseDAO.parseCourse(rs));
                 }
             }
-        } catch (SQLException e) {
-            log.error(e);
-            throw new RuntimeException(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-    }
-
-    private void executeSqlStatement(Connection connection, String sql) {
-        try (PreparedStatement ps = connection.prepareStatement(sql)){
-            ps.executeUpdate();
         } catch (SQLException e) {
             log.error(e);
             throw new RuntimeException(e);
