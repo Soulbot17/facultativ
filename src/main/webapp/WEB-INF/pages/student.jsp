@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!doctype html>
 <head>
     <title>Страница студента</title>
@@ -12,7 +13,7 @@
             background-color: dodgerblue;
             color: #fff;
             font-family: sans-serif;
-            font-weight: 300px;
+            font-weight: 300;
         }
 
         .center_field{
@@ -125,7 +126,15 @@
                 <th>Info</th>
                 <th>Tutor review</th>
             </tr>
-            <tr>
+            <c:forEach items="${courses}" var="course">
+                <tr>
+                    <td>${course.getName()}</td>
+                    <td>${course.getDate()}</td>
+                    <td>${course.getInfo()}</td>
+                    <td></td>
+                </tr>
+            </c:forEach>
+            <%--<tr>
                 <td>HTML/CSS/JAVASCRIPT</td>
                 <td>15/05/2018</td>
                 <td>Ajkhasdkjgh ksjdhgkajsdh skdjhg ksadlj hgksldj hgsalkdjgh kasldjhg sakdjhgsdakjg</td>
@@ -138,7 +147,7 @@
                     skdjfhgskljdfhgslk djfhgkljsdfhglksjdf gbskdlbjxckljgsdklfjg sdfkjghs ldfgjh sdfkjhg sdlfkjhg lsdf</td>
                 <td>ASfdgdsfgkjl dkfjhg kdlfjhg lksdjfhgksldfnvxzlkjcv lskdjngf dosuighsdfkjgn ksdjfhg adlfkjgsdf dfgfd
                     sdfgsdfg sdfg sdf gsdfgf sjkdfhglskdfjhg ksldjfhglsdkjfhg sdfg</td>
-            </tr>
+            </tr>--%>
         </table>
         <div class="switcher">
             <input type="button" class="buttons" onclick="change_tables()" value="Show available courses">

@@ -1,11 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: admin
-  Date: 19.03.2018
-  Time: 14:55
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!doctype html>
 <head>
     <title>Tutor page</title>
@@ -19,7 +12,7 @@
             background-color: dodgerblue;
             color: #fff;
             font-family: sans-serif;
-            font-weight: 300px;
+            font-weight: 300;
         }
 
         .center_field{
