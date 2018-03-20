@@ -1,7 +1,6 @@
 package com.epam.webelecty.persistence.database;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.sql.Connection;
@@ -66,8 +65,7 @@ public class ConnectionPool {
         try {
             Class.forName(driverName);
         } catch (ClassNotFoundException e) {
-            // FIXME: 20.03.18 log instead of stdout
-            e.printStackTrace();
+            log.debug(e);
         }
         for (int i = 0; i < poolSize; i++) {
             try {
