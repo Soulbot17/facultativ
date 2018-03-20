@@ -10,9 +10,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
+// FIXME: 20.03.18 move both initializers from configm it's not a confgi
 public class ApplicationInitializer implements WebApplicationInitializer {
 
 
+    // FIXME: 20.03.18 it never throws exception
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 

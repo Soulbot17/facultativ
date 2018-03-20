@@ -16,6 +16,7 @@ public class Course {
     private String annotation;
     private CourseStatus status;
 
+    // FIXME: 20.03.18 duplicate constructor
     public Course(String courseName, int tutorId, String annotation, CourseStatus status) {
         this.courseName = courseName;
         this.tutorId = tutorId;

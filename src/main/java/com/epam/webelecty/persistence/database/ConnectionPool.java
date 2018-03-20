@@ -66,6 +66,7 @@ public class ConnectionPool {
         try {
             Class.forName(driverName);
         } catch (ClassNotFoundException e) {
+            // FIXME: 20.03.18 log instead of stdout
             e.printStackTrace();
         }
         for (int i = 0; i < poolSize; i++) {
