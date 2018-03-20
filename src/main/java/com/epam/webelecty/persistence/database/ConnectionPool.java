@@ -53,7 +53,7 @@ public class ConnectionPool {
         }
     }
 
-    private ConnectionPool(String driverName, String url, String user, String password, int poolSize) {
+    public ConnectionPool(String driverName, String url, String user, String password, int poolSize) {
         this.driverName = driverName;
         this.url = url;
         this.user = user;
@@ -67,5 +67,7 @@ public class ConnectionPool {
                 log.error(e);
             }
         }
-}
+
     }
+}
+
