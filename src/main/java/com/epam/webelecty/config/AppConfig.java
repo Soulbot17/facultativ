@@ -16,7 +16,8 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @Configuration
 @ComponentScan({ "com.epam.webelecty.*" })
-@Import({DBConfig.class})
+@Import({DBConfig.class, SecurityConfig.class})
+
 public class AppConfig {
 
     @Autowired
@@ -31,14 +32,14 @@ public class AppConfig {
         return internalResourceViewResolver;
     }
 
-    @Bean
-    public TestController testController() {
-        return new TestController();
-    }
-
-    @Bean
-    public UserDAO userDao() {
-        return new UserDAOImpl(connectionPool);
-    }
+//    @Bean
+//    public TestController testController() {
+//        return new TestController();
+//    }
+//
+//    @Bean
+//    public UserDAO userDao() {
+//        return new UserDAOImpl(connectionPool);
+//    }
 
 }

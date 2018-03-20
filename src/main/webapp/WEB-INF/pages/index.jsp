@@ -20,7 +20,7 @@
         <div class="signin_area">
             <p>Sign in into your account</p>
             <form name='loginForm'
-                  action="<c:url value='${contextPath}/login' />" method='POST'>
+                  action="<c:url value='/index' />" method='POST'>
 
                 <div class="form-group">
                     <input name="email" type="text" class="form-control" placeholder="Username"/>

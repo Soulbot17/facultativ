@@ -2,7 +2,9 @@ package com.epam.webelecty.persistence.database;
 
 import lombok.extern.log4j.Log4j2;
 
+import javax.annotation.PreDestroy;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -27,6 +29,7 @@ public class ConnectionPool {
         return connection;
     }
 
+    @PreDestroy
     public void dispose() throws SQLException {
         Connection connection;
         while ((connection = connectionQueue.poll()) != null) {
@@ -60,6 +63,11 @@ public class ConnectionPool {
         this.password = password;
         this.poolSize = poolSize;
         connectionQueue = new ArrayBlockingQueue<>(poolSize);
+        try {
+            Class.forName(driverName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < poolSize; i++) {
             try {
                 connectionQueue.offer(DriverManager.getConnection(url, user, password));
@@ -67,7 +75,5 @@ public class ConnectionPool {
                 log.error(e);
             }
         }
-
     }
 }
-
