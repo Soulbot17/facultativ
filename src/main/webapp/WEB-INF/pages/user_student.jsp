@@ -26,7 +26,7 @@
         table{
             border-collapse: collapse;
         }
-        td{
+        td,th{
             width: 200px;
             height: 30px;
             text-align: center;
