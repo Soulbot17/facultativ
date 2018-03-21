@@ -107,7 +107,7 @@
             <p>${error}</p>
             <form:form method="post" modelAttribute="userForm"  class="form-signin">
                 <input class="login_fields" type="text" name="name" placeholder="Name" required>
-                <input class="login_fields" type="text" name="Surname" placeholder="Surname" required>
+                <input class="login_fields" type="text" name="lastName" placeholder="Surname" required>
                 <input class="login_fields" id="email" type="email" name="email" placeholder="Email" onfocusout="check_email()" required>
                 <input class="login_fields" id="pass" type="password" name="password" placeholder="Password" required>
                 <input class="login_fields" id="repeat_pass" type="password" name="confirmPassword" placeholder="Repeat password" onfocusout="compare_passwords()" required>
