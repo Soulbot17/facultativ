@@ -179,10 +179,8 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
 
     private void fillCoursesSet(Connection connection, Set<Course> courseSet, String sql) {
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
-            if (rs.next()) {
-                while (rs.next()) {
-                    courseSet.add(CourseDAO.parseCourse(rs));
-                }
+            while (rs.next()) {
+                courseSet.add(CourseDAO.parseCourse(rs));
             }
         } catch (SQLException e) {
             log.error(e);
