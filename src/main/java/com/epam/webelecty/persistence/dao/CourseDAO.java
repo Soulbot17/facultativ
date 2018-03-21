@@ -2,24 +2,23 @@ package com.epam.webelecty.persistence.dao;
 
 import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.CourseStatus;
+import com.epam.webelecty.persistence.dao.exceptions.course.CourseNotCreatedException;
+import com.epam.webelecty.persistence.dao.exceptions.course.NoCourseFoundException;
 import com.epam.webelecty.persistence.database.ConnectionPool;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Log4j2
 @Component
 public class CourseDAO implements DAO<Course> {
 
-    @Value("${db.table}")
+    @Value("${db.name}")
     private String databaseName;
 
     private ConnectionPool connectionPool;
@@ -30,65 +29,56 @@ public class CourseDAO implements DAO<Course> {
     }
 
     @Override
-    public List<Course> getAllEntries() {
+    public Set<Course> getAllEntries() {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("SELECT courseId, name, tutorId, annotation, status FROM %s.courses", databaseName);
-        List<Course> courses = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+        Set<Course> courseSet = new HashSet<>();
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 Course course = parseCourse(rs);
-                if (course != null) courses.add(course);
+                if (course != null) courseSet.add(course);
             }
-
         } catch (SQLException e) {
             log.error(e);
+            throw new NoCourseFoundException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
-        return courses;
+        return courseSet;
     }
 
     @Override
-    public void updateById(int id, Course entry) {
-        Connection connection = connectionPool.getConnection();
+    public Course updateEntry(Course entry) {
         String sql = String.format("UPDATE %s.courses SET name='%s', tutorId='%d', annotation='%s', status='%s' WHERE courseId=%d",
-                databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name(), id);
-        try {
-            connection.prepareStatement(sql).execute();
-        } catch (SQLException e) {
-            log.error(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
+                databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name(), entry.getCourseId());
+        executeSqlStatement(connectionPool, sql);
+        return getById(entry.getCourseId());
     }
 
     @Override
     public void removeById(int id) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("DELETE FROM %s.courses WHERE courseId=%d", databaseName, id);
-        try {
-            connection.prepareStatement(sql).execute();
-        } catch (SQLException e) {
-            log.error(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
+        executeSqlStatement(connectionPool, sql);
     }
 
     @Override
-    public void insert(Course entry) {
-        Connection connection = connectionPool.getConnection();
+    public Course insert(Course entry) {
         String sql = String.format("INSERT INTO %s.courses(name, tutorId, annotation, status) VALUES('%s', %d, '%s', '%s')",
                 databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name());
-        try {
-            connection.prepareStatement(sql).executeUpdate();
+        Connection connection = connectionPool.getConnection();
+        Course course = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.executeUpdate();
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) course = getById(generatedKeys.getInt(1));
+            }
         } catch (SQLException e) {
             log.error(e);
+            throw new CourseNotCreatedException("Course was not created");
         } finally {
             connectionPool.releaseConnection(connection);
         }
+        return course;
     }
 
     @Override
@@ -96,47 +86,46 @@ public class CourseDAO implements DAO<Course> {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("SELECT courseId, name, tutorId, annotation, status FROM %s.courses where courseId=%d", databaseName, id);
         Course course = null;
-        try {
-            ResultSet rs = connection.prepareStatement(sql).executeQuery();
-            course = parseCourse(rs);
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            if (rs.next()) course = parseCourse(rs);
         } catch (SQLException e) {
             log.error(e);
+            throw new NoCourseFoundException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
         return course;
     }
 
-    public static Course parseCourse(ResultSet rs) {
-        Course course = null;
+    static Course parseCourse(ResultSet rs) {
+        Course course;
         try {
-            if (rs.next()) {
-                int id = rs.getInt("courseId");
-                String name = rs.getString("name");
-                int tutorId = rs.getInt("tutorId");
-                String annotation = rs.getString("annotation");
-                CourseStatus status;
-                switch (rs.getString("status").toLowerCase()) {
-                    case "active":
-                        status = CourseStatus.ACTIVE;
-                        break;
-                    case "finished":
-                        status = CourseStatus.FINISHED;
-                        break;
-                    case "planned":
-                    default:
-                        status = CourseStatus.PLANNED;
-                }
-                course = Course.builder()
-                        .courseId(id)
-                        .courseName(name)
-                        .tutorId(tutorId)
-                        .annotation(annotation)
-                        .status(status)
-                        .build();
+            int id = rs.getInt("courseId");
+            String name = rs.getString("name");
+            int tutorId = rs.getInt("tutorId");
+            String annotation = rs.getString("annotation");
+            CourseStatus status;
+            switch (rs.getString("status").toLowerCase()) {
+                case "active":
+                    status = CourseStatus.ACTIVE;
+                    break;
+                case "finished":
+                    status = CourseStatus.FINISHED;
+                    break;
+                case "planned":
+                default:
+                    status = CourseStatus.PLANNED;
             }
+            course = Course.builder()
+                    .courseId(id)
+                    .courseName(name)
+                    .tutorId(tutorId)
+                    .annotation(annotation)
+                    .status(status)
+                    .build();
         } catch (SQLException e) {
             log.error(e);
+            throw new CourseNotCreatedException(e);
         }
         return course;
     }

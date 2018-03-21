@@ -1,6 +1,6 @@
 create table users(
   userId INT AUTO_INCREMENT,
-  email VARCHAR(45) NOT NULL,
+  email VARCHAR(45) NOT NULL UNIQUE,
   pass VARCHAR(45) NOT NULL,
   name VARCHAR(45),
   lastName VARCHAR(45),

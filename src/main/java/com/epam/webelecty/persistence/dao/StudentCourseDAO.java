@@ -3,23 +3,26 @@ package com.epam.webelecty.persistence.dao;
 import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.StudentCourse;
 import com.epam.webelecty.models.User;
+import com.epam.webelecty.persistence.dao.exceptions.course.NoCourseFoundException;
+import com.epam.webelecty.persistence.dao.exceptions.student_course.NoStudentCourseFoundException;
+import com.epam.webelecty.persistence.dao.exceptions.student_course.StudentCourseNotCreatedException;
+import com.epam.webelecty.persistence.dao.exceptions.users.NoUserFoundException;
 import com.epam.webelecty.persistence.database.ConnectionPool;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Log4j2
 @Component
 public class StudentCourseDAO implements DAO<StudentCourse> {
 
-    @Value("${db.table}")
+    @Value("${db.name}")
     private String databaseName;
 
     private ConnectionPool connectionPool;
@@ -30,117 +33,96 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     }
 
     @Override
-    public List<StudentCourse> getAllEntries() {
+    public Set<StudentCourse> getAllEntries() {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("SELECT id, courseId, studentId, studentMark, studentFeedback FROM %s.student_course", databaseName);
-        List<StudentCourse> scList = new ArrayList<>();
-        try {
-            ResultSet rs = connection.prepareStatement(sql).executeQuery();
+        Set<StudentCourse> studentCourseSet = new TreeSet<>();
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 StudentCourse studentCourse = parseStudentCourse(rs);
-                if (studentCourse != null) scList.add(studentCourse);
+                if (studentCourse != null) studentCourseSet.add(studentCourse);
             }
         } catch (SQLException e) {
             log.error(e);
+            throw new NoStudentCourseFoundException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
-        return scList;
+        return studentCourseSet;
     }
 
-    public List<Course> getAllCoursesByStudent(int studentId) {
+    public Set<Course> getAllCoursesByStudent(User user) {
         Connection connection = connectionPool.getConnection();
-        List<Course> courseList = new ArrayList<>();
-        String sql = String.format("SELECT courseId from %s.student_course where studentId=%d", databaseName, studentId);
-        try {
-            ResultSet rs = connection.prepareStatement(sql).executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("courseId");
-                sql = String.format("SELECT courseId, name, tutorId, annotation, status FROM %s.courses where courseId=%d",
-                        databaseName, id);
-                ResultSet userResult = connection.prepareStatement(sql).executeQuery();
-                courseList.add(CourseDAO.parseCourse(userResult));
-            }
-        } catch (SQLException e) {
-            log.error(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-        return courseList;
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
+                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d",
+                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
     }
 
-    public List<User> getAllStudentsByCourse(int courseId) {
+    public Set<User> getAllStudentsByCourse(Course course) {
         Connection connection = connectionPool.getConnection();
-        List<User> studentList = new ArrayList<>();
-        String sql = String.format("SELECT studentId from %s.student_course where courseId=%d", databaseName, courseId);
-        try {
-            ResultSet rs = connection.prepareStatement(sql).executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("studentId");
-                sql = String.format("SELECT userId, email, pass, name, lastName, role FROM %s.users WHERE userId=%d",
-                        databaseName, id);
-                ResultSet userResult = connection.prepareStatement(sql).executeQuery();
-                studentList.add(UserDAO.parseUser(userResult));
-            }
-        } catch (SQLException e) {
-            log.error(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-        return studentList;
+        Set<User> studentSet = new HashSet<>();
+        String sql = String.format("SELECT users.userId, email, pass, name, lastName, role from %s.student_course JOIN " +
+                        "%s.users ON %s.student_course.studentId = %s.users.userId where courseId=%d",
+                databaseName, databaseName, databaseName, databaseName, course.getCourseId());
+        fillUserSet(connection, studentSet, sql);
+        return studentSet;
     }
 
     @Override
-    public void updateById(int id, StudentCourse entry) {
-        Connection connection = connectionPool.getConnection();
+    public StudentCourse updateEntry(StudentCourse entry) {
         String sql = String.format("UPDATE %s.student_course SET courseId=%d, studentId=%d, studentMark=%d, studentFeedback='%s' WHERE id=%d",
-                databaseName, entry.getCourseId(), entry.getStudentId(), entry.getStudentMark(), entry.getStudentFeedback(), id);
-        try {
-            connection.prepareStatement(sql).execute();
-        } catch (SQLException e) {
-            log.error(e);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
+                databaseName, entry.getCourseId(), entry.getStudentId(), entry.getStudentMark(),
+                entry.getStudentFeedback(), entry.getId());
+        executeSqlStatement(connectionPool, sql);
+        return getById(entry.getId());
     }
 
     @Override
     public void removeById(int id) {
-        Connection connection = connectionPool.getConnection();
         String sql = String.format("DELETE FROM %s.student_course WHERE id=%d", databaseName, id);
-        try {
-            connection.prepareStatement(sql).execute();
-        } catch (SQLException e) {
-            log.error(e);
-        }
-        connectionPool.releaseConnection(connection);
+        executeSqlStatement(connectionPool, sql);
     }
 
     @Override
-    public void insert(StudentCourse entry) {
-        Connection connection = connectionPool.getConnection();
+    public StudentCourse insert(StudentCourse entry) {
         String sql = String.format("INSERT INTO %s.student_course(courseId, studentId, studentMark, studentFeedback) VALUES(%d, %d, %d, '%s')",
                 databaseName, entry.getCourseId(), entry.getStudentId(), entry.getStudentMark(), entry.getStudentFeedback() != null ? entry.getStudentFeedback() : "No feedback yet.");
-        try {
-            connection.prepareStatement(sql).executeUpdate();
+        Connection connection = connectionPool.getConnection();
+        StudentCourse studentCourse = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.executeUpdate();
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) studentCourse = getById(generatedKeys.getInt(1));
+            }
         } catch (SQLException e) {
             log.error(e);
+            throw new StudentCourseNotCreatedException("Student-course entity was not created");
         } finally {
             connectionPool.releaseConnection(connection);
         }
+        return studentCourse;
     }
 
-    public void insert(User student, Course course) {
-        Connection connection = connectionPool.getConnection();
+    public StudentCourse insert(User student, Course course) {
         String sql = String.format("INSERT INTO %s.student_course(courseId, studentId) VALUES(%d, %d)",
                 databaseName, course.getCourseId(), student.getUserId());
-        try {
-            connection.prepareStatement(sql).executeUpdate();
+        Connection connection = connectionPool.getConnection();
+        StudentCourse studentCourse = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.executeUpdate();
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) studentCourse = getById(generatedKeys.getInt(1));
+            }
         } catch (SQLException e) {
             log.error(e);
+            throw new StudentCourseNotCreatedException("Student_course was not created");
         } finally {
             connectionPool.releaseConnection(connection);
         }
+        return studentCourse;
     }
 
     @Override
@@ -149,37 +131,64 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         String sql = String.format("SELECT id, courseId, studentId, studentMark, studentFeedback FROM %s.student_course WHERE id=%d",
                 databaseName, id);
         StudentCourse sc = null;
-        try {
-            ResultSet rs = connection.prepareStatement(sql).executeQuery();
-            sc = parseStudentCourse(rs);
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            if (rs.next()) sc = parseStudentCourse(rs);
         } catch (SQLException e) {
             log.error(e);
+            throw new NoStudentCourseFoundException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
         return sc;
     }
 
-    public static StudentCourse parseStudentCourse(ResultSet rs) {
-        StudentCourse sc = null;
+    private static StudentCourse parseStudentCourse(ResultSet rs) {
+        StudentCourse sc;
         try {
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                int courseId = rs.getInt("courseId");
-                int studentId = rs.getInt("studentId");
-                int studentMark = rs.getInt("studentMark");
-                String studentFeedback = rs.getString("studentFeedback");
-                sc = StudentCourse.builder()
-                        .id(id)
-                        .courseId(courseId)
-                        .studentId(studentId)
-                        .studentMark(studentMark)
-                        .studentFeedback(studentFeedback)
-                        .build();
+            int id = rs.getInt("id");
+            int courseId = rs.getInt("courseId");
+            int studentId = rs.getInt("studentId");
+            int studentMark = rs.getInt("studentMark");
+            String studentFeedback = rs.getString("studentFeedback");
+            sc = StudentCourse.builder()
+                    .id(id)
+                    .courseId(courseId)
+                    .studentId(studentId)
+                    .studentMark(studentMark)
+                    .studentFeedback(studentFeedback)
+                    .build();
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoStudentCourseFoundException(e);
+        }
+        return sc;
+    }
+
+    private void fillUserSet(Connection connection, Set<User> studentSet, String sql) {
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            while (rs.next()) {
+                studentSet.add(UserDAO.parseUser(rs));
             }
         } catch (SQLException e) {
             log.error(e);
+            throw new NoUserFoundException(e);
+        } finally {
+            connectionPool.releaseConnection(connection);
         }
-        return sc;
+    }
+
+    private void fillCoursesSet(Connection connection, Set<Course> courseSet, String sql) {
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            if (rs.next()) {
+                while (rs.next()) {
+                    courseSet.add(CourseDAO.parseCourse(rs));
+                }
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoCourseFoundException(e);
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
     }
 }
