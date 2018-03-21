@@ -1,26 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: banka
-  Date: 18.03.18
-  Time: 1:26
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>UserPage</title>
-</head>
-<body>
-${UserName}
-<h1>Tutor info</h1>
-
-</body>
-</html>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!doctype html>
 <head>
-    <title>Tutor page</title>
+    <title>Страница студента</title>
     <meta charset="utf-8">
     <style>
         /*html{
@@ -44,7 +26,7 @@ ${UserName}
         table{
             border-collapse: collapse;
         }
-        td, th{
+        td,th{
             width: 200px;
             height: 30px;
             text-align: center;
@@ -86,13 +68,12 @@ ${UserName}
             margin: 5px
         }
         form{
-            display: initial;
+            display: inline-block;
         }
         .switcher{
             margin-top: 15px;
-            display: inline-block;
         }
-        .buttons, .delete_button{
+        .buttons{
             padding: 10px;
             border: 0;
             background-color: darkorange;
@@ -103,25 +84,15 @@ ${UserName}
         .buttons:hover{
             cursor: pointer;
         }
+        .go_to_course > .buttons{
+            width: 190px;
+            margin: 5px;
+        }
+        input[type="submit"][disabled]{
+            background-color: grey;
+        }
         h4{
             margin-bottom: 18px;
-        }
-        .add_new_course{
-            display: none;
-            padding-top: 10px;
-        }
-        .new_course_inputs{
-            display: block;
-            width: 200px;
-            height: 30px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        .delete_button{
-            background-color: #d62121;
-        }
-        .table_edit{
-            width: 50px;
         }
     </style>
     <script>
@@ -132,15 +103,6 @@ ${UserName}
             }else{
                 document.getElementsByClassName("courses_info")[0].style.display = "block";
                 document.getElementsByClassName("ended_courses_info")[0].style.display = "none";
-            }
-        }
-        function add_new_course(){
-            if(document.getElementsByClassName("add_new_course")[0].style.display == "block"){
-                document.getElementsByClassName("courses_info")[0].style.display = "block";
-                document.getElementsByClassName("add_new_course")[0].style.display = "none";
-            }else{
-                document.getElementsByClassName("courses_info")[0].style.display = "none";
-                document.getElementsByClassName("add_new_course")[0].style.display = "block";
             }
         }
     </script>
@@ -161,90 +123,77 @@ ${UserName}
                 <th>Course name</th>
                 <th>Date</th>
                 <th>Info</th>
+                <th>Tutor review</th>
+            </tr>
+            <c:forEach items="${courses}" var="course">
+                <tr>
+                    <td>${course.getName()}</td>
+                    <td>${course.getDate()}</td>
+                    <td>${course.getInfo()}</td>
+                    <td></td>
+                </tr>
+            </c:forEach>
+            <%--<tr>
+                <td>HTML/CSS/JAVASCRIPT</td>
+                <td>15/05/2018</td>
+                <td>Ajkhasdkjgh ksjdhgkajsdh skdjhg ksadlj hgksldj hgsalkdjgh kasldjhg sakdjhgsdakjg</td>
+                <td>ASfdgdsfgkjl dkfjhg kdlfjhg lksdjfhgksldfnvxzlkjcv lskdjngf dosuighsdfkjgn ksdjfhg adlfkjgsdf</td>
             </tr>
             <tr>
-                <td>column1</td>
-                <td>column2</td>
-                <td>column3</td>
-            </tr>
+                <td>Java Spring</td>
+                <td>20/05/2018</td>
+                <td>Ajkhasdkjgh ksjdhgkajsdh skdjhg ksadlj hgksldj hgsalkdjgh kasldjhg sakdjhgsdakjg jksdfhgl kjshdfgkj
+                    skdjfhgskljdfhgslk djfhgkljsdfhglksjdf gbskdlbjxckljgsdklfjg sdfkjghs ldfgjh sdfkjhg sdlfkjhg lsdf</td>
+                <td>ASfdgdsfgkjl dkfjhg kdlfjhg lksdjfhgksldfnvxzlkjcv lskdjngf dosuighsdfkjgn ksdjfhg adlfkjgsdf dfgfd
+                    sdfgsdfg sdfg sdf gsdfgf sjkdfhglskdfjhg ksldjfhglsdkjfhg sdfg</td>
+            </tr>--%>
         </table>
         <div class="switcher">
             <input type="button" class="buttons" onclick="change_tables()" value="Show available courses">
         </div>
     </div>
     <div class="courses_info">
-        <h4>My courses</h4>
+        <h4>Available courses</h4>
         <table>
             <tr>
                 <th>Course name</th>
                 <th>Date</th>
                 <th>Info</th>
                 <th></th>
-                <th></th>
             </tr>
             <tr>
-                <td>column1</td>
-                <td>column2</td>
-                <td>column3</td>
-                <td class="table_edit">
-                    <form>
-                        <input class="buttons" type="submit" value="Edit">
-                    </form>
-                </td>
-                <td class="table_edit">
-                    <form>
-                        <input class="delete_button" type="submit" value="Delete">
+                <td>Git</td>
+                <td>11/11/2018</td>
+                <td>Ajkhf klajdshf lkjsadhfl kjasdhflk jasdhfl kjashdf</td>
+                <td>
+                    <form class="go_to_course">
+                        <input type="submit" class="buttons" value="Enter">
                     </form>
                 </td>
             </tr>
             <tr>
-                <td>column1</td>
-                <td>column2</td>
-                <td>column3</td>
-                <td class="table_edit">
-                    <form>
-                        <input class="buttons" type="submit" value="Edit">
-                    </form>
-                </td>
-                <td class="table_edit">
-                    <form>
-                        <input class="delete_button" type="submit" value="Delete">
+                <td>SQL, MySql</td>
+                <td>10/10/2018</td>
+                <td>ASdkjfhs dklfjshd lfkjsdh lkjsdhf lksjdhf ksljdhf slkjd hfdh gkjhfdgkd fjhg dflkjg hdslfkj gdl</td>
+                <td>
+                    <form class="go_to_course">
+                        <input type="submit" class="buttons" value="Invited" disabled>
                     </form>
                 </td>
             </tr>
             <tr>
-                <td>column1</td>
-                <td>column2</td>
-                <td>column3</td>
-                <td class="table_edit">
-                    <form>
-                        <input class="buttons" type="submit" value="Edit">
-                    </form>
-                </td>
-                <td class="table_edit">
-                    <form>
-                        <input class="delete_button" type="submit" value="Delete">
+                <td>Java 11</td>
+                <td>12/12/2018</td>
+                <td>Ajhflsdkjhf lkfjdhg lkdsjfhg lkdsjfhgl ksjdfhglsdkjfhglk jhsdfl gkjhsdflkjghsd lfkjgshfdl gkjdsf</td>
+                <td>
+                    <form class="go_to_course">
+                        <input type="submit" class="buttons" value="Enter">
                     </form>
                 </td>
             </tr>
         </table>
         <div class="switcher">
             <input type="button" class="buttons" onclick="change_tables()" value="Show ended courses">
-        </div>
-        <div class="switcher">
-            <input type="button" class="buttons" onclick="add_new_course()" value="Add new course">
-        </div>
-    </div>
-    <div class="add_new_course">
-        <h4>Add new course</h4>
-        <form>
-            <input class="new_course_inputs" type="text" placeholder="Course name" name="course_name">
-            <input class="new_course_inputs" type="date" placeholder="Start date" name="start_date">
-            <input class="new_course_inputs" type="text" placeholder="Info" name="course_info">
-            <input class="buttons" type="submit" value="Create course">
-        </form>
-        <div class="switcher">
-            <input type="button" class="buttons" onclick="add_new_course()" value="Show my courses">
         </div>
     </div>
 </div>

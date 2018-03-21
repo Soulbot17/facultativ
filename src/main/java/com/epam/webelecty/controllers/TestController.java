@@ -4,8 +4,6 @@ import com.epam.webelecty.models.User;
 import com.epam.webelecty.models.UserRole;
 import com.epam.webelecty.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +34,7 @@ public class TestController {
             modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
             return modelAndView;
         }
-        modelAndView = new ModelAndView("user");
+        modelAndView = new ModelAndView("user_student");
         modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
         return modelAndView;
     }
