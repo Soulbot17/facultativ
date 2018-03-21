@@ -14,8 +14,7 @@ public class StudentController {
 
     @GetMapping(value = "/user_student")
     public ModelAndView getUserPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView = new ModelAndView("user_student");
+        ModelAndView modelAndView = new ModelAndView("user_student");;
         modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
         return modelAndView;
     }
