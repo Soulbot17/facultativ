@@ -115,7 +115,7 @@ public class UserDAO implements DAO<User> {
         return user;
     }
 
-    public static User parseUser(ResultSet rs) {
+    static User parseUser(ResultSet rs) {
         User user;
         try {
             int id = rs.getInt("userId");

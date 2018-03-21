@@ -97,7 +97,7 @@ public class CourseDAO implements DAO<Course> {
         return course;
     }
 
-    public static Course parseCourse(ResultSet rs) {
+    static Course parseCourse(ResultSet rs) {
         Course course;
         try {
             int id = rs.getInt("courseId");

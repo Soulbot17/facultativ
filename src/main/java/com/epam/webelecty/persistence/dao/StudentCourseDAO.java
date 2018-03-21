@@ -61,32 +61,12 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return courseSet;
     }
 
-    public Set<Course> getAllCoursesByStudentId(int id) {
-        Connection connection = connectionPool.getConnection();
-        Set<Course> courseSet = new HashSet<>();
-        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
-                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d",
-                databaseName, databaseName, databaseName, databaseName, id);
-        fillCoursesSet(connection, courseSet, sql);
-        return courseSet;
-    }
-
     public Set<User> getAllStudentsByCourse(Course course) {
         Connection connection = connectionPool.getConnection();
         Set<User> studentSet = new HashSet<>();
         String sql = String.format("SELECT users.userId, email, pass, name, lastName, role from %s.student_course JOIN " +
                         "%s.users ON %s.student_course.studentId = %s.users.userId where courseId=%d",
                 databaseName, databaseName, databaseName, databaseName, course.getCourseId());
-        fillUserSet(connection, studentSet, sql);
-        return studentSet;
-    }
-
-    public Set<User> getAllStudentsByCourseId(int id) {
-        Connection connection = connectionPool.getConnection();
-        Set<User> studentSet = new HashSet<>();
-        String sql = String.format("SELECT users.userId, email, pass, name, lastName, role from %s.student_course JOIN " +
-                        "%s.users ON %s.student_course.studentId = %s.users.userId where courseId=%d",
-                databaseName, databaseName, databaseName, databaseName, id);
         fillUserSet(connection, studentSet, sql);
         return studentSet;
     }
@@ -162,7 +142,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return sc;
     }
 
-    public static StudentCourse parseStudentCourse(ResultSet rs) {
+    private static StudentCourse parseStudentCourse(ResultSet rs) {
         StudentCourse sc;
         try {
             int id = rs.getInt("id");
