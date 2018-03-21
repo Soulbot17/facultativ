@@ -1,0 +1,117 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Страница регистрации</title>
+    <style>
+        h1{
+            font-family: sans-serif;
+            font-weight: 900;
+            color: #fff;
+        }
+        body{
+            margin: 0;
+            background-color: dodgerblue;
+        }
+        .left_main_area{
+            float: left;
+            width: 700px;
+            height: 400px;
+        }
+        .right_main_area{
+            float: left;
+            width: 324px;
+            height: 400px;
+        }
+        .center_main_area{
+            width: 1024px;
+            margin: auto;
+        }
+        .signin_area{
+            margin-top: 200px;
+            height: 200px;
+        }
+        p{
+            color: #fff;
+            font-family: sans-serif;
+            font-weight: 600;
+        }
+        .login_fields{
+            display: block;
+            width: 200px;
+            margin-bottom: 10px;
+            height: 20px;
+        }
+        .login_buttons{
+            width: 100px;
+            background-color: #fff;
+            border: 0;
+            height: 25px;
+        }
+        .login_buttons:hover{
+            cursor: pointer;
+        }
+        .logo{
+            margin-top: 250px;
+        }
+        .result{
+            color: lightgreen;
+            font-weight: 400;
+        }
+    </style>
+    <script>
+        function compare_passwords(){
+            var firstPassword = document.getElementById("pass").value;
+            var secondPassword = document.getElementById("repeat_pass").value;
+            if(firstPassword != secondPassword){
+                alert("Passwords doesnt match");
+                document.getElementById("repeat_pass").value = '';
+            }
+        }
+
+        function check_email(){
+            var regex = /(\w+\@\w+\.\w+)/g;
+            var email = document.getElementById("email");
+            var result = email.value.match(regex);
+
+            if(result == null){
+                alert("bad email");
+                document.getElementById("email").value = '';
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="center_main_area">
+    <div class="left_main_area">
+        <div class="logo">
+            <h1>Training your skills</h1>
+        </div>
+    </div>
+    <div class="right_main_area">
+        <div class="signin_area">
+            <p>Sign up a new account</p>
+            <form:form method="post" modelAttribute="userForm"  class="form-signin">
+                <form:input name="name" type="text" path="name" class="form-control" placeholder="Name"
+                            autofocus="true" />
+                <form:input name="Surname" type="text" path="lastName" class="form-control" placeholder="Surname"
+                            autofocus="true" />
+                <form:input name="email" type="text" path="email" class="form-control" placeholder="email"
+                            autofocus="true" />
+                <form:input name="password" type="password" path="password" class="form-control" placeholder="password"
+                            autofocus="true" />
+                <form:input  name="repeat_password" type="password" path="confirmPassword" class="form-control" placeholder="Confirm your password"
+                            autofocus="true" />
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                <input class="login_fields" type="text" name="name" placeholder="Name" required>
+                <input class="login_fields" type="text" name="Surname" placeholder="Surname" required>
+                <input class="login_fields" id="email" type="email" name="email" placeholder="Email" onfocusout="check_email()" required>
+                <input class="login_fields" id="pass" type="password" name="password" placeholder="Password" required>
+                <input class="login_fields" id="repeat_pass" type="password" name="repeat_password" placeholder="Repeat password" onfocusout="compare_passwords()" required>
+                <input class="login_buttons" id="submit" type="submit" name="submit" value="Sign up">
+            </form:form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

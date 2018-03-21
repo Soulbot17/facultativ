@@ -15,11 +15,4 @@ public class Course {
     private int tutorId;
     private String annotation;
     private CourseStatus status;
-
-    public Course(String courseName, int tutorId, String annotation, CourseStatus status) {
-        this.courseName = courseName;
-        this.tutorId = tutorId;
-        this.annotation = annotation;
-        this.status = status;
-    }
 }
