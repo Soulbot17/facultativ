@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: banka
+  Date: 21.03.18
+  Time: 18:32
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -74,10 +81,15 @@
         <div class="signin_area">
             <p>Sign in into your account</p>
             <form name='loginForm'
-                  action="<c:url value='/index' />" method='POST'>
+                  action="<c:url value='/login' />" method='POST'>
+
                 <div class="form-group">
-                    <button class="login_buttons" type="submit" onclick="location.href='${contextPath}/user'">Enter</button>
+                    <input name="email" type="text" class="login_fields" placeholder="Email"/>
+                    <input name="password" type="password" class="login_fields" placeholder="Password"/>
+                    <button class="login_buttons" type="submit">Sign in</button>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <input class="login_buttons" type="button" name="go_register" value="Sigh up" onclick="location.href='${contextPath}/registration'">
+
                 </div>
 
             </form>

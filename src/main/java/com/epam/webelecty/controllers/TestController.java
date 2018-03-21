@@ -7,6 +7,7 @@ import com.epam.webelecty.services.UserService;
 import com.epam.webelecty.services.exeptions.EmailIsUsedException;
 import com.epam.webelecty.services.exeptions.RegisterDataException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,12 @@ public class TestController {
     public ModelAndView getIndexPage() {
         return new ModelAndView("index");
     }
+    @RequestMapping(value = {"/index"}, method = {RequestMethod.POST})
+    public String sendUserPage() {
+        return "redirect:/user";
+    }
+
+
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseBody
@@ -74,5 +81,13 @@ public class TestController {
         model.addAttribute("error", "Error in register data");
         model.addAttribute("userForm", new UserDTO());
         return "registration";
+    }
+
+    @GetMapping(value = "/login")
+    public ModelAndView getLoginPage() {
+        if(!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){
+            return new ModelAndView("redirect:/index");
+        }
+        return new ModelAndView("login");
     }
 }
