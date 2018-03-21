@@ -20,7 +20,6 @@ import javax.annotation.Resource;
 @Log4j2
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Resource(name = "userDetailServiceImplementation")
     private UserDetailsService userDetailService;
 
@@ -56,5 +55,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setUserDetailsService(userDetailService);
         return authProvider;
     }
-
 }

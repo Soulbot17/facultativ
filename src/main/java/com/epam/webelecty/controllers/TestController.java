@@ -1,16 +1,15 @@
 package com.epam.webelecty.controllers;
 
 import com.epam.webelecty.models.User;
+import com.epam.webelecty.models.UserDTO;
 import com.epam.webelecty.models.UserRole;
 import com.epam.webelecty.services.UserService;
+import com.epam.webelecty.services.exeptions.EmailIsUsedException;
+import com.epam.webelecty.services.exeptions.RegisterDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -19,8 +18,13 @@ public class TestController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET})
-    public ModelAndView getWelcomePage() {
+    @GetMapping(value = "/")
+    public String redirectUserPage() {
+        return "redirect:/index";
+    }
+
+    @RequestMapping(value = "index", method = {RequestMethod.GET})
+    public ModelAndView getIndexPage() {
         return new ModelAndView("index");
     }
 
@@ -46,14 +50,27 @@ public class TestController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
-        model.addAttribute("userForm", new User());
-
+        model.addAttribute("userForm", new UserDTO());
         return "registration";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    @ResponseBody
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-        return "Welcome " + userForm.toString();
+    public String registration(@ModelAttribute("userForm") UserDTO userForm) {
+        userService.register(userForm);
+        return "redirect:/index";
+    }
+
+    @ExceptionHandler(EmailIsUsedException.class)
+    public String emailError(Model model) {
+        model.addAttribute("error", "Email is registered");
+        model.addAttribute("userForm", new UserDTO());
+        return "registration";
+    }
+
+    @ExceptionHandler(RegisterDataException.class)
+    public String regDataError(Model model) {
+        model.addAttribute("error", "Error in register data");
+        model.addAttribute("userForm", new UserDTO());
+        return "registration";
     }
 }
