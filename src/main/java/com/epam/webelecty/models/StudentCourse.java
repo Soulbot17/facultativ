@@ -15,11 +15,4 @@ public class StudentCourse {
     private int studentId;
     private int studentMark;
     private String studentFeedback;
-
-    public StudentCourse(int courseId, int studentId, int studentMark, String studentFeedback) {
-        this.courseId = courseId;
-        this.studentId = studentId;
-        this.studentMark = studentMark;
-        this.studentFeedback = studentFeedback;
-    }
 }
