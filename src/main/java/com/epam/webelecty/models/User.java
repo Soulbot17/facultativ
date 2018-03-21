@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.beans.Transient;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,8 +16,6 @@ public class User {
     private String name;
     private String lastName;
     private UserRole role;
-
-    private String confirmPassword;
 
     public User(String email, String password, String name, String lastName, UserRole role) {
         this.email = email;

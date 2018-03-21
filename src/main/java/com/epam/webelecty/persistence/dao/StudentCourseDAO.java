@@ -3,15 +3,17 @@ package com.epam.webelecty.persistence.dao;
 import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.StudentCourse;
 import com.epam.webelecty.models.User;
+import com.epam.webelecty.persistence.dao.exceptions.course.NoCourseFoundException;
+import com.epam.webelecty.persistence.dao.exceptions.student_course.NoStudentCourseFoundException;
+import com.epam.webelecty.persistence.dao.exceptions.student_course.StudentCourseNotCreatedException;
+import com.epam.webelecty.persistence.dao.exceptions.users.NoUserFoundException;
 import com.epam.webelecty.persistence.database.ConnectionPool;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -35,14 +37,14 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("SELECT id, courseId, studentId, studentMark, studentFeedback FROM %s.student_course", databaseName);
         Set<StudentCourse> studentCourseSet = new TreeSet<>();
-        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()){
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 StudentCourse studentCourse = parseStudentCourse(rs);
                 if (studentCourse != null) studentCourseSet.add(studentCourse);
             }
         } catch (SQLException e) {
             log.error(e);
-            throw new RuntimeException(e);
+            throw new NoStudentCourseFoundException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -95,7 +97,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
                 databaseName, entry.getCourseId(), entry.getStudentId(), entry.getStudentMark(),
                 entry.getStudentFeedback(), entry.getId());
         executeSqlStatement(connectionPool, sql);
-        return entry;
+        return getById(entry.getId());
     }
 
     @Override
@@ -108,14 +110,39 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public StudentCourse insert(StudentCourse entry) {
         String sql = String.format("INSERT INTO %s.student_course(courseId, studentId, studentMark, studentFeedback) VALUES(%d, %d, %d, '%s')",
                 databaseName, entry.getCourseId(), entry.getStudentId(), entry.getStudentMark(), entry.getStudentFeedback() != null ? entry.getStudentFeedback() : "No feedback yet.");
-        executeSqlStatement(connectionPool, sql);
-        return entry;
+        Connection connection = connectionPool.getConnection();
+        StudentCourse studentCourse = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.executeUpdate();
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) studentCourse = getById(generatedKeys.getInt(1));
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new StudentCourseNotCreatedException("Student-course entity was not created");
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+        return studentCourse;
     }
 
-    public void insert(User student, Course course) {
+    public StudentCourse insert(User student, Course course) {
         String sql = String.format("INSERT INTO %s.student_course(courseId, studentId) VALUES(%d, %d)",
                 databaseName, course.getCourseId(), student.getUserId());
-        executeSqlStatement(connectionPool, sql);
+        Connection connection = connectionPool.getConnection();
+        StudentCourse studentCourse = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.executeUpdate();
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) studentCourse = getById(generatedKeys.getInt(1));
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new StudentCourseNotCreatedException("Student_course was not created");
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+        return studentCourse;
     }
 
     @Override
@@ -124,11 +151,11 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         String sql = String.format("SELECT id, courseId, studentId, studentMark, studentFeedback FROM %s.student_course WHERE id=%d",
                 databaseName, id);
         StudentCourse sc = null;
-        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()){
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             if (rs.next()) sc = parseStudentCourse(rs);
         } catch (SQLException e) {
             log.error(e);
-            throw new RuntimeException(e);
+            throw new NoStudentCourseFoundException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -152,19 +179,19 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
                     .build();
         } catch (SQLException e) {
             log.error(e);
-            throw new RuntimeException(e);
+            throw new NoStudentCourseFoundException(e);
         }
         return sc;
     }
 
     private void fillUserSet(Connection connection, Set<User> studentSet, String sql) {
-        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()){
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 studentSet.add(UserDAO.parseUser(rs));
             }
         } catch (SQLException e) {
             log.error(e);
-            throw new RuntimeException(e);
+            throw new NoUserFoundException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -179,7 +206,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
             }
         } catch (SQLException e) {
             log.error(e);
-            throw new RuntimeException(e);
+            throw new NoCourseFoundException(e);
         } finally {
             connectionPool.releaseConnection(connection);
         }
