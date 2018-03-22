@@ -7,7 +7,8 @@ import com.epam.webelecty.services.UserService;
 import com.epam.webelecty.services.exeptions.EmailIsUsedException;
 import com.epam.webelecty.services.exeptions.RegisterDataException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,19 @@ public class WebAppController {
 
     @GetMapping(value = "/")
     public String redirectUserPage() {
-        return "redirect:/index";
+        return "redirect:/user";
     }
 
     @RequestMapping(value = "index", method = {RequestMethod.GET})
     public ModelAndView getIndexPage() {
         return new ModelAndView("index");
     }
+    @RequestMapping(value = {"/index"}, method = {RequestMethod.POST})
+    public String sendUserPage() {
+        return "redirect:/user";
+    }
+
+
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public String getUserPage() {
@@ -68,5 +75,13 @@ public class WebAppController {
         model.addAttribute("error", "Error in register data");
         model.addAttribute("userForm", new UserDTO());
         return "registration";
+    }
+
+    @GetMapping(value = "/login")
+    public ModelAndView getLoginPage(Authentication authentication) {
+        if(authentication!=null){
+            return new ModelAndView("redirect:/index");
+        }
+        return new ModelAndView("login");
     }
 }
