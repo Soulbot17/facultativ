@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
-@Setter
 @Service
 @Log4j2
 public class UserDetailServiceImplementation implements UserDetailsService {
