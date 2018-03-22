@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import javax.annotation.Resource;
 
 @Configuration
 @EnableWebSecurity
@@ -28,15 +27,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/index", "/registration").access("permitAll()")
-                .antMatchers("/*").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+                .antMatchers("/registration", "/login").access("permitAll()")
+                .antMatchers("/user_tutor").access("hasAnyRole('ROLE_TUTOR')")
+                .antMatchers("/user_student").access("hasAnyRole('ROLE_STUDENT')")
+                .antMatchers("/*").access("hasAnyRole('ROLE_STUDENT', 'ROLE_TUTOR')")
                 .and().formLogin()
-                .loginPage("/index")
-                .failureUrl("/index?error")
-                .defaultSuccessUrl("/user", true)
+                .loginPage("/login")
+                .failureUrl("/login?error")
+                .defaultSuccessUrl("/user")
                 .usernameParameter("email").passwordParameter("password")
                 .and().logout()
-                .logoutSuccessUrl("/index?logout")
+                .logoutSuccessUrl("/login?logout")
                 .and().csrf();
     }
 
@@ -56,4 +57,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setUserDetailsService(userDetailService);
         return authProvider;
     }
+
 }
