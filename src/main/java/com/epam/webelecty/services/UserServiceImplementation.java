@@ -29,7 +29,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User getRoleByEmail() {
+    public User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return userDAO.getUserByEmail(email);
     }

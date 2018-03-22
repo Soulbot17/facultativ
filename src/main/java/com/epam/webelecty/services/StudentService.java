@@ -13,7 +13,7 @@ public interface StudentService {
     Set<Course> getAvailableCourses(User user);
     Set<Course> getWaitedCourses(User user);
     Set<Course> getCourses(User user, CourseStatus status);
-    StudentCourse joinCourse(User user, Course course);
+    StudentCourse joinCourse(User user, int courseId);
     StudentCourse getMarkAndAnnotationByCourseName(User user, Course course);
 
 }

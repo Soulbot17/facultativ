@@ -16,7 +16,7 @@ public class TutorController {
     public ModelAndView getUserPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user_tutor");
-        modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
+        modelAndView.addObject("UserName", userService.getCurrentUser().getName());
         return modelAndView;
     }
 }

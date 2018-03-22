@@ -51,6 +51,26 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return studentCourseSet;
     }
 
+    public Set<Course> getAllAvailableCoursesByStudent(User user) {
+        Connection connection = connectionPool.getConnection();
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
+                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId!=%d and courses.status='planned'",
+                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
+    }
+
+    public Set<Course> getWaitedCourses(User user) {
+        Connection connection = connectionPool.getConnection();
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
+                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.status='planned'",
+                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
+    }
+
     public Set<Course> getAllCoursesByStudent(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
@@ -179,8 +199,8 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
 
     private void fillCoursesSet(Connection connection, Set<Course> courseSet, String sql) {
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
-                while (rs.next()) {
-                    courseSet.add(CourseDAO.parseCourse(rs));
+            while (rs.next()) {
+                courseSet.add(CourseDAO.parseCourse(rs));
             }
         } catch (SQLException e) {
             log.error(e);
