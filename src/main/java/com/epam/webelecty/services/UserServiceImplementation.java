@@ -12,13 +12,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImplementation  implements UserService{
-    @Autowired
-    UserDAO userDAO;
-    @Autowired
-    BCryptPasswordEncoder encoder;
+public class UserServiceImplementation implements UserService {
 
+    private UserDAO userDAO;
+    private BCryptPasswordEncoder encoder;
 
+    @Autowired
+    public UserServiceImplementation(UserDAO userDAO, BCryptPasswordEncoder encoder) {
+        this.userDAO = userDAO;
+        this.encoder = encoder;
+    }
 
     @Override
     public User getUserByEmail(String email) {
@@ -37,11 +40,11 @@ public class UserServiceImplementation  implements UserService{
                 || "".equals(userDTO.getLastName())
                 || "".equals(userDTO.getLastName())
                 || "".equals(userDTO.getEmail())
-                || userDTO.getPassword().length()<5
-                || !userDTO.getPassword().equals(userDTO.getConfirmPassword())){
+                || userDTO.getPassword().length() < 5
+                || !userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
             throw new RegisterDataException();
         }
-        if(this.getUserByEmail(userDTO.getEmail())!=null){
+        if (this.getUserByEmail(userDTO.getEmail()) != null) {
             throw new EmailIsUsedException();
         }
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
@@ -49,8 +52,8 @@ public class UserServiceImplementation  implements UserService{
         userDAO.insert(customUserDTOToUser(userDTO));
     }
 
-    private User customUserDTOToUser(UserDTO userDTO){
-        User user=new User(
+    private User customUserDTOToUser(UserDTO userDTO) {
+        User user = new User(
                 userDTO.getEmail(),
                 userDTO.getPassword(),
                 userDTO.getName(),
