@@ -28,17 +28,17 @@ public class WebAppController {
     public ModelAndView getIndexPage() {
         return new ModelAndView("index");
     }
+
     @RequestMapping(value = {"/index"}, method = {RequestMethod.POST})
     public String sendUserPage() {
         return "redirect:/user";
     }
 
 
-
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public String getUserPage() {
         User user = userService.getCurrentUser();
-        if(UserRole.TUTOR==user.getRole()){
+        if (UserRole.TUTOR == user.getRole()) {
             return "redirect:/user_tutor";
         }
         return "redirect:/user_student";
@@ -78,7 +78,7 @@ public class WebAppController {
 
     @GetMapping(value = "/login")
     public ModelAndView getLoginPage(Authentication authentication) {
-        if(authentication!=null){
+        if (authentication != null) {
             return new ModelAndView("redirect:/index");
         }
         return new ModelAndView("login");

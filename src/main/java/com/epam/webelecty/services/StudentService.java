@@ -14,6 +14,4 @@ public interface StudentService {
     Set<Course> getWaitedCourses(User user);
     Set<Course> getCourses(User user, CourseStatus status);
     StudentCourse joinCourse(User user, int courseId);
-    StudentCourse getMarkAndAnnotationByCourseName(int userId, Course course);
-
 }

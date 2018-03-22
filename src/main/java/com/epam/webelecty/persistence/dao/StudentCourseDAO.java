@@ -51,6 +51,21 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return studentCourseSet;
     }
 
+    public StudentCourse getMarkAndAnnotationByCourseName(int userId, Course course) {
+        Connection connection = connectionPool.getConnection();
+        StudentCourse studentCourse = null;
+        String sql = String.format("SELECT id, courses.courseId, studentId, studentMark, studentFeedback from %s.student_course" +
+                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.name='%s'",
+                databaseName, databaseName, databaseName, databaseName, userId, course.getCourseName());
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            if (rs.next()) studentCourse = parseStudentCourse(rs);
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoStudentCourseFoundException(e);
+        }
+        return studentCourse;
+    }
+
     public Set<Course> getAllAvailableCoursesByStudent(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
