@@ -13,45 +13,48 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import static com.epam.webelecty.controllers.EndPointsAPI.*;
+
 @Controller
 public class TestController {
 
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET})
+    @RequestMapping(value = {"/", INDEX_PAGE}, method = {RequestMethod.GET})
     public ModelAndView getWelcomePage() {
-        return new ModelAndView("index");
+
+        return new ModelAndView(INDEX_PAGE);
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @RequestMapping(value = USER_PAGE, method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getUserPage() {
         ModelAndView modelAndView = new ModelAndView();
         User user = userService.getRoleByEmail();
         if(UserRole.TUTOR==user.getRole()){
-            modelAndView.setViewName("user_tutor");
+            modelAndView.setViewName(TUTOR_PAGE);
             modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
             return modelAndView;
         }
-        modelAndView = new ModelAndView("user_student");
+        modelAndView = new ModelAndView(STUDENT_PAGE);
         modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
         return modelAndView;
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = USER_PAGE, method = RequestMethod.POST)
     public ModelAndView getUserPagePost(@ModelAttribute("userForm") User userForm) {
-        return new ModelAndView("user").addObject("name", userForm.getName());
+        return new ModelAndView(USER_PAGE).addObject("name", userForm.getName());
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    @RequestMapping(value = REGISTRATION_PAGE, method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
 
-        return "registration";
+        return REGISTRATION_PAGE;
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    @RequestMapping(value = REGISTRATION_PAGE, method = RequestMethod.POST)
     @ResponseBody
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
         return "Welcome " + userForm.toString();
