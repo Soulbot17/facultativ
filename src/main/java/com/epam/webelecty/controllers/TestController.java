@@ -60,7 +60,7 @@ public class TestController {
         userService.register(userForm);
         return "redirect:/index";
     }
-    @ResponseStatus(value= HttpStatus.NOT_ACCEPTABLE, reason="email is used")
+
     @ExceptionHandler(EmailIsUsedException.class)
     public String emailError(Model model) {
         model.addAttribute("error", "Email is registered");
@@ -68,7 +68,7 @@ public class TestController {
         return "registration";
     }
 
-    @ResponseStatus(value= HttpStatus.NOT_ACCEPTABLE, reason="registration data is wrong")
+
     @ExceptionHandler(RegisterDataException.class)
     public String regDataError(Model model) {
         model.addAttribute("error", "Error in register data");
