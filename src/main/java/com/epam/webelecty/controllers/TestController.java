@@ -8,7 +8,6 @@ import com.epam.webelecty.services.exeptions.EmailIsUsedException;
 import com.epam.webelecty.services.exeptions.RegisterDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +28,11 @@ public class TestController {
     public ModelAndView getIndexPage() {
         return new ModelAndView("index");
     }
+
     @RequestMapping(value = {"/index"}, method = {RequestMethod.POST})
     public String sendUserPage() {
         return "redirect:/user";
     }
-
 
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
@@ -41,7 +40,7 @@ public class TestController {
     public ModelAndView getUserPage() {
         ModelAndView modelAndView = new ModelAndView();
         User user = userService.getRoleByEmail();
-        if(UserRole.TUTOR==user.getRole()){
+        if (UserRole.TUTOR == user.getRole()) {
             modelAndView.setViewName("user_tutor");
             modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
             return modelAndView;
@@ -85,7 +84,7 @@ public class TestController {
 
     @GetMapping(value = "/login")
     public ModelAndView getLoginPage(Authentication authentication) {
-        if(authentication!=null){
+        if (authentication != null) {
             return new ModelAndView("redirect:/index");
         }
         return new ModelAndView("login");
