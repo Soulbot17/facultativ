@@ -35,30 +35,16 @@ public class StudentController {
     @GetMapping(value = "/user_student")
     @SneakyThrows
     public ModelAndView getUserPage() {
-        ModelAndView modelAndView = new ModelAndView("user_student");
-        User currentUser = userService.getRoleByEmail();
-
-        Set<Course> plannedCourses = studentService.getCourses(currentUser, CourseStatus.PLANNED);
-        Set<Course> activeCourses = studentService.getCourses(currentUser, CourseStatus.ACTIVE);
-        Set<Course> finishedCourses = studentService.getCourses(currentUser, CourseStatus.FINISHED);
-        Map<Course, StudentCourse> finishedMap = new HashMap<>();
-
-        for (Course course : finishedCourses)
-            finishedMap.put(course, studentService.getMarkAndAnnotationByCourseName(currentUser, course));
-
-        modelAndView.addObject("userName", currentUser.getName());
-        modelAndView.addObject("userLastName", currentUser.getLastName());
-        modelAndView.addObject("plannedCourses", plannedCourses);
-        modelAndView.addObject("activeCourses", activeCourses);
-        modelAndView.addObject("finishedMap", finishedMap);
-
-
-        return modelAndView;
+        return getDefaultModelAndView();
     }
 
     @RequestMapping(value = "/user_student", method = RequestMethod.POST)
     public ModelAndView addUserCourse(@ModelAttribute("course") Integer id) {
-            studentService.joinCourse(userService.getRoleByEmail(), courseDAO.getById(id));
+        studentService.joinCourse(userService.getRoleByEmail(), courseDAO.getById(id));
+        return getDefaultModelAndView();
+    }
+
+    private ModelAndView getDefaultModelAndView() {
         ModelAndView modelAndView = new ModelAndView("user_student");
         User currentUser = userService.getRoleByEmail();
 
@@ -79,4 +65,6 @@ public class StudentController {
         modelAndView.addObject("finishedMap", finishedMap);
         return modelAndView;
     }
+
+
 }

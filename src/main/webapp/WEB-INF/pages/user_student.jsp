@@ -155,26 +155,13 @@
                     <td>${finished.value.studentFeedback}</td>
                 </tr>
             </c:forEach>
-
-            <%--<tr>
-                <td>HTML/CSS/JAVASCRIPT</td>
-                <td>15/05/2018</td>
-                <td>Ajkhasdkjgh ksjdhgkajsdh skdjhg ksadlj hgksldj hgsalkdjgh kasldjhg sakdjhgsdakjg</td>
-                <td>ASfdgdsfgkjl dkfjhg kdlfjhg lksdjfhgksldfnvxzlkjcv lskdjngf dosuighsdfkjgn ksdjfhg adlfkjgsdf</td>
-            </tr>
-            <tr>
-                <td>Java Spring</td>
-                <td>20/05/2018</td>
-                <td>Ajkhasdkjgh ksjdhgkajsdh skdjhg ksadlj hgksldj hgsalkdjgh kasldjhg sakdjhgsdakjg jksdfhgl kjshdfgkj
-                    skdjfhgskljdfhgslk djfhgkljsdfhglksjdf gbskdlbjxckljgsdklfjg sdfkjghs ldfgjh sdfkjhg sdlfkjhg lsdf</td>
-                <td>ASfdgdsfgkjl dkfjhg kdlfjhg lksdjfhgksldfnvxzlkjcv lskdjngf dosuighsdfkjgn ksdjfhg adlfkjgsdf dfgfd
-                    sdfgsdfg sdfg sdf gsdfgf sjkdfhglskdfjhg ksldjfhglsdkjfhg sdfg</td>
-            </tr>--%>
         </table>
+
         <div class="switcher">
             <input type="button" class="buttons" onclick="change_tables()" value="Show available courses">
         </div>
     </div>
+
     <div class="courses_info">
         <h4>Available courses</h4>
         <table>
@@ -200,11 +187,9 @@
                     <td>${waited.courseName}</td>
                     <td>${waited.annotation}</td>
                     <td>
-                        td>
                         <form class="go_to_course">
-                            <input type="submit" class="buttons" value="Waiting for start" disabled>
+                            <input type="submit" class="buttons" value="In wainitng" disabled>
                         </form>
-                    </td>
                     </td>
                 </tr>
             </c:forEach>
@@ -220,41 +205,6 @@
                     </td>
                 </tr>
             </c:forEach>
-
-
-            <%--<c:forEach items="${list}" var="course">--%>
-            <%--<tr>--%>
-            <%--<td><c:out value="${course.name}" /></td>--%>
-            <%--<td><c:out value="${course.annotation}" /></td>--%>
-            <%--<td>--%>
-            <%--<form class="go_to_course">--%>
-            <%--<input type="submit" class="buttons" value="Enter">--%>
-            <%--</form>--%>
-            <%--</td>--%>
-            <%--</tr>--%>
-            <%----%>
-            <%--</c:forEach>--%>
-
-            <%--<tr>--%>
-            <%--<td>SQL, MySql</td>--%>
-            <%--<td>10/10/2018</td>--%>
-            <%--<td>ASdkjfhs dklfjshd lfkjsdh lkjsdhf lksjdhf ksljdhf slkjd hfdh gkjhfdgkd fjhg dflkjg hdslfkj gdl</td>--%>
-            <%--<td>--%>
-            <%--<form class="go_to_course">--%>
-            <%--<input type="submit" class="buttons" value="Invited" disabled>--%>
-            <%--</form>--%>
-            <%--</td>--%>
-            <%--</tr>--%>
-            <%--<tr>--%>
-            <%--<td>Java 11</td>--%>
-            <%--<td>12/12/2018</td>--%>
-            <%--<td>Ajhflsdkjhf lkfjdhg lkdsjfhg lkdsjfhgl ksjdfhglsdkjfhglk jhsdfl gkjhsdflkjghsd lfkjgshfdl gkjdsf</td>--%>
-            <%--<td>--%>
-            <%--<form class="go_to_course">--%>
-            <%--<input type="submit" class="buttons" value="Enter">--%>
-            <%--</form>--%>
-            <%--</td>--%>
-            <%--</tr>--%>
         </table>
         <div class="switcher">
             <input type="button" class="buttons" onclick="change_tables()" value="Show ended courses">
