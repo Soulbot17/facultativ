@@ -7,6 +7,7 @@ import com.epam.webelecty.services.UserService;
 import com.epam.webelecty.services.exeptions.EmailIsUsedException;
 import com.epam.webelecty.services.exeptions.RegisterDataException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,8 +84,8 @@ public class TestController {
     }
 
     @GetMapping(value = "/login")
-    public ModelAndView getLoginPage() {
-        if(!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){
+    public ModelAndView getLoginPage(Authentication authentication) {
+        if(authentication!=null){
             return new ModelAndView("redirect:/index");
         }
         return new ModelAndView("login");

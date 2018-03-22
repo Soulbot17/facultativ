@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+
 @Setter
 @Service
 public class UserDetailServiceImplementation implements UserDetailsService {
@@ -29,9 +30,9 @@ public class UserDetailServiceImplementation implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userDao.getUserByEmail(email);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        if(UserRole.TUTOR==user.getRole()) {
+        if (UserRole.TUTOR == user.getRole()) {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_TUTOR"));
-        }else {
+        } else {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
