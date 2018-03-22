@@ -22,8 +22,6 @@ public class StudentServiceImpl implements StudentService {
     private final CourseDAO courseDAO;
 
     @Autowired
-    UserService userService;
-
     public StudentServiceImpl(StudentCourseDAO studentCourseDAO, CourseDAO courseDAO) {
         this.studentCourseDAO = studentCourseDAO;
         this.courseDAO = courseDAO;
@@ -91,16 +89,16 @@ public class StudentServiceImpl implements StudentService {
         Map<Course, StudentCourse> finishedMap = new HashMap<>();
         Set<Course> finishedCourses = getCourses(user, CourseStatus.FINISHED);
         for (Course course : finishedCourses) {
-            finishedMap.put(course, getMarkAndAnnotationByCourseName(user, course));
+            finishedMap.put(course, getMarkAndAnnotationByCourseName(user.getUserId(), course));
         }
         return finishedMap;
     }
 
     @Override
-    public StudentCourse getMarkAndAnnotationByCourseName(User user, Course course) {
+    public StudentCourse getMarkAndAnnotationByCourseName(int userId, Course course) {
         Set<StudentCourse> allEntries = studentCourseDAO.getAllEntries();
         for (StudentCourse sc : allEntries) {
-            boolean checkStudentId = sc.getStudentId() == user.getUserId();
+            boolean checkStudentId = sc.getStudentId() == userId;
             boolean checkCourseId = sc.getCourseId() == course.getCourseId();
             boolean isFinished = course.getStatus() == CourseStatus.FINISHED;
             if (checkStudentId && checkCourseId && isFinished) return sc;

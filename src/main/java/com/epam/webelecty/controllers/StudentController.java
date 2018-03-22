@@ -6,6 +6,7 @@ import com.epam.webelecty.models.StudentCourse;
 import com.epam.webelecty.models.User;
 import com.epam.webelecty.services.StudentServiceImpl;
 import com.epam.webelecty.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +25,7 @@ public class StudentController {
 
     private StudentServiceImpl studentService;
 
+    @Autowired
     public StudentController(UserService userService, StudentServiceImpl studentService) {
         this.userService = userService;
         this.studentService = studentService;
