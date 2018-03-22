@@ -21,7 +21,7 @@ public class TestController {
 
     @GetMapping(value = "/")
     public String redirectUserPage() {
-        return "redirect:/index";
+        return "redirect:/user";
     }
 
     @RequestMapping(value = "index", method = {RequestMethod.GET})
