@@ -126,7 +126,8 @@ ${UserName}
     </style>
     <script>
         function change_tables(){
-            if(document.getElementsByClassName("courses_info")[0].style.display == "block"){
+            var courseInfo = document.getElementsByClassName("courses_info")[0].style.display;
+            if (courseInfo == "block" || courseInfo == "") {
                 document.getElementsByClassName("courses_info")[0].style.display = "none";
                 document.getElementsByClassName("ended_courses_info")[0].style.display = "block";
             }else{
@@ -135,12 +136,13 @@ ${UserName}
             }
         }
         function add_new_course(){
-            if(document.getElementsByClassName("add_new_course")[0].style.display == "block"){
-                document.getElementsByClassName("courses_info")[0].style.display = "block";
-                document.getElementsByClassName("add_new_course")[0].style.display = "none";
-            }else{
+            var courseInfo = document.getElementsByClassName("courses_info")[0].style.display;
+            if (courseInfo == "block" || courseInfo == "") {
                 document.getElementsByClassName("courses_info")[0].style.display = "none";
                 document.getElementsByClassName("add_new_course")[0].style.display = "block";
+            }else{
+                document.getElementsByClassName("courses_info")[0].style.display = "block";
+                document.getElementsByClassName("add_new_course")[0].style.display = "none";
             }
         }
     </script>
