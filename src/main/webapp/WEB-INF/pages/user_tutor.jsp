@@ -1,19 +1,12 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: banka
-  Date: 18.03.18
-  Time: 1:26
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>UserPage</title>
+    <title>TutorPage</title>
 </head>
 <body>
-${UserName}
-<h1>Tutor info</h1>
 
+<h1>${UserName}${UserLastName}</h1>
 </body>
 </html>
 
@@ -72,7 +65,7 @@ ${UserName}
         .courses_info{
             padding: 10px;
         }
-        .ended_courses_info{
+        .show_student_list{
             display: none;
             padding: 10px;
         }
@@ -92,7 +85,7 @@ ${UserName}
             margin-top: 15px;
             display: inline-block;
         }
-        .buttons, .delete_button{
+        .buttons, .finish_button{
             padding: 10px;
             border: 0;
             background-color: darkorange;
@@ -117,7 +110,7 @@ ${UserName}
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        .delete_button{
+        .finish_button{
             background-color: #d62121;
         }
         .table_edit{
@@ -126,23 +119,22 @@ ${UserName}
     </style>
     <script>
         function change_tables(){
-            var courseInfo = document.getElementsByClassName("courses_info")[0].style.display;
-            if (courseInfo == "block" || courseInfo == "") {
+            var s = document.getElementsByClassName("show_student_list")[0].style.display == "block";
+            if (s == "block" || s == "") {
                 document.getElementsByClassName("courses_info")[0].style.display = "none";
-                document.getElementsByClassName("ended_courses_info")[0].style.display = "block";
+                document.getElementsByClassName("show_student_list")[0].style.display = "block";
             }else{
                 document.getElementsByClassName("courses_info")[0].style.display = "block";
-                document.getElementsByClassName("ended_courses_info")[0].style.display = "none";
+                document.getElementsByClassName("show_student_list")[0].style.display = "none";
             }
         }
         function add_new_course(){
-            var courseInfo = document.getElementsByClassName("courses_info")[0].style.display;
-            if (courseInfo == "block" || courseInfo == "") {
-                document.getElementsByClassName("courses_info")[0].style.display = "none";
-                document.getElementsByClassName("add_new_course")[0].style.display = "block";
-            }else{
+            if(document.getElementsByClassName("add_new_course")[0].style.display == "block"){
                 document.getElementsByClassName("courses_info")[0].style.display = "block";
                 document.getElementsByClassName("add_new_course")[0].style.display = "none";
+            }else{
+                document.getElementsByClassName("courses_info")[0].style.display = "none";
+                document.getElementsByClassName("add_new_course")[0].style.display = "block";
             }
         }
     </script>
@@ -156,13 +148,14 @@ ${UserName}
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
-    <div class="ended_courses_info">
-        <h4>Ended courses</h4>
+
+    <div class="show_student_list">
+        <h4>Student list</h4>
         <table>
             <tr>
-                <th>Course name</th>
-                <th>Date</th>
-                <th>Info</th>
+                <th>Student name</th>
+                <th>Mark</th>
+                <th>Feedback</th>
             </tr>
             <tr>
                 <td>column1</td>
@@ -171,7 +164,7 @@ ${UserName}
             </tr>
         </table>
         <div class="switcher">
-            <input type="button" class="buttons" onclick="change_tables()" value="Show available courses">
+            <input type="button" class="buttons" onclick="change_tables()" value="Show courses">
         </div>
     </div>
     <div class="courses_info">
@@ -179,75 +172,29 @@ ${UserName}
         <table>
             <tr>
                 <th>Course name</th>
-                <th>Date</th>
                 <th>Info</th>
                 <th></th>
                 <th></th>
             </tr>
-            <tr>
-                <td>column1</td>
-                <td>column2</td>
-                <td>column3</td>
-                <td class="table_edit">
-                    <form>
-                        <input class="buttons" type="submit" value="Edit">
-                    </form>
-                </td>
-                <td class="table_edit">
-                    <form>
-                        <input class="delete_button" type="submit" value="Delete">
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>column1</td>
-                <td>column2</td>
-                <td>column3</td>
-                <td class="table_edit">
-                    <form>
-                        <input class="buttons" type="submit" value="Edit">
-                    </form>
-                </td>
-                <td class="table_edit">
-                    <form>
-                        <input class="delete_button" type="submit" value="Delete">
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>column1</td>
-                <td>column2</td>
-                <td>column3</td>
-                <td class="table_edit">
-                    <form>
-                        <input class="buttons" type="submit" value="Edit">
-                    </form>
-                </td>
-                <td class="table_edit">
-                    <form>
-                        <input class="delete_button" type="submit" value="Delete">
-                    </form>
-                </td>
-            </tr>
+            <c:forEach var="course" items="${Courses}">
+                <tr>
+                    <td>${course.courseName}</td>
+                    <td>${course.annotation}</td>
+                    <td>
+                        <form class="switcher" method="post" modelAttribute="course">
+                            <input type="button" class="buttons" onclick="change_tables()"
+                                   value="Show student list" >
+                        </form>
+                    </td>
+                    <td>
+                        <form class="go_to_course">
+                            <input type="submit" class="finish_button" value="Close course">
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
+
         </table>
-        <div class="switcher">
-            <input type="button" class="buttons" onclick="change_tables()" value="Show ended courses">
-        </div>
-        <div class="switcher">
-            <input type="button" class="buttons" onclick="add_new_course()" value="Add new course">
-        </div>
-    </div>
-    <div class="add_new_course">
-        <h4>Add new course</h4>
-        <form>
-            <input class="new_course_inputs" type="text" placeholder="Course name" name="course_name">
-            <input class="new_course_inputs" type="date" placeholder="Start date" name="start_date">
-            <input class="new_course_inputs" type="text" placeholder="Info" name="course_info">
-            <input class="buttons" type="submit" value="Create course">
-        </form>
-        <div class="switcher">
-            <input type="button" class="buttons" onclick="add_new_course()" value="Show my courses">
-        </div>
     </div>
 </div>
 </body>

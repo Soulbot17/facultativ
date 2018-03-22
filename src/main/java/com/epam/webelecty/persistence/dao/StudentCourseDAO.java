@@ -71,6 +71,16 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return studentSet;
     }
 
+    public Set<Course> getAllCoursesByTutor(User user) {
+        Connection connection = connectionPool.getConnection();
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
+                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d",
+                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
+    }
+
     @Override
     public StudentCourse updateEntry(StudentCourse entry) {
         String sql = String.format("UPDATE %s.student_course SET courseId=%d, studentId=%d, studentMark=%d, studentFeedback='%s' WHERE id=%d",
@@ -179,9 +189,9 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
 
     private void fillCoursesSet(Connection connection, Set<Course> courseSet, String sql) {
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
-            while (rs.next()) {
-                courseSet.add(CourseDAO.parseCourse(rs));
-            }
+                while (rs.next()) {
+                    courseSet.add(CourseDAO.parseCourse(rs));
+                }
         } catch (SQLException e) {
             log.error(e);
             throw new NoCourseFoundException(e);
