@@ -2,6 +2,7 @@ package com.epam.webelecty.config;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,8 @@ import javax.annotation.Resource;
 @Log4j2
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Resource(name = "userDetailServiceImplementation")
+    @Autowired
+    @Qualifier("userDetailServiceImplementation")
     private UserDetailsService userDetailService;
 
     @Override
@@ -35,7 +37,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email").passwordParameter("password")
                 .and().logout()
                 .logoutSuccessUrl("/index?logout")
-                .deleteCookies("JSESSIONID")
                 .and().csrf();
     }
 
