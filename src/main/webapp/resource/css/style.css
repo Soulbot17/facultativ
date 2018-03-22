@@ -1,11 +1,15 @@
+html{
+    background-image: url("/resource/images/back.jpg");
+    background-size: cover;
+}
 h1{
-    font-family: sans-serif;
-    font-weight: 900;
     color: #fff;
 }
 body{
+    font-family: 'Ubuntu', sans-serif;
     margin: 0;
-    background-color: dodgerblue;
+    /*background-color: dodgerblue;*/
+    background-color: #1e90ff8c;
 }
 .left_main_area{
     float: left;
@@ -14,7 +18,7 @@ body{
 }
 .right_main_area{
     float: left;
-    width: 324px;
+    width: 260px;
     height: 400px;
 }
 .center_main_area{
@@ -25,26 +29,31 @@ body{
     margin-top: 200px;
     height: 200px;
 }
+.reg{
+    margin-top: 140px;
+}
 p{
     color: #fff;
-    font-family: sans-serif;
-    font-weight: 600;
 }
 .login_fields{
     display: block;
     width: 200px;
     margin-bottom: 10px;
-    height: 20px;
+    height: 30px;
 }
 .login_buttons{
-    width: 100px;
-    background-color: #fff;
+    padding: 10px;
     border: 0;
-    height: 25px;
+    background-color: darkorange;
+    color: #fff;
 }
 .login_buttons:hover{
     cursor: pointer;
 }
 .logo{
     margin-top: 250px;
+}
+.change_language{
+    float: right;
+    margin-right: 10px;
 }
