@@ -8,12 +8,15 @@ import com.epam.webelecty.services.exeptions.EmailIsUsedException;
 import com.epam.webelecty.services.exeptions.RegisterDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImplementation  implements UserService{
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    BCryptPasswordEncoder encoder;
 
 
 
@@ -41,6 +44,7 @@ public class UserServiceImplementation  implements UserService{
         if(this.getUserByEmail(userDTO.getEmail())!=null){
             throw new EmailIsUsedException();
         }
+        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         userDTO.setRole(UserRole.STUDENT);
         userDAO.insert(customUserDTOToUser(userDTO));
     }
