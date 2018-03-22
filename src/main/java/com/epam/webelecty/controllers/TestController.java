@@ -90,14 +90,4 @@ public class TestController {
         }
         return new ModelAndView("login");
     }
-
-    //for test only
-    @GetMapping(value = "/user_tutor")
-    public ModelAndView getTutorPage(){
-        return new ModelAndView("user_tutor");
-    }
-    @GetMapping(value = "/user_student")
-    public ModelAndView getStudentPage(){
-        return new ModelAndView("user_student");
-    }
 }
