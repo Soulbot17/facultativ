@@ -90,6 +90,25 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return getById(entry.getId());
     }
 
+    public StudentCourse postMarkAndAnnotation(int userId, int courseId, int mark, String annotation) {
+        Connection connection = connectionPool.getConnection();
+        String sql = String.format("select id, courseId, studentId, studentMark, studentFeedback from %s.student_course where studentId=%d and courseId=%d",
+                databaseName, userId, courseId);
+        StudentCourse studentCourse = null;
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()){
+            if (rs.next()) {
+                studentCourse = parseStudentCourse(rs);
+                studentCourse.setStudentMark(mark);
+                studentCourse.setStudentFeedback(annotation);
+                updateEntry(studentCourse);
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoStudentCourseFoundException(e);
+        }
+        return studentCourse;
+    }
+
     @Override
     public void removeById(int id) {
         String sql = String.format("DELETE FROM %s.student_course WHERE id=%d", databaseName, id);

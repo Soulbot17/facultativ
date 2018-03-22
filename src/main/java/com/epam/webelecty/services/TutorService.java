@@ -9,6 +9,10 @@ public interface TutorService {
 
     Set<Course> getCourses(User user);
 
+    Course getCourseById(Integer courseId);
+
     Set<User> getStudents(Course course);
+
+    Course updateCourse(Course course);
 
 }

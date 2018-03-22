@@ -1,7 +1,7 @@
 package com.epam.webelecty.controllers;
 
+
 import com.epam.webelecty.models.Course;
-import com.epam.webelecty.models.CourseStatus;
 import com.epam.webelecty.models.User;
 import com.epam.webelecty.services.TutorService;
 import com.epam.webelecty.services.UserService;
@@ -15,32 +15,32 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Set;
 
 @Controller
-public class TutorController {
-
+public class ListStudentsController {
     @Autowired
     UserService userService;
 
     @Autowired
     TutorService tutorService;
 
-    @GetMapping(value = "/user_tutor")
-    public ModelAndView getUserPage() {
+    @GetMapping(value = "/student_list")
+    public ModelAndView getStudentListByCourseId(@ModelAttribute("course") Integer courseId) {
+        Course course = tutorService.getCourseById(courseId);
+        Set<User> students = tutorService.getStudents(course);
         User tutor = userService.getRoleByEmail();
-        Set<Course> courses = tutorService.getCourses(tutor);
-
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user_tutor");
-        modelAndView.addObject("UserName", tutor.getName());
+        modelAndView.setViewName("student_list");
+
+        modelAndView.addObject("CourseName", course.getCourseName());
         modelAndView.addObject("UserLastName", tutor.getLastName());
-        modelAndView.addObject("Courses", courses);
+        modelAndView.addObject("Students", students);
         return modelAndView;
     }
 
-    @PostMapping(value = "/user_tutor")
-    public ModelAndView setCourseStatusClose(@ModelAttribute("course") Integer courseId){
-        Course course = tutorService.getCourseById(courseId);
-        course.setStatus(CourseStatus.FINISHED);
-        tutorService.updateCourse(course);
-        return getUserPage();
+    //TODO: реализовать метод для оставления фидбека
+    @PostMapping(value = "/student_list")
+    public ModelAndView postMarkAndFeedback(){
+        return new ModelAndView();
     }
+
+
 }

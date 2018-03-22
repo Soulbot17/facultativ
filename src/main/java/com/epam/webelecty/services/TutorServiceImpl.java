@@ -25,8 +25,20 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
+    public Course getCourseById(Integer courseId) {
+        return courseDAO.getById(courseId);
+    }
+
+    @Override
     public Set<User> getStudents(Course course) {
         Set<User> students = studentCourseDAO.getAllStudentsByCourse(course);
         return students;
     }
+
+    @Override
+    public Course updateCourse(Course course) {
+
+        return courseDAO.updateEntry(course);
+    }
+
 }

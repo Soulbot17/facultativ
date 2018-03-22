@@ -3,18 +3,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>TutorPage</title>
+    <title>Student list</title>
 </head>
 <body>
 
-<h1>${UserName}${UserLastName}</h1>
+<h1>${CourseName}</h1>
 </body>
 </html>
 
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!doctype html>
 <head>
-    <title>Tutor page</title>
+    <title>Student list</title>
     <meta charset="utf-8">
     <style>
         /*html{
@@ -64,6 +64,7 @@
             position: relative;
         }
         .courses_info{
+            display: block;
             padding: 10px;
         }
         .show_student_list{
@@ -118,27 +119,7 @@
             width: 50px;
         }
     </style>
-    <script>
-        function change_tables(){
-            var s = document.getElementsByClassName("show_student_list")[0].style.display == "block";
-            if (s == "block" || s == "") {
-                document.getElementsByClassName("courses_info")[0].style.display = "none";
-                document.getElementsByClassName("show_student_list")[0].style.display = "block";
-            }else{
-                document.getElementsByClassName("courses_info")[0].style.display = "block";
-                document.getElementsByClassName("show_student_list")[0].style.display = "none";
-            }
-        }
-        function add_new_course(){
-            if(document.getElementsByClassName("add_new_course")[0].style.display == "block"){
-                document.getElementsByClassName("courses_info")[0].style.display = "block";
-                document.getElementsByClassName("add_new_course")[0].style.display = "none";
-            }else{
-                document.getElementsByClassName("courses_info")[0].style.display = "none";
-                document.getElementsByClassName("add_new_course")[0].style.display = "block";
-            }
-        }
-    </script>
+
 </head>
 <body>
 <div class="center_field">
@@ -150,37 +131,30 @@
         </form>
     </div>
 
-
     <div class="courses_info">
-        <h4>My courses</h4>
+        <h4>Student list</h4>
         <table>
             <tr>
-                <th>Course name</th>
-                <th>Info</th>
-                <th></th>
-                <th></th>
+                <th>Last name</th>
+                <th>Name</th>
+                <th>Mark</th>
+                <th>Feedback</th>
             </tr>
-            <c:forEach var="course" items="${Courses}">
+            <c:forEach var="student" items="${Students}">
                 <tr>
-                    <td>${course.courseName}</td>
-                    <td>${course.annotation}</td>
-                    <td>
-                        <form:form modelAttribute="course"  id="studentListDirect" method="POST" action="/student_list">
-                            <button class="buttons" type="submit">Show student list</button>
-                            <input type="hidden" name="course" value="${course.courseId}"/>
-                            <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
-                        </form:form>
-                    </td>
-                    <td>
-                        <form:form class="go_to_course" modelAttribute="course" method="post">
-                            <input type="hidden" name="course" value="${course.courseId}">
-                            <input type="submit" class="finish_button" value="Close course">
-                        </form:form>
-                    </td>
+                    <td>${student.lastName}</td>
+                    <td>${student.name}</td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </c:forEach>
 
         </table>
+        <form  id="studentListDirect" method="get" action="/user_tutor">
+            <button class="buttons" type="submit">Show courses</button>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
     </div>
+
 </div>
 </body>
