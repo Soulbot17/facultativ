@@ -157,6 +157,43 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return finishedMap;
     }
 
+    public Map<User, StudentCourse> getMapStudentCoursesByCourseNoFeedback(Course course) {
+        Connection connection = connectionPool.getConnection();
+        Map<User, StudentCourse> finishedMap = new HashMap<>();
+        String sql = String.format("SELECT users.userId, email, pass, name, lastName, role," +
+                        " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON " +
+                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback is null", databaseName,
+                databaseName, databaseName, databaseName, course.getCourseId());
+        fillMapByStudentCourseUser(connection, finishedMap, sql);
+        return finishedMap;
+    }
+
+    public Map<User, StudentCourse> getMapStudentCoursesByCourseWithFeedback(Course course) {
+        Connection connection = connectionPool.getConnection();
+        Map<User, StudentCourse> finishedMap = new HashMap<>();
+        String sql = String.format("SELECT users.userId, email, pass, name, lastName, role," +
+                        " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON " +
+                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback is not null", databaseName,
+                databaseName, databaseName, databaseName, course.getCourseId());
+        fillMapByStudentCourseUser(connection, finishedMap, sql);
+        return finishedMap;
+    }
+
+    private void fillMapByStudentCourseUser(Connection connection, Map<User, StudentCourse> finishedMap, String sql) {
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            while (rs.next()) {
+                User user = UserDAO.parseUser(rs);
+                StudentCourse studentCourse = parseStudentCourse(rs);
+                finishedMap.put(user, studentCourse);
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoStudentCourseFoundException(e);
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+    }
+
     @Override
     public StudentCourse insert(StudentCourse entry) {
         String sql = String.format("INSERT INTO %s.student_course(courseId, studentId, studentMark, studentFeedback) VALUES(%d, %d, %d, '%s')",
