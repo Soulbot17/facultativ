@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Set;
 
 @Controller
-public class ListStudentsController {
+public class StudentsListController {
     @Autowired
     UserService userService;
 
@@ -34,12 +34,6 @@ public class ListStudentsController {
         modelAndView.addObject("Students", students);
         return modelAndView;
     }
-
-    //TODO: реализовать метод для оставления фидбека
-//    @PostMapping(value = "/student_list")
-//    public ModelAndView postMarkAndFeedback(){
-//        return new ModelAndView();
-//    }
 
 
 }
