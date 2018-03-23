@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<h1>${StudentLstName}</h1>
+<h1>${StudentLastName}</h1>
 </body>
 </html>
 
@@ -140,12 +140,12 @@
             width: 50px;
         }
     </style>
-
+    <link type="text/css" href="${contextPath}/resource/css/style.css" rel="stylesheet">
 </head>
 <body>
 <div class="center_field">
     <div class="user_info">
-        <p>${UserLastName}</p>
+        <p>${UserName} ${UserLastName}</p>
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
             <button class="buttons" type="submit">Logout</button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
