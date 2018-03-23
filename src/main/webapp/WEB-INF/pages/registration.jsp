@@ -60,8 +60,8 @@
         </div>
     </div>
     <div class="right_main_area">
-        <div class="signin_area reg">
-            <p><spring:message code="label.signup_info"/></p>
+        <div class="signup_area">
+            <p class="form_label"><spring:message code="label.signup_info"/></p>
             <p>${error}</p>
             <form:form method="post" modelAttribute="userForm"  class="form-signin">
                 <input class="login_fields" type="text" name="name" placeholder="<spring:message code="label.name"/>" required>

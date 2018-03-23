@@ -5,8 +5,9 @@
 body{
     font-family: 'Ubuntu', sans-serif;
     margin: 0;
-    /*background-color: dodgerblue;*/
-    background-color: #1e90ff8c;
+    color: #fff;
+    /*background-color: #1e90ff8c;*/
+    background-color: #000000d1;
 }
 .center_main_area{
     width: 1024px;
@@ -27,6 +28,9 @@ body{
 }
 form {
     display: initial;
+}
+.form_label{
+    margin-bottom: 10px;
 }
 .go_to_course > .buttons{
     width: 190px;
@@ -60,6 +64,7 @@ html{
     padding: 10px;
     border: 0;
     background-color: darkorange;
+    font-family: 'Ubuntu', sans-serif;
     color: #fff;
 }
 .login_buttons:hover{
@@ -71,9 +76,6 @@ html{
 p{
     color: #fff;
 }
-.reg{
-    margin-top: 140px;
-}
 .right_main_area{
     float: left;
     width: 260px;
@@ -81,6 +83,10 @@ p{
 }
 .signin_area{
     margin-top: 200px;
+    height: 200px;
+}
+.signup_area{
+    margin-top: 150px;
     height: 200px;
 }
 .show_student_list {
@@ -92,6 +98,7 @@ table, th, td {
 }
 table {
     border-collapse: collapse;
+    margin-bottom: 10px;
 }
 td, th {
     width: 200px;
@@ -99,10 +106,10 @@ td, th {
     text-align: center;
 }
 tr {
-    background-color: #5f9ea0ad;
+    background-color: #6f6f6fad;
 }
 tr:nth-child(even) {
-    background-color: cadetblue;
+    background-color: #ffffff33;
 }
 th {
     padding-top: 12px;
@@ -120,6 +127,7 @@ th {
 }
 h3, p {
     margin: 0;
+    display: inline-block;
 }
 .switcher {
     margin-top: 15px;
@@ -130,16 +138,14 @@ h3, p {
     border: 0;
     background-color: darkorange;
     color: #fff;
-    font-family: sans-serif;
-    font-weight: bold;
+    font-family: 'Ubuntu', sans-serif;
 }
 .buttons, .finish_button {
     padding: 10px;
     border: 0;
     background-color: darkorange;
     color: #fff;
-    font-family: sans-serif;
-    font-weight: bold;
+    font-family: 'Ubuntu', sans-serif;
 }
 .buttons:hover {
     cursor: pointer;
@@ -164,4 +170,19 @@ h4 {
     height: 100px;
     width: 1024px;
     margin: auto;
+    height: -webkit-fill-available;
+}
+.signin_button{
+    margin-top: 255px;
+    float: right;
+}
+
+.long_button{
+    width: 190px;
+}
+
+.student_list_text{
+    height: 35px;
+    width: 200px;
+    margin: 5px;
 }

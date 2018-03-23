@@ -24,7 +24,7 @@
     </div>
     <div class="right_main_area">
         <div class="signin_area">
-            <p><spring:message code="label.signin_info"/></p>
+            <p class="form_label"><spring:message code="label.signin_info"/></p>
             <form name='loginForm'
                   action="<c:url value='/login' />" method='POST'>
 
