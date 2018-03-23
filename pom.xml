@@ -127,7 +127,6 @@
             <version>${spring.ver}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
