@@ -1,6 +1,7 @@
 package com.epam.webelecty.services;
 
 import com.epam.webelecty.models.Course;
+import com.epam.webelecty.models.CourseStatus;
 import com.epam.webelecty.models.User;
 import com.epam.webelecty.persistence.dao.CourseDAO;
 import com.epam.webelecty.persistence.dao.StudentCourseDAO;
@@ -38,7 +39,9 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
-    public Course updateCourse(Course course) {
+    public Course updateCourse(int courseId) {
+        Course course = getCourseById(courseId);
+        course.setStatus(CourseStatus.FINISHED);
         return courseDAO.updateEntry(course);
     }
 

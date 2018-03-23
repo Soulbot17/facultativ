@@ -1,7 +1,5 @@
 package com.epam.webelecty.controllers;
 
-import com.epam.webelecty.models.Course;
-import com.epam.webelecty.models.CourseStatus;
 import com.epam.webelecty.services.TutorService;
 import com.epam.webelecty.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +25,7 @@ public class TutorController {
 
     @PostMapping(value = "/user_tutor")
     public ModelAndView setCourseStatusClose(@ModelAttribute("course") Integer courseId){
-        Course course = tutorService.getCourseById(courseId);
-        course.setStatus(CourseStatus.FINISHED);
-        tutorService.updateCourse(course);
+        tutorService.updateCourse(courseId);
         return getUserPage();
     }
 }

@@ -14,8 +14,7 @@ public interface TutorService {
 
     Set<User> getStudents(Course course);
 
-    Course updateCourse(Course course);
+    Course updateCourse(int courseId);
 
     ModelAndView fillModelAndView();
-
 }

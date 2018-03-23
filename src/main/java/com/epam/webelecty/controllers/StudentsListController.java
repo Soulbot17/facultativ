@@ -3,6 +3,7 @@ package com.epam.webelecty.controllers;
 
 import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.User;
+import com.epam.webelecty.services.StudentsListService;
 import com.epam.webelecty.services.TutorService;
 import com.epam.webelecty.services.UserService;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,9 @@ public class StudentsListController {
     @Autowired
     TutorService tutorService;
 
+    @Autowired
+    StudentsListService studentsListService;
+
     @GetMapping(value = "/student_list")
     public ModelAndView getStudentListByCourseId(@ModelAttribute("course") Integer courseId, Model model) {
         Course course = tutorService.getCourseById(courseId);
@@ -38,6 +42,7 @@ public class StudentsListController {
         modelAndView.setViewName("student_list");
 
         modelAndView.addObject("CourseName", course.getCourseName());
+        modelAndView.addObject("CourseId", course.getCourseId());
         modelAndView.addObject("UserLastName", tutor.getLastName());
         modelAndView.addObject("Students", students);
         model.addAttribute("course", new UserFeedback());
@@ -45,10 +50,13 @@ public class StudentsListController {
     }
 
     @PostMapping(value = "/student_list")
-    public Model addFeedback(@ModelAttribute("course") UserFeedback userFeedback, Model model) {
-        log.debug(userFeedback.feedback);
-        log.debug(userFeedback.mark);
-        return model;
+    public ModelAndView addFeedback(@ModelAttribute("course") UserFeedback userFeedback, Model model) {
+        studentsListService.postMarkAndAnnotation(
+                userFeedback.studentId,
+                userFeedback.courseId,
+                userFeedback.mark,
+                userFeedback.feedback);
+        return getStudentListByCourseId(userFeedback.courseId, model);
     }
 
     @Data
@@ -56,16 +64,9 @@ public class StudentsListController {
     @NoArgsConstructor
     @AllArgsConstructor
     static class UserFeedback {
-        private String mark;
+        private Integer studentId;
+        private Integer courseId;
+        private Integer mark;
         private String feedback;
-
-//        public UserFeedback() {
-//        }
-
-        //        public UserFeedback(String mark, String feedback) {
-//            this.mark = mark;
-//            this.feedback = feedback;
-//        }
     }
-
 }

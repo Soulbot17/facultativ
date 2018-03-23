@@ -167,14 +167,19 @@
                     <form:form modelAttribute="course" id="studentListDirect" method="post"
                                action="/student_list">
                         <td>
-                            <input class="login_fields" type="text" name="mark" placeholder="Mark" required>
+                            <input class="login_fields" maxlength="1" type="text" name="mark" placeholder="Mark"
+                                   required>
+                            <input type="text" hidden name="courseId" value="${CourseId}">
+                            <input type="text" hidden name="studentId" value="${student.userId}">
+
                         </td>
                         <td>
-                            <input class="login_fields" type="text" name="feedback" placeholder="feedback" required>
+                            <textarea class="login_fields" name="feedback" placeholder="feedback" required></textarea>
                         </td>
                         <td>
                             <button class="buttons" type="submit">add feedback</button>
                         </td>
+
                     </form:form>
 
                 </tr>

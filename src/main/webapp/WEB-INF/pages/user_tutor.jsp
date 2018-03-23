@@ -6,8 +6,6 @@
     <title>TutorPage</title>
 </head>
 <body>
-
-<h1>${UserName}${UserLastName}</h1>
 </body>
 </html>
 

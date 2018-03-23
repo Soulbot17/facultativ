@@ -1,14 +1,14 @@
 package com.epam.webelecty.services;
 
-import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.StudentCourse;
-import com.epam.webelecty.models.User;
 import com.epam.webelecty.persistence.dao.CourseDAO;
 import com.epam.webelecty.persistence.dao.StudentCourseDAO;
 import com.epam.webelecty.persistence.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class ListStudentsServiceImpl implements ListStudentsService {
+@Service
+public class StudentsListServiceImpl implements StudentsListService {
     @Autowired
     CourseDAO courseDAO;
 
@@ -19,7 +19,7 @@ public class ListStudentsServiceImpl implements ListStudentsService {
     UserDAO userDAO;
 
     @Override
-    public StudentCourse postMarkAndAnnotation(int mark, User user, Course course) {
-        return null;
+    public StudentCourse postMarkAndAnnotation(int userId, int courseId, int mark, String feedback) {
+        return studentCourseDAO.postMarkAndAnnotation(userId, courseId, mark, feedback);
     }
 }
