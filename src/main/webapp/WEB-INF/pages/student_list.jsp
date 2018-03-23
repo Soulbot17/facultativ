@@ -11,7 +11,7 @@
 </body>
 </html>
 
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <head>
     <title>Student list</title>
@@ -20,42 +20,50 @@
         /*html{
             background-image: url(123.jpg);
         }*/
-        body{
+        body {
             margin: auto;
             background-color: dodgerblue;
             color: #fff;
             font-family: sans-serif;
             font-weight: 300;
         }
-        .center_field{
+
+        .center_field {
             height: 100px;
             width: 1024px;
             margin: auto;
         }
-        table, th, td{
-            border: thin solid rgba(0,0,0,0);
+
+        table, th, td {
+            border: thin solid rgba(0, 0, 0, 0);
         }
-        table{
+
+        table {
             border-collapse: collapse;
         }
-        td, th{
+
+        td, th {
             width: 200px;
             height: 30px;
             text-align: center;
         }
-        tr{
+
+        tr {
             background-color: #5f9ea0ad;
         }
-        tr:nth-child(even){
+
+        tr:nth-child(even) {
             background-color: cadetblue;
         }
+
         th {
             padding-top: 12px;
             padding-bottom: 12px;
             background-color: darkorange;
             color: white;
         }
-        .user_info{
+
+        .user_info {
             border: thin solid white;
             padding: 10px;
             margin: 10px;
@@ -63,31 +71,38 @@
             float: right;
             position: relative;
         }
-        .courses_info{
+
+        .courses_info {
             display: block;
             padding: 10px;
         }
-        .show_student_list{
+
+        .show_student_list {
             display: none;
             padding: 10px;
         }
-        h3, p{
+
+        h3, p {
             margin: 0;
         }
-        p{
+
+        p {
             display: inline-block;
             font-family: sans-serif;
             font-weight: 600;
             margin: 5px
         }
-        form{
+
+        form {
             display: initial;
         }
-        .switcher{
+
+        .switcher {
             margin-top: 15px;
             display: inline-block;
         }
-        .buttons, .finish_button{
+
+        .buttons, .finish_button {
             padding: 10px;
             border: 0;
             background-color: darkorange;
@@ -95,27 +110,33 @@
             font-family: sans-serif;
             font-weight: bold;
         }
-        .buttons:hover{
+
+        .buttons:hover {
             cursor: pointer;
         }
-        h4{
+
+        h4 {
             margin-bottom: 18px;
         }
-        .add_new_course{
+
+        .add_new_course {
             display: none;
             padding-top: 10px;
         }
-        .new_course_inputs{
+
+        .new_course_inputs {
             display: block;
             width: 200px;
             height: 30px;
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        .finish_button{
+
+        .finish_button {
             background-color: #d62121;
         }
-        .table_edit{
+
+        .table_edit {
             width: 50px;
         }
     </style>
@@ -143,23 +164,24 @@
             <c:forEach var="student" items="${Students}">
                 <tr>
                     <td>${student.lastName} ${student.name}</td>
-                    <td><form:form method="post" modelAttribute="userForm" class="form-signin">
-                        <input class="login_fields" type="text" name="mark" placeholder="Mark" required>
-                    </form:form></td>
-                    <td><form:form method="post" modelAttribute="userForm" class="form-signin">
-                        <input class="login_fields" type="text" name="feedback" placeholder="feedback" required>
-                    </form:form></td>
-                    <td>
-                        <form:form modelAttribute="course" id="studentListDirect" method="post"
-                                   action="/student_feedback">
+                    <form:form modelAttribute="course" id="studentListDirect" method="post"
+                               action="/student_list">
+                        <td>
+                            <input class="login_fields" type="text" name="mark" placeholder="Mark" required>
+                        </td>
+                        <td>
+                            <input class="login_fields" type="text" name="feedback" placeholder="feedback" required>
+                        </td>
+                        <td>
                             <button class="buttons" type="submit">add feedback</button>
-                        </form:form>
-                    </td>
+                        </td>
+                    </form:form>
+
                 </tr>
             </c:forEach>
 
         </table>
-        <form  id="studentListDirect" method="get" action="/user_tutor">
+        <form id="studentListDirect" method="get" action="/user_tutor">
             <button class="buttons" type="submit">Show courses</button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
