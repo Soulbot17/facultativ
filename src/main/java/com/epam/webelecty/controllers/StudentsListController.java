@@ -2,6 +2,7 @@ package com.epam.webelecty.controllers;
 
 
 import com.epam.webelecty.models.Course;
+import com.epam.webelecty.models.StudentCourse;
 import com.epam.webelecty.models.User;
 import com.epam.webelecty.services.StudentsListService;
 import com.epam.webelecty.services.TutorService;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Set;
+import java.util.Map;
 
 @Log4j2
 @Controller
@@ -32,10 +33,14 @@ public class StudentsListController {
     @Autowired
     StudentsListService studentsListService;
 
+
     @GetMapping(value = "/student_list")
     public ModelAndView getStudentListByCourseId(@ModelAttribute("course") Integer courseId) {
         Course course = tutorService.getCourseById(courseId);
-        Set<User> students = tutorService.getStudents(course);
+
+        Map<User, StudentCourse> withFeedback = studentsListService.getHasFeedbackMapStudentCourseUser(course);
+        Map<User, StudentCourse> noFeedback = studentsListService.getNoFeedbackMapStudentCourseUser(course);
+
         User tutor = userService.getCurrentUser();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("student_list");
@@ -43,8 +48,9 @@ public class StudentsListController {
         modelAndView.addObject("CourseName", course.getCourseName());
         modelAndView.addObject("CourseId", course.getCourseId());
         modelAndView.addObject("UserLastName", tutor.getLastName());
-        modelAndView.addObject("Students", students);
         modelAndView.addObject("course", new UserFeedback());
+        modelAndView.addObject("WithFeedback", withFeedback);
+        modelAndView.addObject("NoFeedback", noFeedback);
         return modelAndView;
     }
 

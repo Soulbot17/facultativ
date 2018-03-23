@@ -1,6 +1,8 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/"/>
 <html>
 <head>
     <title>Student info</title>
@@ -16,130 +18,12 @@
 <head>
     <title>Student list</title>
     <meta charset="utf-8">
-    <style>
-        /*html{
-            background-image: url(123.jpg);
-        }*/
-        body {
-            margin: auto;
-            background-color: dodgerblue;
-            color: #fff;
-            font-family: sans-serif;
-            font-weight: 300;
-        }
-
-        .center_field {
-            height: 100px;
-            width: 1024px;
-            margin: auto;
-        }
-
-        table, th, td {
-            border: thin solid rgba(0, 0, 0, 0);
-        }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        td, th {
-            width: 200px;
-            height: 30px;
-            text-align: center;
-        }
-
-        tr {
-            background-color: #5f9ea0ad;
-        }
-
-        tr:nth-child(even) {
-            background-color: cadetblue;
-        }
-
-        th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            background-color: darkorange;
-            color: white;
-        }
-
-        .user_info {
-            border: thin solid white;
-            padding: 10px;
-            margin: 10px;
-            height: max-content;
-            float: right;
-            position: relative;
-        }
-
-        .courses_info {
-            display: block;
-            padding: 10px;
-        }
-
-        .show_student_list {
-            display: none;
-            padding: 10px;
-        }
-
-        h3, p {
-            margin: 0;
-        }
-
-        p {
-            display: inline-block;
-            font-family: sans-serif;
-            font-weight: 600;
-            margin: 5px
-        }
-
-        form {
-            display: initial;
-        }
-
-        .switcher {
-            margin-top: 15px;
-            display: inline-block;
-        }
-
-        .buttons, .finish_button {
-            padding: 10px;
-            border: 0;
-            background-color: darkorange;
-            color: #fff;
-            font-family: sans-serif;
-            font-weight: bold;
-        }
-
-        .buttons:hover {
-            cursor: pointer;
-        }
-
-        h4 {
-            margin-bottom: 18px;
-        }
-
-        .add_new_course {
-            display: none;
-            padding-top: 10px;
-        }
-
-        .new_course_inputs {
-            display: block;
-            width: 200px;
-            height: 30px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .finish_button {
-            background-color: #d62121;
-        }
-
-        .table_edit {
-            width: 50px;
-        }
-    </style>
+    <head>
+        <meta charset="utf-8">
+        <title><spring:message code="label.auth_page"/></title>
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+        <link type="text/css" href="/resource/css/style.css" rel="stylesheet">
+    </head>
 
 </head>
 <body>
@@ -161,16 +45,19 @@
                 <th>Feedback</th>
                 <th></th>
             </tr>
-            <c:forEach var="student" items="${Students}">
+
+            <c:forEach items="${NoFeedback}" var="cur">
                 <tr>
-                    <td>${student.lastName} ${student.name}</td>
+                    <td>${cur.key.lastName} ${cur.key.name}</td>
+                    <td>${cur.value.studentMark}</td>
+                    <td>${cur.value.studentFeedback}</td>
                     <form:form modelAttribute="course" id="studentListDirect" method="post"
                                action="/student_list">
                         <td>
                             <input class="login_fields" maxlength="1" type="text" name="mark" placeholder="Mark"
                                    required>
                             <input type="text" hidden name="courseId" value="${CourseId}">
-                            <input type="text" hidden name="studentId" value="${student.userId}">
+                            <input type="text" hidden name="studentId" value="${cur.key.userId}">
 
                         </td>
                         <td>
@@ -181,9 +68,39 @@
                         </td>
 
                     </form:form>
-
                 </tr>
             </c:forEach>
+
+            <c:forEach items="${WithFeedback}" var="cur">
+                <tr>
+                    <td>${cur.key.lastName} ${cur.key.name}</td>
+                    <td>${cur.value.studentMark}</td>
+                    <td>${cur.value.studentFeedback}</td>
+                </tr>
+            </c:forEach>
+            <%--<c:forEach var="student" items="${Students}">--%>
+            <%--<tr>--%>
+            <%--<td>${student.lastName} ${student.name}</td>--%>
+            <%--<form:form modelAttribute="course" id="studentListDirect" method="post"--%>
+            <%--action="/student_list">--%>
+            <%--<td>--%>
+            <%--<input class="login_fields" maxlength="1" type="text" name="mark" placeholder="Mark"--%>
+            <%--required>--%>
+            <%--<input type="text" hidden name="courseId" value="${CourseId}">--%>
+            <%--<input type="text" hidden name="studentId" value="${student.userId}">--%>
+
+            <%--</td>--%>
+            <%--<td>--%>
+            <%--<textarea class="login_fields" name="feedback" placeholder="feedback" required></textarea>--%>
+            <%--</td>--%>
+            <%--<td>--%>
+            <%--<button class="buttons" type="submit">add feedback</button>--%>
+            <%--</td>--%>
+
+            <%--</form:form>--%>
+
+            <%--</tr>--%>
+            <%--</c:forEach>--%>
 
         </table>
         <form id="studentListDirect" method="get" action="/user_tutor">
