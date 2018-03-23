@@ -3,7 +3,7 @@ package com.epam.webelecty.services;
 import com.epam.webelecty.models.User;
 import com.epam.webelecty.models.UserRole;
 import com.epam.webelecty.persistence.dao.UserDAO;
-import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@Log4j2
 public class UserDetailServiceImplementation implements UserDetailsService {
 
     private UserDAO userDao;

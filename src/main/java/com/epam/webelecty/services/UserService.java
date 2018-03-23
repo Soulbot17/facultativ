@@ -7,7 +7,7 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    User getRoleByEmail();
+    User getCurrentUser();
 
     public void register(UserDTO user);
 }

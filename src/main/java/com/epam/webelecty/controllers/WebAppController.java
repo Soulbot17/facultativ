@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class TestController {
+public class WebAppController {
 
     @Autowired
     UserService userService;
@@ -36,18 +36,12 @@ public class TestController {
 
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    @ResponseBody
-    public ModelAndView getUserPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        User user = userService.getRoleByEmail();
+    public String getUserPage() {
+        User user = userService.getCurrentUser();
         if (UserRole.TUTOR == user.getRole()) {
-            modelAndView.setViewName("user_tutor");
-            modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
-            return modelAndView;
+            return "redirect:/user_tutor";
         }
-        modelAndView = new ModelAndView("user_student");
-        modelAndView.addObject("UserName", userService.getRoleByEmail().getName());
-        return modelAndView;
+        return "redirect:/user_student";
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
