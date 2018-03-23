@@ -11,7 +11,7 @@
 </body>
 </html>
 
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <head>
     <title>Tutor page</title>
@@ -20,42 +20,50 @@
         /*html{
             background-image: url(123.jpg);
         }*/
-        body{
+        body {
             margin: auto;
             background-color: dodgerblue;
             color: #fff;
             font-family: sans-serif;
             font-weight: 300;
         }
-        .center_field{
+
+        .center_field {
             height: 100px;
             width: 1024px;
             margin: auto;
         }
-        table, th, td{
-            border: thin solid rgba(0,0,0,0);
+
+        table, th, td {
+            border: thin solid rgba(0, 0, 0, 0);
         }
-        table{
+
+        table {
             border-collapse: collapse;
         }
-        td, th{
+
+        td, th {
             width: 200px;
             height: 30px;
             text-align: center;
         }
-        tr{
+
+        tr {
             background-color: #5f9ea0ad;
         }
-        tr:nth-child(even){
+
+        tr:nth-child(even) {
             background-color: cadetblue;
         }
+
         th {
             padding-top: 12px;
             padding-bottom: 12px;
             background-color: darkorange;
             color: white;
         }
-        .user_info{
+
+        .user_info {
             border: thin solid white;
             padding: 10px;
             margin: 10px;
@@ -63,30 +71,37 @@
             float: right;
             position: relative;
         }
-        .courses_info{
+
+        .courses_info {
             padding: 10px;
         }
-        .show_student_list{
+
+        .show_student_list {
             display: none;
             padding: 10px;
         }
-        h3, p{
+
+        h3, p {
             margin: 0;
         }
-        p{
+
+        p {
             display: inline-block;
             font-family: sans-serif;
             font-weight: 600;
             margin: 5px
         }
-        form{
+
+        form {
             display: initial;
         }
-        .switcher{
+
+        .switcher {
             margin-top: 15px;
             display: inline-block;
         }
-        .buttons, .finish_button{
+
+        .buttons, .finish_button {
             padding: 10px;
             border: 0;
             background-color: darkorange;
@@ -94,46 +109,53 @@
             font-family: sans-serif;
             font-weight: bold;
         }
-        .buttons:hover{
+
+        .buttons:hover {
             cursor: pointer;
         }
-        h4{
+
+        h4 {
             margin-bottom: 18px;
         }
-        .add_new_course{
+
+        .add_new_course {
             display: none;
             padding-top: 10px;
         }
-        .new_course_inputs{
+
+        .new_course_inputs {
             display: block;
             width: 200px;
             height: 30px;
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        .finish_button{
+
+        .finish_button {
             background-color: #d62121;
         }
-        .table_edit{
+
+        .table_edit {
             width: 50px;
         }
     </style>
     <script>
-        function change_tables(){
+        function change_tables() {
             var s = document.getElementsByClassName("show_student_list")[0].style.display == "block";
             if (s == "block" || s == "") {
                 document.getElementsByClassName("courses_info")[0].style.display = "none";
                 document.getElementsByClassName("show_student_list")[0].style.display = "block";
-            }else{
+            } else {
                 document.getElementsByClassName("courses_info")[0].style.display = "block";
                 document.getElementsByClassName("show_student_list")[0].style.display = "none";
             }
         }
-        function add_new_course(){
-            if(document.getElementsByClassName("add_new_course")[0].style.display == "block"){
+
+        function add_new_course() {
+            if (document.getElementsByClassName("add_new_course")[0].style.display == "block") {
                 document.getElementsByClassName("courses_info")[0].style.display = "block";
                 document.getElementsByClassName("add_new_course")[0].style.display = "none";
-            }else{
+            } else {
                 document.getElementsByClassName("courses_info")[0].style.display = "none";
                 document.getElementsByClassName("add_new_course")[0].style.display = "block";
             }
@@ -165,7 +187,7 @@
                     <td>${course.courseName}</td>
                     <td>${course.annotation}</td>
                     <td>
-                        <form:form modelAttribute="course"  id="studentListDirect" method="get" action="/student_list">
+                        <form:form modelAttribute="course" id="studentListDirect" method="get" action="/student_list">
                             <button class="buttons" type="submit">Show student list</button>
                             <input type="hidden" name="course" value="${course.courseId}"/>
                             <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>

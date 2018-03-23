@@ -3,11 +3,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Student list</title>
+    <title>Student info</title>
 </head>
 <body>
 
-<h1>${CourseName}</h1>
+<h1>${StudentLstName}</h1>
 </body>
 </html>
 
@@ -132,7 +132,7 @@
     </div>
 
     <div class="courses_info">
-        <h4>Add feedback</h4>
+        <h4>Student list</h4>
         <table>
             <tr>
                 <th>Last name</th>
@@ -145,15 +145,10 @@
                 <tr>
                     <td>${student.lastName}</td>
                     <td>${student.name}</td>
-                    <td><form:form method="post" modelAttribute="userForm"  class="form-signin">
-                        <input class="login_fields" type="text" name="name" placeholder="Mark" required>
-                    </form:form></td>
-                    <td><form:form method="post" modelAttribute="userForm"  class="form-signin">
-                        <input class="login_fields" type="text" name="lastName" placeholder="Feedback" required>
-                    </form:form></td>
+                    <td></td>
+                    <td></td>
                     <td>
-                        <%--<TODO: submit feedback by click>--%>
-                        <form  id="studentFeedback" method="post" action="/submit feedback">
+                        <form  id="studentFeedback" method="get" action="/student_feedback">
                             <button class="buttons" type="submit">add feedback</button>
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         </form>

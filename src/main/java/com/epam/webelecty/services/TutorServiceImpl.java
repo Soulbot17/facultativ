@@ -6,6 +6,7 @@ import com.epam.webelecty.persistence.dao.CourseDAO;
 import com.epam.webelecty.persistence.dao.StudentCourseDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Set;
 
@@ -18,10 +19,12 @@ public class TutorServiceImpl implements TutorService {
     @Autowired
     StudentCourseDAO studentCourseDAO;
 
+    @Autowired
+    UserService userService;
+
     @Override
     public Set<Course> getCourses(User user) {
-        Set<Course> courses = studentCourseDAO.getAllCoursesByTutor(user);
-        return courses;
+        return studentCourseDAO.getAllCoursesByTutor(user);
     }
 
     @Override
@@ -31,13 +34,25 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public Set<User> getStudents(Course course) {
-        Set<User> students = studentCourseDAO.getAllStudentsByCourse(course);
-        return students;
+        return studentCourseDAO.getAllStudentsByCourse(course);
     }
 
     @Override
     public Course updateCourse(Course course) {
         return courseDAO.updateEntry(course);
+    }
+
+    @Override
+    public ModelAndView fillModelAndView(){
+        User tutor = userService.getRoleByEmail();
+        Set<Course> courses = this.getCourses(tutor);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user_tutor");
+        modelAndView.addObject("UserName", tutor.getName());
+        modelAndView.addObject("UserLastName", tutor.getLastName());
+        modelAndView.addObject("Courses", courses);
+        return modelAndView;
     }
 
 }
