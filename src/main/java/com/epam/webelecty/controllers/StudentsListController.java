@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,10 +33,10 @@ public class StudentsListController {
     StudentsListService studentsListService;
 
     @GetMapping(value = "/student_list")
-    public ModelAndView getStudentListByCourseId(@ModelAttribute("course") Integer courseId, Model model) {
+    public ModelAndView getStudentListByCourseId(@ModelAttribute("course") Integer courseId) {
         Course course = tutorService.getCourseById(courseId);
         Set<User> students = tutorService.getStudents(course);
-        User tutor = userService.getRoleByEmail();
+        User tutor = userService.getCurrentUser();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("student_list");
 
@@ -45,18 +44,18 @@ public class StudentsListController {
         modelAndView.addObject("CourseId", course.getCourseId());
         modelAndView.addObject("UserLastName", tutor.getLastName());
         modelAndView.addObject("Students", students);
-        model.addAttribute("course", new UserFeedback());
+        modelAndView.addObject("course", new UserFeedback());
         return modelAndView;
     }
 
     @PostMapping(value = "/student_list")
-    public ModelAndView addFeedback(@ModelAttribute("course") UserFeedback userFeedback, Model model) {
+    public ModelAndView addFeedback(@ModelAttribute("course") UserFeedback userFeedback) {
         studentsListService.postMarkAndAnnotation(
                 userFeedback.studentId,
                 userFeedback.courseId,
                 userFeedback.mark,
                 userFeedback.feedback);
-        return getStudentListByCourseId(userFeedback.courseId, model);
+        return getStudentListByCourseId(userFeedback.courseId);
     }
 
     @Data

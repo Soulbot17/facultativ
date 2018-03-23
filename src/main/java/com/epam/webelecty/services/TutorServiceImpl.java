@@ -47,7 +47,7 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public ModelAndView fillModelAndView(){
-        User tutor = userService.getRoleByEmail();
+        User tutor = userService.getCurrentUser();
         Set<Course> courses = this.getCourses(tutor);
 
         ModelAndView modelAndView = new ModelAndView();
