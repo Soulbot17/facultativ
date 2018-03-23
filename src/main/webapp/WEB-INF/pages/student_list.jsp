@@ -135,20 +135,23 @@
         <h4>Student list</h4>
         <table>
             <tr>
-                <th>Last name</th>
-                <th>Name</th>
+                <th>Student name</th>
                 <th>Mark</th>
                 <th>Feedback</th>
                 <th></th>
             </tr>
             <c:forEach var="student" items="${Students}">
                 <tr>
-                    <td>${student.lastName}</td>
-                    <td>${student.name}</td>
-                    <td></td>
-                    <td></td>
+                    <td>${student.lastName} ${student.name}</td>
+                    <td><form:form method="post" modelAttribute="userForm" class="form-signin">
+                        <input class="login_fields" type="text" name="mark" placeholder="Mark" required>
+                    </form:form></td>
+                    <td><form:form method="post" modelAttribute="userForm" class="form-signin">
+                        <input class="login_fields" type="text" name="feedback" placeholder="feedback" required>
+                    </form:form></td>
                     <td>
-                        <form:form modelAttribute="course" id="studentListDirect" method="get" action="/student_feedback">
+                        <form:form modelAttribute="course" id="studentListDirect" method="post"
+                                   action="/student_feedback">
                             <button class="buttons" type="submit">add feedback</button>
                         </form:form>
                     </td>

@@ -196,7 +196,7 @@
                     <td>
                         <form:form class="go_to_course" modelAttribute="course" method="post">
                             <input type="hidden" name="course" value="${course.courseId}">
-                            <input type="submit" class="finish_button" value="Close course">
+                            <input type="submit" class="finish_button buttons" value="Close course">
                         </form:form>
                     </td>
                 </tr>
