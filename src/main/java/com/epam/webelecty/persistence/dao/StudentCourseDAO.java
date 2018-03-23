@@ -155,6 +155,8 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         } catch (SQLException e) {
             log.error(e);
             throw new NoStudentCourseFoundException(e);
+        } finally {
+            connectionPool.releaseConnection(connection);
         }
         return finishedMap;
     }
