@@ -6,7 +6,7 @@ CREATE TABLE test.users (
   pass     VARCHAR(244) NOT NULL,
   name     VARCHAR(45),
   lastName VARCHAR(45),
-  role     VARCHAR(45)  NOT NULL,
+  role     VARCHAR(10)  NOT NULL,
   PRIMARY KEY (userId)
 );
 
