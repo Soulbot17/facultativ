@@ -34,9 +34,7 @@
                     <button class="login_buttons" type="submit"><spring:message code="label.signin"/></button>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <input class="login_buttons" type="button" name="go_register" value="<spring:message code="label.signup"/>" onclick="location.href='${contextPath}/registration'">
-
                 </div>
-
             </form>
         </div>
     </div>
