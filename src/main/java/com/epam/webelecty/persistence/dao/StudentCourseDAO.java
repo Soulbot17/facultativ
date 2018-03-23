@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import java.sql.*;
 import java.util.*;
 
+import static com.epam.webelecty.persistence.dao.ExecuterSQLDAO.executeSqlStatement;
+
 @Log4j2
 @Component
 public class StudentCourseDAO implements DAO<StudentCourse> {
