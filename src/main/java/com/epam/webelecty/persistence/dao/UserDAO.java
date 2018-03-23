@@ -28,6 +28,7 @@ public class UserDAO implements DAO<User> {
         this.connectionPool = connectionPool;
     }
 
+
     @Override
     public Set<User> getAllEntries() {
         Connection connection = connectionPool.getConnection();
