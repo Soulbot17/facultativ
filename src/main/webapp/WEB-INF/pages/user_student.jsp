@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <head>
@@ -116,8 +117,8 @@
     </style>
     <script>
         function change_tables() {
-            var courseInfo = document.getElementsByClassName("courses_info")[0].style.display;
-            if (courseInfo == "block" || courseInfo == "") {
+            var element = document.getElementsByClassName("courses_info")[0].style.display;
+            if (element === "block" || element === "") {
                 document.getElementsByClassName("courses_info")[0].style.display = "none";
                 document.getElementsByClassName("ended_courses_info")[0].style.display = "block";
             } else {
@@ -130,7 +131,7 @@
 <body>
 <div class="center_field">
     <div class="user_info">
-        <p>${UserName}</p>
+        <p>${userName} ${userLastName}</p>
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
             <button class="buttons" type="submit">Logout</button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -141,77 +142,69 @@
         <table>
             <tr>
                 <th>Course name</th>
-                <th>Date</th>
                 <th>Info</th>
+                <th>Mark</th>
                 <th>Tutor review</th>
             </tr>
-            <c:forEach items="${courses}" var="course">
+            <%--FIX IT--%>
+            <c:forEach var="finished" items="${finishedMap}">
                 <tr>
-                    <td>${course.getName()}</td>
-                    <td>${course.getDate()}</td>
-                    <td>${course.getInfo()}</td>
-                    <td></td>
+                    <td>${finished.key.courseName}</td>
+                    <td>${finished.key.annotation}</td>
+                    <td>${finished.value.studentMark}</td>
+                    <td>${finished.value.studentFeedback}</td>
                 </tr>
             </c:forEach>
-            <%--<tr>
-                <td>HTML/CSS/JAVASCRIPT</td>
-                <td>15/05/2018</td>
-                <td>Ajkhasdkjgh ksjdhgkajsdh skdjhg ksadlj hgksldj hgsalkdjgh kasldjhg sakdjhgsdakjg</td>
-                <td>ASfdgdsfgkjl dkfjhg kdlfjhg lksdjfhgksldfnvxzlkjcv lskdjngf dosuighsdfkjgn ksdjfhg adlfkjgsdf</td>
-            </tr>
-            <tr>
-                <td>Java Spring</td>
-                <td>20/05/2018</td>
-                <td>Ajkhasdkjgh ksjdhgkajsdh skdjhg ksadlj hgksldj hgsalkdjgh kasldjhg sakdjhgsdakjg jksdfhgl kjshdfgkj
-                    skdjfhgskljdfhgslk djfhgkljsdfhglksjdf gbskdlbjxckljgsdklfjg sdfkjghs ldfgjh sdfkjhg sdlfkjhg lsdf</td>
-                <td>ASfdgdsfgkjl dkfjhg kdlfjhg lksdjfhgksldfnvxzlkjcv lskdjngf dosuighsdfkjgn ksdjfhg adlfkjgsdf dfgfd
-                    sdfgsdfg sdfg sdf gsdfgf sjkdfhglskdfjhg ksldjfhglsdkjfhg sdfg</td>
-            </tr>--%>
         </table>
+
         <div class="switcher">
             <input type="button" class="buttons" onclick="change_tables()" value="Show available courses">
         </div>
     </div>
+
     <div class="courses_info">
         <h4>Available courses</h4>
         <table>
             <tr>
                 <th>Course name</th>
-                <th>Date</th>
                 <th>Info</th>
-                <th></th>
             </tr>
-            <tr>
-                <td>Git</td>
-                <td>11/11/2018</td>
-                <td>Ajkhf klajdshf lkjsadhfl kjasdhflk jasdhfl kjashdf</td>
-                <td>
-                    <form class="go_to_course">
-                        <input type="submit" class="buttons" value="Enter">
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>SQL, MySql</td>
-                <td>10/10/2018</td>
-                <td>ASdkjfhs dklfjshd lfkjsdh lkjsdhf lksjdhf ksljdhf slkjd hfdh gkjhfdgkd fjhg dflkjg hdslfkj gdl</td>
-                <td>
-                    <form class="go_to_course">
-                        <input type="submit" class="buttons" value="Invited" disabled>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>Java 11</td>
-                <td>12/12/2018</td>
-                <td>Ajhflsdkjhf lkfjdhg lkdsjfhg lkdsjfhgl ksjdfhglsdkjfhglk jhsdfl gkjhsdflkjghsd lfkjgshfdl gkjdsf
-                </td>
-                <td>
-                    <form class="go_to_course">
-                        <input type="submit" class="buttons" value="Enter">
-                    </form>
-                </td>
-            </tr>
+            <c:forEach var="available" items="${availableCourses}">
+                <tr>
+                    <td>${available.courseName}</td>
+                    <td>${available.annotation}</td>
+                    <td>
+                        <form:form class="go_to_course" modelAttribute="course" method="post">
+                            <input type="hidden" name="course" value="${available.courseId}">
+                            <input type="submit" class="buttons" value="Attend">
+                        </form:form>
+                    </td>
+                </tr>
+            </c:forEach>
+
+            <c:forEach var="waited" items="${waitedCourses}">
+                <tr>
+                    <td>${waited.courseName}</td>
+                    <td>${waited.annotation}</td>
+                    <td>
+                        <form class="go_to_course">
+                            <input type="submit" class="buttons" value="In wainitng" disabled>
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
+
+            <c:forEach var="active" items="${activeCourses}">
+                <tr>
+                    <td>${active.courseName}</td>
+                    <td>${active.annotation}</td>
+                    <td>
+                        <form class="go_to_course">
+                            <input type="submit" class="buttons" value="In progress" disabled>
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
         </table>
         <div class="switcher">
             <input type="button" class="buttons" onclick="change_tables()" value="Show ended courses">

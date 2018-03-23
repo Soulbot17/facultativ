@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Log4j2
 @Component
@@ -49,6 +47,26 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
             connectionPool.releaseConnection(connection);
         }
         return studentCourseSet;
+    }
+
+    public Set<Course> getAllAvailableCoursesByStudent(User user) {
+        Connection connection = connectionPool.getConnection();
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format("SELECT courseId, name, tutorId, annotation, status FROM %s.courses WHERE courses.courseId NOT IN " +
+                        "(SELECT courseId FROM %s.student_course WHERE studentId = %d) AND courses.status = 'planned'",
+                databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
+    }
+
+    public Set<Course> getWaitedCourses(User user) {
+        Connection connection = connectionPool.getConnection();
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
+                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.status='planned'",
+                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
     }
 
     public Set<Course> getAllCoursesByStudent(User user) {
@@ -84,6 +102,28 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public void removeById(int id) {
         String sql = String.format("DELETE FROM %s.student_course WHERE id=%d", databaseName, id);
         executeSqlStatement(connectionPool, sql);
+    }
+
+    public Map<Course, StudentCourse> getFinishedCoursesMap(User user) {
+        Connection connection = connectionPool.getConnection();
+        Map<Course, StudentCourse> finishedMap = new HashMap<>();
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status, id, studentId, studentMark, " +
+                        "studentFeedback FROM %s.courses JOIN %s.student_course ON " +
+                        "student_course.courseId = %s.courses.courseId WHERE studentId=%d and status='finished'", databaseName,
+                databaseName, databaseName, user.getUserId());
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            while (rs.next()) {
+                Course course = CourseDAO.parseCourse(rs);
+                StudentCourse studentCourse = parseStudentCourse(rs);
+                finishedMap.put(course, studentCourse);
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoStudentCourseFoundException(e);
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+        return finishedMap;
     }
 
     @Override
