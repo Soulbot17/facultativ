@@ -9,7 +9,6 @@ import com.epam.webelecty.persistence.dao.StudentCourseDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -86,11 +85,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public Map<Course, StudentCourse> getFinishedCoursesMap(User user) {
-        Map<Course, StudentCourse> finishedMap = new HashMap<>();
-        Set<Course> finishedCourses = getCourses(user, CourseStatus.FINISHED);
-        for (Course course : finishedCourses) {
-            finishedMap.put(course, studentCourseDAO.getMarkAndAnnotationByCourseName(user.getUserId(), course));
-        }
-        return finishedMap;
+        return studentCourseDAO.getFinishedCoursesMap(user);
     }
 }
