@@ -37,7 +37,6 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public Course updateCourse(Course course) {
-
         return courseDAO.updateEntry(course);
     }
 

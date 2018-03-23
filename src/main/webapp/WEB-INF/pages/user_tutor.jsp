@@ -165,7 +165,7 @@
                     <td>${course.courseName}</td>
                     <td>${course.annotation}</td>
                     <td>
-                        <form:form modelAttribute="course"  id="studentListDirect" method="POST" action="/student_list">
+                        <form:form modelAttribute="course"  id="studentListDirect" method="get" action="/student_list">
                             <button class="buttons" type="submit">Show student list</button>
                             <input type="hidden" name="course" value="${course.courseId}"/>
                             <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
