@@ -64,7 +64,7 @@ public class TestController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registration(@ModelAttribute("userForm") UserDTO userForm) {
         userService.register(userForm);
-        return "redirect:/index";
+        return "redirect:/user";
     }
 
     @ExceptionHandler(EmailIsUsedException.class)
