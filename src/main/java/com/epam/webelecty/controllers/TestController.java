@@ -29,27 +29,11 @@ public class TestController {
 
     @GetMapping(value = "/")
     public String redirectUserPage() {
-
         return "redirect:/index";
     }
 
     @RequestMapping(value = "index", method = {RequestMethod.GET})
-    public ModelAndView getIndexPage(Locale locale, Model model) {
-        String welcome = source.getMessage("label.welcome", new Object[]{}, locale);
-        String signin_info = source.getMessage("label.signin_info", new Object[]{}, locale);
-        String password = source.getMessage("label.password", new Object[]{}, locale);
-        String signin = source.getMessage("label.signin", new Object[]{}, locale);
-        String signup = source.getMessage("label.signup", new Object[]{}, locale);
-        String auth_page = source.getMessage("label.auth_page", new Object[]{}, locale);
-
-        model.addAttribute("locale", locale);
-        model.addAttribute("welcome", welcome);
-        model.addAttribute("signin_info", signin_info);
-        model.addAttribute("password", password);
-        model.addAttribute("signin", signin);
-        model.addAttribute("auth_page", auth_page);
-        model.addAttribute("signup", signup);
-
+    public ModelAndView getIndexPage() {
         return new ModelAndView("index");
     }
 
@@ -74,27 +58,7 @@ public class TestController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String registration(Locale locale, Model model) {
-        String signup_info = source.getMessage("label.signup_info", new Object[]{}, locale);
-        String signup = source.getMessage("label.signup", new Object[]{}, locale);
-        String name = source.getMessage("label.name", new Object[]{}, locale);
-        String surname = source.getMessage("label.surname", new Object[]{}, locale);
-        String reg_page = source.getMessage("label.reg_page", new Object[]{}, locale);
-        String welcome = source.getMessage("label.welcome", new Object[]{}, locale);
-        String password = source.getMessage("label.password", new Object[]{}, locale);
-        String repeat_password = source.getMessage("label.repeat_password", new Object[]{}, locale);
-        String auth = source.getMessage("label.auth", new Object[]{}, locale);
-
-        model.addAttribute("signup_info", signup_info);
-        model.addAttribute("welcome", welcome);
-        model.addAttribute("reg_page", reg_page);
-        model.addAttribute("signup", signup);
-        model.addAttribute("name", name);
-        model.addAttribute("surname", surname);
-        model.addAttribute("userForm", new UserDTO());
-        model.addAttribute("password", password);
-        model.addAttribute("repeat_password", repeat_password);
-        model.addAttribute("auth", auth);
+    public String registration() {
         return "registration";
     }
 

@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link type="text/css" href="/resource/css/style.css" rel="stylesheet">
     <meta charset="utf-8">
-    <title>${reg_page}</title>
+    <title><spring:message code="label.reg_page"/></title>
     <%--<style>
         .login_buttons{
             width: 100px;
@@ -56,21 +56,21 @@
 <div class="center_main_area">
     <div class="left_main_area">
         <div class="logo">
-            <h1>${welcome}</h1>
+            <h1><spring:message code="label.welcome"/> </h1>
         </div>
     </div>
     <div class="right_main_area">
         <div class="signin_area reg">
-            <p>${signup_info}</p>
+            <p><spring:message code="label.signup_info"/></p>
             <p>${error}</p>
             <form:form method="post" modelAttribute="userForm"  class="form-signin">
-                <input class="login_fields" type="text" name="name" placeholder="${name}" required>
-                <input class="login_fields" type="text" name="lastName" placeholder="${surname}" required>
+                <input class="login_fields" type="text" name="name" placeholder="<spring:message code="label.name"/>" required>
+                <input class="login_fields" type="text" name="lastName" placeholder="<spring:message code="label.surname"/>" required>
                 <input class="login_fields" id="email" type="email" name="email" placeholder="Email" onfocusout="check_email()" required>
-                <input class="login_fields" id="pass" type="password" name="password" placeholder="${password}" required>
-                <input class="login_fields" id="repeat_pass" type="password" name="confirmPassword" placeholder="${repeat_password}" onfocusout="compare_passwords()" required>
-                <input class="login_buttons" id="submit" type="submit" name="submit" value="${signup}">
-                <input class="login_buttons" type="button" onclick="location.href='${contextPath}/index'" value="${auth}" >
+                <input class="login_fields" id="pass" type="password" name="password" placeholder="<spring:message code="label.password"/>" required>
+                <input class="login_fields" id="repeat_pass" type="password" name="confirmPassword" placeholder="<spring:message code="label.repeat_password"/>" onfocusout="compare_passwords()" required>
+                <input class="login_buttons" id="submit" type="submit" name="submit" value="<spring:message code="label.signup"/>">
+                <input class="login_buttons" type="button" onclick="location.href='${contextPath}/index'" value="<spring:message code="label.auth"/>" >
             </form:form>
         </div>
     </div>
