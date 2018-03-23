@@ -14,6 +14,8 @@ import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.epam.webelecty.persistence.dao.ExecuterSQLDAO.executeSqlStatement;
+
 @Log4j2
 @Component
 public class CourseDAO implements DAO<Course> {
