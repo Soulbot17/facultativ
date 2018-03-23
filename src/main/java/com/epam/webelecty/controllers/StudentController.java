@@ -47,16 +47,16 @@ public class StudentController {
         ModelAndView modelAndView = new ModelAndView("user_student");
         User currentUser = userService.getCurrentUser();
 
-        Set<Course> plannedCourses = studentService.getAvailableCourses(currentUser);
+        Set<Course> availableCourses = studentService.getAvailableCourses(currentUser);
         Set<Course> waitedCourses = studentService.getWaitedCourses(currentUser);
         Set<Course> activeCourses = studentService.getCourses(currentUser, CourseStatus.ACTIVE);
         Map<Course, StudentCourse> finishedCoursesMap = studentService.getFinishedCoursesMap(currentUser);
 
         modelAndView.addObject("userName", currentUser.getName());
         modelAndView.addObject("userLastName", currentUser.getLastName());
-        modelAndView.addObject("plannedCourses", plannedCourses);
-        modelAndView.addObject("activeCourses", activeCourses);
+        modelAndView.addObject("availableCourses", availableCourses);
         modelAndView.addObject("waitedCourses", waitedCourses);
+        modelAndView.addObject("activeCourses", activeCourses);
         modelAndView.addObject("finishedMap", finishedCoursesMap);
         return modelAndView;
     }

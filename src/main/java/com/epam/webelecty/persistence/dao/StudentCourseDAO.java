@@ -83,13 +83,13 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return studentCourse;
     }
 
-
     public Set<Course> getAllAvailableCoursesByStudent(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
-                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId!=%d and courses.status='planned'",
-                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        String sql = String.format("SELECT courseId, name, tutorId, annotation, status FROM %s.courses WHERE courses.courseId NOT IN " +
+                        "(SELECT courseId FROM %s.student_course WHERE studentId = %d) AND courses.status = 'planned'",
+                databaseName, databaseName, user.getUserId());
+
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
     }

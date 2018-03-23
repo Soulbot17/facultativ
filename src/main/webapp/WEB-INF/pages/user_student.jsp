@@ -169,13 +169,13 @@
                 <th>Course name</th>
                 <th>Info</th>
             </tr>
-            <c:forEach var="planned" items="${plannedCourses}">
+            <c:forEach var="available" items="${availableCourses}">
                 <tr>
-                    <td>${planned.courseName}</td>
-                    <td>${planned.annotation}</td>
+                    <td>${available.courseName}</td>
+                    <td>${available.annotation}</td>
                     <td>
                         <form:form class="go_to_course" modelAttribute="course" method="post">
-                            <input type="hidden" name="course" value="${planned.courseId}">
+                            <input type="hidden" name="course" value="${available.courseId}">
                             <input type="submit" class="buttons" value="Attend">
                         </form:form>
                     </td>

@@ -26,7 +26,6 @@ public class StudentServiceImpl implements StudentService {
         this.courseDAO = courseDAO;
     }
 
-    @Override
     public Set<Course> getAvailableCourses(User user) {
         return studentCourseDAO.getAllAvailableCoursesByStudent(user);
     }
