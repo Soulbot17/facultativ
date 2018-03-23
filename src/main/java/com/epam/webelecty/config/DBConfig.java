@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Log4j2
 @Configuration
@@ -29,6 +31,10 @@ public class DBConfig {
     private String password;
     @Value("${db.poolsize}")
     private int poolSize;
+    @Value("${db.InitDBScript}")
+    String sqlBaseInit;
+    @Value("${db.FillDBScript}")
+    String sqlFillDB;
 
     @Bean
     public ConnectionPool connectionPool() {
@@ -38,45 +44,43 @@ public class DBConfig {
 
     @PostConstruct
     public void runScript() {
-        String sqlBaseInit = getSQLFromFile("src/main/resources/db/dataBaseInitH2.sql");
-        String sqlFillDB = getSQLFromFile("src/main/resources/db/fillDBWithTestDataH2.sql");
         DAO dao = new DAO() {
             @Override
             public Set getAllEntries() {
-                return null;
+                throw new UnsupportedOperationException("This method shouldn't use in anonymous class");
             }
 
             @Override
             public Object updateEntry(Object entry) {
-                return null;
+                throw new UnsupportedOperationException("This method shouldn't use in anonymous class");
             }
 
             @Override
             public void removeById(int id) {
-
+                throw new UnsupportedOperationException("This method shouldn't use in anonymous class");
             }
 
             @Override
             public Object insert(Object entry) {
-                return null;
+                throw new UnsupportedOperationException("This method shouldn't use in anonymous class");
             }
 
             @Override
             public Object getById(int id) {
-                return null;
+                throw new UnsupportedOperationException("This method shouldn't use in anonymous class");
             }
         };
-        dao.executeSqlStatement(connectionPool(), sqlBaseInit);
-        dao.executeSqlStatement(connectionPool(), sqlFillDB);
+        dao.executeSqlStatement(connectionPool(), getSQLFromFile(sqlBaseInit));
+        dao.executeSqlStatement(connectionPool(), getSQLFromFile(sqlFillDB));
     }
 
     private String getSQLFromFile(String file) {
-        StringBuilder sql = new StringBuilder("");
-        try {
-            Files.lines(Paths.get(file)).forEach(sql::append);
+        String sql = "";
+        try (Stream<String> stream = Files.lines(Paths.get(file))) {
+            sql = stream.collect(Collectors.joining());
         } catch (IOException e) {
             log.error(e);
         }
-        return sql.toString();
+        return sql;
     }
 }
