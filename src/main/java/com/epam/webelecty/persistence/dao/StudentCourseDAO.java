@@ -115,7 +115,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         String sql = String.format("select id, courseId, studentId, studentMark, studentFeedback from %s.student_course where studentId=%d and courseId=%d",
                 databaseName, userId, courseId);
         StudentCourse studentCourse = null;
-        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()){
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             if (rs.next()) {
                 studentCourse = parseStudentCourse(rs);
                 studentCourse.setStudentMark(mark);
@@ -160,7 +160,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Map<User, StudentCourse> getMapStudentCoursesByCourse(Course course, boolean hasFeedback) {
         Connection connection = connectionPool.getConnection();
         Map<User, StudentCourse> finishedMap = new HashMap<>();
-        String iSNullRequest = hasFeedback ? "is not null" : "is null";
+        String iSNullRequest = hasFeedback ? "is not null and studentFeedback!=''" : "is null or studentFeedback=''";
         String sql = String.format("SELECT users.userId, email, pass, name, lastName, role," +
                         " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON " +
                         "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback " + iSNullRequest, databaseName,
@@ -277,9 +277,9 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
 
     private void fillCoursesSet(Connection connection, Set<Course> courseSet, String sql) {
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
-                while (rs.next()) {
-                    courseSet.add(CourseDAO.parseCourse(rs));
-                }
+            while (rs.next()) {
+                courseSet.add(CourseDAO.parseCourse(rs));
+            }
         } catch (SQLException e) {
             log.error(e);
             throw new NoCourseFoundException(e);
