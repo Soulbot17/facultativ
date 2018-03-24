@@ -25,8 +25,13 @@ public class TutorServiceImpl implements TutorService {
     UserService userService;
 
     @Override
-    public Set<Course> getCourses(User user) {
-        return studentCourseDAO.getAllCoursesByTutor(user);
+    public Set<Course> getUnfinishedCourses(User user) {
+        return studentCourseDAO.getAllUnfinishedCoursesByTutor(user);
+    }
+
+    @Override
+    public Set<Course> getFinishedCourses(User user) {
+        return studentCourseDAO.getAllFinishedCoursesByTutor(user);
     }
 
     @Override
@@ -47,15 +52,18 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
-    public ModelAndView fillModelAndView(){
+    public ModelAndView fillModelAndView() {
         User tutor = userService.getCurrentUser();
-        Set<Course> courses = this.getCourses(tutor);
+        Set<Course> unfinishedCourses = getUnfinishedCourses(tutor);
+        Set<Course> finishedCourses = getFinishedCourses(tutor);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user_tutor");
         modelAndView.addObject("UserName", tutor.getName());
         modelAndView.addObject("UserLastName", tutor.getLastName());
-        modelAndView.addObject("Courses", courses);
+        modelAndView.addObject("unfinishedCourses", unfinishedCourses);
+        modelAndView.addObject("finishedCourses", finishedCourses);
+
         return modelAndView;
     }
 

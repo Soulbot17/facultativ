@@ -108,9 +108,6 @@ public class CourseDAO implements DAO<Course> {
             String annotation = rs.getString("annotation");
             CourseStatus status;
             switch (rs.getString("status").toLowerCase()) {
-                case "active":
-                    status = CourseStatus.ACTIVE;
-                    break;
                 case "finished":
                     status = CourseStatus.FINISHED;
                     break;

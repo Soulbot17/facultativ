@@ -8,7 +8,9 @@ import java.util.Set;
 
 public interface TutorService {
 
-    Set<Course> getCourses(User user);
+    Set<Course> getUnfinishedCourses(User user);
+
+    Set<Course> getFinishedCourses(User user);
 
     Course getCourseById(Integer courseId);
 

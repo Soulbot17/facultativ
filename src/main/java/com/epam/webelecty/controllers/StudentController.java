@@ -37,7 +37,7 @@ public class StudentController {
     }
 
 
-    @RequestMapping(value = EndPointsAPI.STUDENT_PAGE, method = RequestMethod.POST)
+    @RequestMapping(value = "/user_student", method = RequestMethod.POST)
     public ModelAndView addUserCourse(@ModelAttribute("course") Integer id) {
         studentService.joinCourse(userService.getCurrentUser(), id);
         return getDefaultModelAndView();
@@ -49,14 +49,12 @@ public class StudentController {
 
         Set<Course> availableCourses = studentService.getAvailableCourses(currentUser);
         Set<Course> waitedCourses = studentService.getWaitedCourses(currentUser);
-        Set<Course> activeCourses = studentService.getCourses(currentUser, CourseStatus.ACTIVE);
         Map<Course, StudentCourse> finishedCoursesMap = studentService.getFinishedCoursesMap(currentUser);
 
         modelAndView.addObject("userName", currentUser.getName());
         modelAndView.addObject("userLastName", currentUser.getLastName());
         modelAndView.addObject("availableCourses", availableCourses);
         modelAndView.addObject("waitedCourses", waitedCourses);
-        modelAndView.addObject("activeCourses", activeCourses);
         modelAndView.addObject("finishedMap", finishedCoursesMap);
         return modelAndView;
     }

@@ -91,11 +91,23 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return studentSet;
     }
 
-    public Set<Course> getAllCoursesByTutor(User user) {
+    public Set<Course> getAllFinishedCoursesByTutor(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
         String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
-                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d",
+                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d and " +
+                        "courses.status='finished'",
+                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
+    }
+
+    public Set<Course> getAllUnfinishedCoursesByTutor(User user) {
+        Connection connection = connectionPool.getConnection();
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
+                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d and " +
+                        "courses.status != 'finished'",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;

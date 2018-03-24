@@ -71,7 +71,7 @@
                     <td>
                         <form:form class="go_to_course" modelAttribute="course" method="post">
                             <input type="hidden" name="course" value="${available.courseId}">
-                            <input type="submit" class="buttons" value="Attend">
+                            <input type="submit" class="buttons" value="Sign up">
                         </form:form>
                     </td>
                 </tr>
@@ -83,19 +83,7 @@
                     <td>${waited.annotation}</td>
                     <td>
                         <form class="go_to_course">
-                            <input type="submit" class="buttons" value="In wainitng" disabled>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-
-            <c:forEach var="active" items="${activeCourses}">
-                <tr>
-                    <td>${active.courseName}</td>
-                    <td>${active.annotation}</td>
-                    <td>
-                        <form class="go_to_course">
-                            <input type="submit" class="buttons" value="In progress" disabled>
+                            <input type="submit" class="buttons" value="Sign up" disabled>
                         </form>
                     </td>
                 </tr>

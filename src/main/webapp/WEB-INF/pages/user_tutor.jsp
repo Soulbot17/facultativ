@@ -63,7 +63,7 @@
                 <th></th>
                 <th></th>
             </tr>
-            <c:forEach var="course" items="${Courses}">
+            <c:forEach var="course" items="${unfinishedCourses}">
                 <tr>
                     <td>${course.courseName}</td>
                     <td>${course.annotation}</td>
@@ -79,6 +79,23 @@
                             <input type="hidden" name="course" value="${course.courseId}">
                             <input type="submit" class="finish_button buttons" value="Close course">
                         </form:form>
+                    </td>
+                </tr>
+            </c:forEach>
+            <c:forEach var="course" items="${finishedCourses}">
+                <tr>
+                    <td>${course.courseName}</td>
+                    <td>${course.annotation}</td>
+                    <td>
+                        <form:form modelAttribute="course" id="studentListDirect" method="get" action="/student_list">
+                            <button class="buttons" type="submit">Show student list</button>
+                            <input type="hidden" name="course" value="${course.courseId}"/>
+                        </form:form>
+                    </td>
+                    <td>
+                        <form class="go_to_course">
+                            <input type="submit" class="buttons" value="Finished" disabled>
+                        </form>
                     </td>
                 </tr>
             </c:forEach>
