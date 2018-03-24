@@ -1,55 +1,48 @@
-INSERT INTO test.users (email, pass, name, lastName, role)
-VALUES ('s1@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Ivan', 'Ivanov', 'student'),
-  ('s2@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Zefir', 'Marmeladov', 'student'),
-  ('s3@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Venya', 'Erofeev', 'student'),
-  ('s4@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Iosif', 'Brodskii', 'student'),
-  ('s5@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Osip', 'Mandelshtam', 'student'),
-  ('s6@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Graf', 'Dracula', 'student'),
-  ('t1@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Osip', 'Mandelshtam', 'student'),
-  ('t2@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Osip', 'Mandelshtam', 'student'),
-  ('t3@mail.ru', '$2a$05$ExEIw8WuiAAP1ZZFb3FYx.nK6q7FOzX4I/XskYNNihOEv6qk.xy7S', 'Tutor', 'Tutorialov', 'tutor');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE)
+VALUES (1, ''s1@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Ivan'', ''Ivanov'',
+        ''student'');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE) VALUES
+  (2, ''s2@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Zefir'', ''Marmeladov'',
+   ''student'');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE) VALUES
+  (3, ''t1@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Tutor'', ''Tutorialov'',
+   ''tutor'');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE) VALUES
+  (4, ''t2@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Tutor2'', ''Tutorialov2'',
+   ''tutor'');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE) VALUES
+  (5, ''s3@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Denis'', ''Kotelnikov'',
+   ''student'');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE)
+VALUES (6, ''s4@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Egor'', ''Vyrva'',
+        ''student'');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE) VALUES
+  (7, ''s5@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Evgeniy'', ''Krysenko'',
+   ''student'');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE)
+VALUES (8, ''s6@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Igor'', ''Balabaev'',
+        ''student'');
+INSERT INTO TEST.USERS (USERID, EMAIL, PASS, NAME, LASTNAME, ROLE) VALUES
+  (9, ''t3@mail.ru'', ''$2a$05$yJyr/jn9Fppmpy.9xd.gcOMqbzW/R4IMrKJhsqN/fvRjt4siXFnPG'', ''Grigory'', ''Rasputin'',
+   ''tutor'');
 
-INSERT INTO test.courses (name, tutorId, annotation, status)
-VALUES ('History of Uganda', 7, 'Cource about history of Uganda', 'planned'),
-  ('Java', 7, 'How to write code like a real patsan', 'planned'),
-  ('Quantum mechanical', 8, 'Course about everything', 'planned'),
-  ('DevOps', 8, 'How to write code like a bearded system administrator', 'planned'),
-  ('Python', 9, 'How to write code like a little girl', 'planned'),
-  ('SQL', 9, 'How to write code and feel pain', 'planned');
-
-INSERT INTO test.student_course (courseId, studentId)
-VALUES ((SELECT test.courses.courseId
-         FROM test.courses
-         WHERE name = 'Python'), (SELECT userId
-                                  FROM test.users
-                                WHERE name = 'Ivan')),
-  ((SELECT test.courses.courseId
-    FROM test.courses
-    WHERE name = 'Java'), (SELECT userId
-                           FROM test.users
-                           WHERE name = 'Zefir')),
-  ((SELECT test.courses.courseId
-    FROM test.courses
-    WHERE name = 'Python'), (SELECT userId
-                             FROM test.users
-                           WHERE name = 'Venya')),
-  ((SELECT test.courses.courseId
-    FROM test.courses
-    WHERE name = 'SQL'), (SELECT userId
-                          FROM test.users
-                           WHERE name = 'Zefir')),
-  ((SELECT test.courses.courseId
-    FROM test.courses
-    WHERE name = 'SQL'), (SELECT userId
-                          FROM test.users
-                           WHERE name = 'Zefir')),
-  ((SELECT test.courses.courseId
-    FROM test.courses
-    WHERE name = 'Java'), (SELECT userId
-                           FROM test.users
-                           WHERE name = 'Zefir')),
-  ((SELECT test.courses.courseId
-    FROM test.courses
-    WHERE name = 'History of Uganda'), (SELECT userId
-                                        FROM test.users
-                                        WHERE name = 'Zefir'));
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (1, ''History of Uganda'', 3, ''Cource about history of Uganda'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (2, ''Java'', 3, ''How TO WRITE CODE LIKE a REAL patsan'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (3, ''Git'', 4, ''Learn Git branching'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (4, ''Jedi'', 9, ''How TO fight LIKE a jedi'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (5, ''Street racing'', 4, ''Just don''''t drive INTO the wall'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (6, ''Paleontology '', 3, ''Paleontology FOR python developers'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (7, ''Composers of 15th century'', 3, ''Influence of Franz Schubert TO nowadays music'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (8, ''Mimicry'', 4, ''How TO look LIKE a tree'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (9, ''Bada - boom'', 9, ''Short history of magic'', ''planned'');
+INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
+VALUES (10, ''Big bada - boom ! '', 9, ''LONG history of magic'', ''planned'');
