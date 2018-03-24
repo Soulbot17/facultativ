@@ -157,24 +157,14 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return finishedMap;
     }
 
-    public Map<User, StudentCourse> getMapStudentCoursesByCourseNoFeedback(Course course) {
+    public Map<User, StudentCourse> getMapStudentCoursesByCourse(Course course, boolean hasFeedback) {
         Connection connection = connectionPool.getConnection();
         Map<User, StudentCourse> finishedMap = new HashMap<>();
+        String iSNullRequest = hasFeedback ? "is not null" : "is null";
         String sql = String.format("SELECT users.userId, email, pass, name, lastName, role," +
                         " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON " +
-                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback is null", databaseName,
-                databaseName, databaseName, databaseName, course.getCourseId());
-        fillMapByStudentCourseUser(connection, finishedMap, sql);
-        return finishedMap;
-    }
-
-    public Map<User, StudentCourse> getMapStudentCoursesByCourseWithFeedback(Course course) {
-        Connection connection = connectionPool.getConnection();
-        Map<User, StudentCourse> finishedMap = new HashMap<>();
-        String sql = String.format("SELECT users.userId, email, pass, name, lastName, role," +
-                        " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON " +
-                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback is not null", databaseName,
-                databaseName, databaseName, databaseName, course.getCourseId());
+                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback " + iSNullRequest, databaseName,
+                databaseName, databaseName, databaseName, course.getCourseId(), iSNullRequest);
         fillMapByStudentCourseUser(connection, finishedMap, sql);
         return finishedMap;
     }

@@ -10,8 +10,6 @@ public interface StudentsListService {
 
     StudentCourse postMarkAndAnnotation(int userId, int courseId, int mark, String feedback);
 
-    Map<User, StudentCourse> getHasFeedbackMapStudentCourseUser(Course course);
-
-    Map<User, StudentCourse> getNoFeedbackMapStudentCourseUser(Course course);
+    Map<User, StudentCourse> getMapUserStudentCourseByCourse(Course course, boolean hasFeedback);
 
 }

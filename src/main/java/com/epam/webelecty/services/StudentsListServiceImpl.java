@@ -28,13 +28,8 @@ public class StudentsListServiceImpl implements StudentsListService {
     }
 
     @Override
-    public Map<User, StudentCourse> getHasFeedbackMapStudentCourseUser(Course course) {
-        return studentCourseDAO.getMapStudentCoursesByCourseWithFeedback(course);
-    }
-
-    @Override
-    public Map<User, StudentCourse> getNoFeedbackMapStudentCourseUser(Course course) {
-        return studentCourseDAO.getMapStudentCoursesByCourseNoFeedback(course);
+    public Map<User, StudentCourse> getMapUserStudentCourseByCourse(Course course, boolean hasFeedback) {
+        return studentCourseDAO.getMapStudentCoursesByCourse(course, hasFeedback);
     }
 }
 
