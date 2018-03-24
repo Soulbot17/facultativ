@@ -34,7 +34,7 @@ public class StudentsListController {
     StudentsListService studentsListService;
 
 
-    @GetMapping(value = "/student_list")
+    @GetMapping(value = EndPointsAPI.STUDENT_LIST)
     public ModelAndView getStudentListByCourseId(@ModelAttribute("course") Integer courseId) {
         Course course = tutorService.getCourseById(courseId);
 
@@ -54,7 +54,7 @@ public class StudentsListController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/student_list")
+    @PostMapping(value = EndPointsAPI.STUDENT_LIST)
     public ModelAndView addFeedback(@ModelAttribute("course") UserFeedback userFeedback) {
         studentsListService.postMarkAndAnnotation(
                 userFeedback.studentId,

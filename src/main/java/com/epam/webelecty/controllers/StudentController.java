@@ -31,13 +31,13 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping(value = "/user_student")
+    @GetMapping(value = EndPointsAPI.STUDENT_PAGE)
     public ModelAndView getUserPage() {
         return getDefaultModelAndView();
     }
 
 
-    @RequestMapping(value = "/user_student", method = RequestMethod.POST)
+    @RequestMapping(value = EndPointsAPI.STUDENT_PAGE, method = RequestMethod.POST)
     public ModelAndView addUserCourse(@ModelAttribute("course") Integer id) {
         studentService.joinCourse(userService.getCurrentUser(), id);
         return getDefaultModelAndView();

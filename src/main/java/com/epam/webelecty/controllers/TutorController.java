@@ -18,12 +18,12 @@ public class TutorController {
     @Autowired
     TutorService tutorService;
 
-    @GetMapping(value = "/user_tutor")
+    @GetMapping(value = EndPointsAPI.TUTOR_PAGE)
     public ModelAndView getUserPage() {
         return tutorService.fillModelAndView();
     }
 
-    @PostMapping(value = "/user_tutor")
+    @PostMapping(value = EndPointsAPI.TUTOR_PAGE)
     public ModelAndView setCourseStatusClose(@ModelAttribute("course") Integer courseId){
         tutorService.updateCourse(courseId);
         return getUserPage();

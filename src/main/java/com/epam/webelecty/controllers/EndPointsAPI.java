@@ -7,4 +7,5 @@ public class EndPointsAPI {
     public static final String STUDENT_PAGE = "/user_student";
     public static final String REGISTRATION_PAGE = "/registration";
     public static final String TUTOR_PAGE = "/user_tutor";
+    public static final String STUDENT_LIST = "/student_list";
 }
