@@ -49,8 +49,6 @@
             <c:forEach items="${NoFeedback}" var="cur">
                 <tr>
                     <td>${cur.key.lastName} ${cur.key.name}</td>
-                    <td>${cur.value.studentMark}</td>
-                    <td>${cur.value.studentFeedback}</td>
                     <form:form modelAttribute="course" id="studentListDirect" method="post"
                                action="/student_list">
                         <td>
