@@ -1,6 +1,6 @@
 package com.epam.webelecty.controllers;
 
-import com.epam.webelecty.services.TutorService;
+import com.epam.webelecty.services.tutor_services.TutorService;
 import com.epam.webelecty.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

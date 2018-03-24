@@ -1,4 +1,4 @@
-package com.epam.webelecty.services;
+package com.epam.webelecty.services.student_services;
 
 import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.CourseStatus;

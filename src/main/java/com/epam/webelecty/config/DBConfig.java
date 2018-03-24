@@ -18,7 +18,7 @@ import static com.epam.webelecty.persistence.dao.ExecuterSQLDAO.executeSqlStatem
 
 @Log4j2
 @Configuration
-@PropertySource("classpath:dbh2.properties")
+@PropertySource("classpath:db.properties")
 public class DBConfig {
 
     @Value("${db.driver}")
@@ -42,11 +42,11 @@ public class DBConfig {
                 driverName, url, user, password, poolSize);
     }
 
-    @PostConstruct
-    public void runScript() {
-        executeSqlStatement(connectionPool(), getSQLFromFile(sqlBaseInit));
-        executeSqlStatement(connectionPool(), getSQLFromFile(sqlFillDB));
-    }
+//    @PostConstruct
+//    public void runScript() {
+//        executeSqlStatement(connectionPool(), getSQLFromFile(sqlBaseInit));
+//        executeSqlStatement(connectionPool(), getSQLFromFile(sqlFillDB));
+//    }
 
     private String getSQLFromFile(String file) {
         String sql = "";

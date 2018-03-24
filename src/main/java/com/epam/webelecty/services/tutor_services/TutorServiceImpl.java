@@ -1,10 +1,11 @@
-package com.epam.webelecty.services;
+package com.epam.webelecty.services.tutor_services;
 
 import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.CourseStatus;
 import com.epam.webelecty.models.User;
 import com.epam.webelecty.persistence.dao.CourseDAO;
 import com.epam.webelecty.persistence.dao.StudentCourseDAO;
+import com.epam.webelecty.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;

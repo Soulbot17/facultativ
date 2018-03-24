@@ -162,7 +162,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         Map<User, StudentCourse> finishedMap = new HashMap<>();
         String sql = String.format("SELECT users.userId, email, pass, name, lastName, role," +
                         " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON " +
-                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback is null", databaseName,
+                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback is null or studentFeedback=''", databaseName,
                 databaseName, databaseName, databaseName, course.getCourseId());
         fillMapByStudentCourseUser(connection, finishedMap, sql);
         return finishedMap;
@@ -173,7 +173,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         Map<User, StudentCourse> finishedMap = new HashMap<>();
         String sql = String.format("SELECT users.userId, email, pass, name, lastName, role," +
                         " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON " +
-                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback is not null", databaseName,
+                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback is not null and studentFeedback!=''", databaseName,
                 databaseName, databaseName, databaseName, course.getCourseId());
         fillMapByStudentCourseUser(connection, finishedMap, sql);
         return finishedMap;

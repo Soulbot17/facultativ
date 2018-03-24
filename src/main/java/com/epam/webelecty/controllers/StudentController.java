@@ -4,7 +4,7 @@ import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.CourseStatus;
 import com.epam.webelecty.models.StudentCourse;
 import com.epam.webelecty.models.User;
-import com.epam.webelecty.services.StudentServiceImpl;
+import com.epam.webelecty.services.student_services.StudentServiceImpl;
 import com.epam.webelecty.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
