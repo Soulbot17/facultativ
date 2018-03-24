@@ -70,15 +70,3 @@ INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
 VALUES (9, 'Bada-boom', 9, 'Short history of magic', 'planned');
 INSERT INTO TEST.COURSES (COURSEID, NAME, TUTORID, ANNOTATION, STATUS)
 VALUES (10, 'Big bada-boom!', 9, 'Long history of magic', 'planned');
-
-INSERT INTO test.student_course (courseId, studentId)
-VALUES ((SELECT test.courses.courseId
-         FROM test.courses
-         WHERE name = 'Java'), (SELECT userId
-                                FROM test.users
-                                WHERE name = 'Ivan')),
-  ((SELECT test.courses.courseId
-    FROM test.courses
-    WHERE name = 'History of Uganda'), (SELECT userId
-                                        FROM test.users
-                                        WHERE name = 'Zefir'));
