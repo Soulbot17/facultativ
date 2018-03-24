@@ -22,6 +22,7 @@ import static com.epam.webelecty.persistence.dao.ExecuterSQLDAO.executeSqlStatem
 @Component
 public class StudentCourseDAO implements DAO<StudentCourse> {
 
+    public static final String SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE = "SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course";
     @Value("${db.name}")
     private String databaseName;
 
@@ -64,8 +65,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getWaitedCourses(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
-                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.status='planned'",
+        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.status='planned'",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
@@ -74,8 +74,8 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getAllCoursesByStudent(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
-                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d",
+        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
+                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
@@ -94,8 +94,8 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getAllCoursesByTutor(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
-                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d",
+        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
+                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
@@ -160,11 +160,14 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Map<User, StudentCourse> getMapStudentCoursesByCourse(Course course, boolean hasFeedback) {
         Connection connection = connectionPool.getConnection();
         Map<User, StudentCourse> finishedMap = new HashMap<>();
-        String iSNullRequest = hasFeedback ? "is not null and studentFeedback!=''" : "is null or studentFeedback=''";
-        String sql = String.format("SELECT users.userId, email, pass, name, lastName, role," +
-                        " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON " +
-                        "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback " + iSNullRequest, databaseName,
-                databaseName, databaseName, databaseName, course.getCourseId(), iSNullRequest);
+        String iSNullRequest = hasFeedback
+                ? "is not null and studentFeedback!=''"
+                : "is null or studentFeedback=''";
+
+        String sql = String.format("SELECT users.userId, email, pass, name, lastName, role,"
+                        + " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON "
+                        + "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback " + iSNullRequest
+                , databaseName, databaseName, databaseName, databaseName, course.getCourseId(), iSNullRequest);
         fillMapByStudentCourseUser(connection, finishedMap, sql);
         return finishedMap;
     }

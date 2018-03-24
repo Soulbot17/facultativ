@@ -58,6 +58,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         return internalResourceViewResolver;
     }
 
+    @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resource/**").addResourceLocations("/resource/");
     }
