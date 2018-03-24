@@ -38,8 +38,8 @@ public class StudentsListController {
     public ModelAndView getStudentListByCourseId(@ModelAttribute("course") Integer courseId) {
         Course course = tutorService.getCourseById(courseId);
 
-        Map<User, StudentCourse> withFeedback = studentsListService.getHasFeedbackMapStudentCourseUser(course);
-        Map<User, StudentCourse> noFeedback = studentsListService.getNoFeedbackMapStudentCourseUser(course);
+        Map<User, StudentCourse> withFeedback = studentsListService.getMapUserStudentCourseByCourse(course, true);
+        Map<User, StudentCourse> noFeedback = studentsListService.getMapUserStudentCourseByCourse(course, false);
 
         User tutor = userService.getCurrentUser();
         ModelAndView modelAndView = new ModelAndView();
@@ -49,8 +49,12 @@ public class StudentsListController {
         modelAndView.addObject("CourseId", course.getCourseId());
         modelAndView.addObject("UserLastName", tutor.getLastName());
         modelAndView.addObject("course", new UserFeedback());
-        modelAndView.addObject("WithFeedback", withFeedback);
-        modelAndView.addObject("NoFeedback", noFeedback);
+        if (!withFeedback.isEmpty()) {
+            modelAndView.addObject("WithFeedback", withFeedback);
+        }
+        if (!noFeedback.isEmpty()) {
+            modelAndView.addObject("NoFeedback", noFeedback);
+        }
         return modelAndView;
     }
 

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<h1>${StudentLstName}</h1>
+<h1>${StudentLastName}</h1>
 </body>
 </html>
 
@@ -29,7 +29,7 @@
 <body>
 <div class="center_field">
     <div class="user_info">
-        <p>${UserLastName}</p>
+        <p>${UserName} ${UserLastName}</p>
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
             <button class="buttons" type="submit">Logout</button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -49,6 +49,7 @@
             <c:forEach items="${NoFeedback}" var="cur">
                 <tr>
                     <td>${cur.key.lastName} ${cur.key.name}</td>
+
                     <form:form modelAttribute="course" id="studentListDirect" method="post"
                                action="/student_list">
                         <td>
@@ -74,31 +75,9 @@
                     <td>${cur.key.lastName} ${cur.key.name}</td>
                     <td>${cur.value.studentMark}</td>
                     <td>${cur.value.studentFeedback}</td>
+                    <td></td>
                 </tr>
             </c:forEach>
-            <%--<c:forEach var="student" items="${Students}">--%>
-            <%--<tr>--%>
-            <%--<td>${student.lastName} ${student.name}</td>--%>
-            <%--<form:form modelAttribute="course" id="studentListDirect" method="post"--%>
-            <%--action="/student_list">--%>
-            <%--<td>--%>
-            <%--<input class="login_fields" maxlength="1" type="text" name="mark" placeholder="Mark"--%>
-            <%--required>--%>
-            <%--<input type="text" hidden name="courseId" value="${CourseId}">--%>
-            <%--<input type="text" hidden name="studentId" value="${student.userId}">--%>
-
-            <%--</td>--%>
-            <%--<td>--%>
-            <%--<textarea class="login_fields" name="feedback" placeholder="feedback" required></textarea>--%>
-            <%--</td>--%>
-            <%--<td>--%>
-            <%--<button class="buttons" type="submit">add feedback</button>--%>
-            <%--</td>--%>
-
-            <%--</form:form>--%>
-
-            <%--</tr>--%>
-            <%--</c:forEach>--%>
 
         </table>
         <form id="studentListDirect" method="get" action="/user_tutor">

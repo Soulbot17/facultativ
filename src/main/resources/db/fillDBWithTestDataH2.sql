@@ -20,8 +20,8 @@ VALUES ('History of Uganda', 7, 'Cource about history of Uganda', 'planned'),
 INSERT INTO test.student_course (courseId, studentId)
 VALUES ((SELECT test.courses.courseId
          FROM test.courses
-         WHERE name = 'Java'), (SELECT userId
-                                FROM test.users
+         WHERE name = 'Python'), (SELECT userId
+                                  FROM test.users
                                 WHERE name = 'Ivan')),
   ((SELECT test.courses.courseId
     FROM test.courses
@@ -30,18 +30,18 @@ VALUES ((SELECT test.courses.courseId
                            WHERE name = 'Zefir')),
   ((SELECT test.courses.courseId
     FROM test.courses
-    WHERE name = 'Java'), (SELECT userId
-                           FROM test.users
+    WHERE name = 'Python'), (SELECT userId
+                             FROM test.users
                            WHERE name = 'Venya')),
   ((SELECT test.courses.courseId
     FROM test.courses
-    WHERE name = 'Java'), (SELECT userId
-                           FROM test.users
+    WHERE name = 'SQL'), (SELECT userId
+                          FROM test.users
                            WHERE name = 'Zefir')),
   ((SELECT test.courses.courseId
     FROM test.courses
-    WHERE name = 'Java'), (SELECT userId
-                           FROM test.users
+    WHERE name = 'SQL'), (SELECT userId
+                          FROM test.users
                            WHERE name = 'Zefir')),
   ((SELECT test.courses.courseId
     FROM test.courses
