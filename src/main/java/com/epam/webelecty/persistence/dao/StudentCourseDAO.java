@@ -22,7 +22,6 @@ import static com.epam.webelecty.persistence.dao.ExecuterSQLDAO.executeSqlStatem
 @Component
 public class StudentCourseDAO implements DAO<StudentCourse> {
 
-    public static final String SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE = "SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course";
     @Value("${db.name}")
     private String databaseName;
 
