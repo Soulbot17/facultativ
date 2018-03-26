@@ -65,7 +65,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getWaitedCourses(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.status='planned'",
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.status='planned'",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
@@ -74,8 +74,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getAllCoursesByStudent(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
-                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d",
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
@@ -94,8 +93,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getAllFinishedCoursesByTutor(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
-                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d and " +
+        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d and " +
                         "courses.status='finished'",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
@@ -105,10 +103,8 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getAllUnfinishedCoursesByTutor(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
-                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d and " +
-                        "courses.status != 'finished'",
-                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        String sql = String.format("SELECT courseId, name, tutorId, annotation, status from %s.courses where tutorId = %d and status != 'finished'",
+                databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
     }
