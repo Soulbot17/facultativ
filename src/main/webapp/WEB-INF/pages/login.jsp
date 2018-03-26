@@ -1,97 +1,43 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: banka
-  Date: 21.03.18
-  Time: 18:32
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/"/>
 
 <html>
 <head>
     <meta charset="utf-8">
-    <title>welcome page</title>
-    <style>
-        h1{
-            font-family: sans-serif;
-            font-weight: 900;
-            color: #fff;
-        }
-        body{
-            margin: 0;
-            background-color: dodgerblue;
-        }
-        .left_main_area{
-            float: left;
-            width: 700px;
-            height: 400px;
-        }
-        .right_main_area{
-            float: left;
-            width: 324px;
-            height: 400px;
-        }
-        .center_main_area{
-            width: 1024px;
-            margin: auto;
-        }
-        .signin_area{
-            margin-top: 200px;
-            height: 200px;
-        }
-        p{
-            color: #fff;
-            font-family: sans-serif;
-            font-weight: 600;
-        }
-        .login_fields{
-            display: block;
-            width: 200px;
-            margin-bottom: 10px;
-            height: 20px;
-        }
-        .login_buttons{
-            padding: 10px;
-            border: 0;
-            background-color: darkorange;
-            color: #fff;
-            font-family: sans-serif;
-            font-weight: bold;
-        }
-        .login_buttons:hover{
-            cursor: pointer;
-        }
-        .logo{
-            margin-top: 250px;
-        }
-    </style>
-    <link type="text/css" href="${contextPath}/resource/css/style.css" rel="stylesheet">
+    <title><spring:message code="label.auth_page"/></title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link type="text/css" href="/resource/css/style.css" rel="stylesheet">
 </head>
 <body>
+<div class="change_language">
+    <a href="?lang=ru"><img src="/resource/images/ru.png"></a>
+    <a href="?lang=en"><img src="/resource/images/en.png"></a>
+</div>
 <div class="center_main_area">
     <div class="left_main_area">
         <div class="logo">
-            <h1>Welcome to the Training portal</h1>
+            <h1><spring:message code="label.welcome"/></h1>
         </div>
     </div>
     <div class="right_main_area">
         <div class="signin_area">
-            <p>Sign in into your account</p>
+            <p class="form_label"><spring:message code="label.signin_info"/></p>
             <form name='loginForm'
                   action="<c:url value='/login' />" method='POST'>
 
                 <div class="form-group">
                     <input name="email" type="text" class="login_fields" placeholder="Email"/>
-                    <input name="password" type="password" class="login_fields" placeholder="Password"/>
-                    <button class="login_buttons" type="submit">Sign in</button>
+                    <input name="password" type="password" class="login_fields"
+                           placeholder="<spring:message code="label.password" />"/>
+                    <button class="login_buttons" type="submit"><spring:message code="label.signin"/></button>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <input class="login_buttons" type="button" name="go_register" value="Sigh up" onclick="location.href='${contextPath}/registration'">
-
+                    <input class="login_buttons" type="button" name="go_register"
+                           value="<spring:message code="label.signup"/>"
+                           onclick="location.href='${contextPath}/registration'">
                 </div>
-
             </form>
         </div>
     </div>

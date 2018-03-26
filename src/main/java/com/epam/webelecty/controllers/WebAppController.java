@@ -29,13 +29,13 @@ public class WebAppController {
         return new ModelAndView("index");
     }
 
-    @RequestMapping(value = {"/index"}, method = {RequestMethod.POST})
+    @RequestMapping(value = EndPointsAPI.INDEX_PAGE, method = {RequestMethod.POST})
     public String sendUserPage() {
         return "redirect:/user";
     }
 
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @RequestMapping(value = EndPointsAPI.USER_PAGE, method = RequestMethod.GET)
     public String getUserPage() {
         User user = userService.getCurrentUser();
         if (UserRole.TUTOR == user.getRole()) {
@@ -44,18 +44,18 @@ public class WebAppController {
         return "redirect:/user_student";
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = EndPointsAPI.USER_PAGE, method = RequestMethod.POST)
     public ModelAndView getUserPagePost(@ModelAttribute("userForm") User userForm) {
         return new ModelAndView("user").addObject("name", userForm.getName());
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    @RequestMapping(value = EndPointsAPI.REGISTRATION_PAGE, method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new UserDTO());
         return "registration";
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    @RequestMapping(value = EndPointsAPI.REGISTRATION_PAGE, method = RequestMethod.POST)
     public String registration(@ModelAttribute("userForm") UserDTO userForm) {
         userService.register(userForm);
         return "redirect:/user";
@@ -76,7 +76,7 @@ public class WebAppController {
         return "registration";
     }
 
-    @GetMapping(value = "/login")
+    @GetMapping(value = EndPointsAPI.LOGIN_PAGE)
     public ModelAndView getLoginPage(Authentication authentication) {
         if (authentication != null) {
             return new ModelAndView("redirect:/index");

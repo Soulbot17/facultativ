@@ -22,6 +22,7 @@ import static com.epam.webelecty.persistence.dao.ExecuterSQLDAO.executeSqlStatem
 @Component
 public class StudentCourseDAO implements DAO<StudentCourse> {
 
+    public static final String SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE = "SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course";
     @Value("${db.name}")
     private String databaseName;
 
@@ -64,8 +65,7 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getWaitedCourses(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
-                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.status='planned'",
+        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d and courses.status='planned'",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
@@ -74,8 +74,8 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
     public Set<Course> getAllCoursesByStudent(User user) {
         Connection connection = connectionPool.getConnection();
         Set<Course> courseSet = new HashSet<>();
-        String sql = String.format("SELECT courses.courseId, name, tutorId, annotation, status from %s.student_course" +
-                        " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d",
+        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
+                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where studentId=%d",
                 databaseName, databaseName, databaseName, databaseName, user.getUserId());
         fillCoursesSet(connection, courseSet, sql);
         return courseSet;
@@ -91,6 +91,28 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         return studentSet;
     }
 
+    public Set<Course> getAllFinishedCoursesByTutor(User user) {
+        Connection connection = connectionPool.getConnection();
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
+                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d and " +
+                        "courses.status='finished'",
+                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
+    }
+
+    public Set<Course> getAllUnfinishedCoursesByTutor(User user) {
+        Connection connection = connectionPool.getConnection();
+        Set<Course> courseSet = new HashSet<>();
+        String sql = String.format(SELECT_ALL_DATA_FROM_STUDENT_COURSE_TABLE
+                        + " JOIN %s.courses ON %s.courses.courseId = %s.student_course.courseId where tutorId=%d and " +
+                        "courses.status != 'finished'",
+                databaseName, databaseName, databaseName, databaseName, user.getUserId());
+        fillCoursesSet(connection, courseSet, sql);
+        return courseSet;
+    }
+
     @Override
     public StudentCourse updateEntry(StudentCourse entry) {
         String sql = String.format("UPDATE %s.student_course SET courseId=%d, studentId=%d, studentMark=%d, studentFeedback='%s' WHERE id=%d",
@@ -98,6 +120,25 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
                 entry.getStudentFeedback(), entry.getId());
         executeSqlStatement(connectionPool, sql);
         return getById(entry.getId());
+    }
+
+    public StudentCourse postMarkAndAnnotation(int userId, int courseId, int mark, String annotation) {
+        Connection connection = connectionPool.getConnection();
+        String sql = String.format("select id, courseId, studentId, studentMark, studentFeedback from %s.student_course where studentId=%d and courseId=%d",
+                databaseName, userId, courseId);
+        StudentCourse studentCourse = null;
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            if (rs.next()) {
+                studentCourse = parseStudentCourse(rs);
+                studentCourse.setStudentMark(mark);
+                studentCourse.setStudentFeedback(annotation);
+                updateEntry(studentCourse);
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoStudentCourseFoundException(e);
+        }
+        return studentCourse;
     }
 
     @Override
@@ -126,6 +167,36 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
             connectionPool.releaseConnection(connection);
         }
         return finishedMap;
+    }
+
+    public Map<User, StudentCourse> getMapStudentCoursesByCourse(Course course, boolean hasFeedback) {
+        Connection connection = connectionPool.getConnection();
+        Map<User, StudentCourse> finishedMap = new HashMap<>();
+        String iSNullRequest = hasFeedback
+                ? "is not null and studentFeedback!=''"
+                : "is null or studentFeedback=''";
+
+        String sql = String.format("SELECT users.userId, email, pass, name, lastName, role,"
+                        + " Id, courseId, studentId, studentMark, studentFeedback FROM %s.users JOIN %s.student_course ON "
+                        + "%s.student_course.studentId = %s.users.userId WHERE courseId=%d and studentFeedback " + iSNullRequest
+                , databaseName, databaseName, databaseName, databaseName, course.getCourseId(), iSNullRequest);
+        fillMapByStudentCourseUser(connection, finishedMap, sql);
+        return finishedMap;
+    }
+
+    private void fillMapByStudentCourseUser(Connection connection, Map<User, StudentCourse> finishedMap, String sql) {
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            while (rs.next()) {
+                User user = UserDAO.parseUser(rs);
+                StudentCourse studentCourse = parseStudentCourse(rs);
+                finishedMap.put(user, studentCourse);
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoStudentCourseFoundException(e);
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
     }
 
     @Override

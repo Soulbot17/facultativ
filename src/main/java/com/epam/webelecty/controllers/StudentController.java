@@ -4,7 +4,7 @@ import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.CourseStatus;
 import com.epam.webelecty.models.StudentCourse;
 import com.epam.webelecty.models.User;
-import com.epam.webelecty.services.StudentServiceImpl;
+import com.epam.webelecty.services.student_services.StudentServiceImpl;
 import com.epam.webelecty.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +31,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping(value = "/user_student")
+    @GetMapping(value = EndPointsAPI.STUDENT_PAGE)
     public ModelAndView getUserPage() {
         return getDefaultModelAndView();
     }
@@ -49,14 +49,12 @@ public class StudentController {
 
         Set<Course> availableCourses = studentService.getAvailableCourses(currentUser);
         Set<Course> waitedCourses = studentService.getWaitedCourses(currentUser);
-        Set<Course> activeCourses = studentService.getCourses(currentUser, CourseStatus.ACTIVE);
         Map<Course, StudentCourse> finishedCoursesMap = studentService.getFinishedCoursesMap(currentUser);
 
         modelAndView.addObject("userName", currentUser.getName());
         modelAndView.addObject("userLastName", currentUser.getLastName());
         modelAndView.addObject("availableCourses", availableCourses);
         modelAndView.addObject("waitedCourses", waitedCourses);
-        modelAndView.addObject("activeCourses", activeCourses);
         modelAndView.addObject("finishedMap", finishedCoursesMap);
         return modelAndView;
     }

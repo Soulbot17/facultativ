@@ -52,7 +52,7 @@ public class CourseDAO implements DAO<Course> {
     @Override
     public Course updateEntry(Course entry) {
         String sql = String.format("UPDATE %s.courses SET name='%s', tutorId='%d', annotation='%s', status='%s' WHERE courseId=%d",
-                databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name(), entry.getCourseId());
+                databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name().toLowerCase(), entry.getCourseId());
         executeSqlStatement(connectionPool, sql);
         return getById(entry.getCourseId());
     }
@@ -66,7 +66,7 @@ public class CourseDAO implements DAO<Course> {
     @Override
     public Course insert(Course entry) {
         String sql = String.format("INSERT INTO %s.courses(name, tutorId, annotation, status) VALUES('%s', %d, '%s', '%s')",
-                databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name());
+                databaseName, entry.getCourseName(), entry.getTutorId(), entry.getAnnotation(), entry.getStatus().name().toLowerCase());
         Connection connection = connectionPool.getConnection();
         Course course = null;
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -108,9 +108,6 @@ public class CourseDAO implements DAO<Course> {
             String annotation = rs.getString("annotation");
             CourseStatus status;
             switch (rs.getString("status").toLowerCase()) {
-                case "active":
-                    status = CourseStatus.ACTIVE;
-                    break;
                 case "finished":
                     status = CourseStatus.FINISHED;
                     break;

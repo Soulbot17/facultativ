@@ -1,4 +1,4 @@
-package com.epam.webelecty.services;
+package com.epam.webelecty.services.student_services;
 
 import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.CourseStatus;
@@ -45,9 +45,6 @@ public class StudentServiceImpl implements StudentService {
             case PLANNED:
                 courseSet = getAllPlannedCourses();
                 break;
-            case ACTIVE:
-                courseSet = getMyActiveCourses(user);
-                break;
             default:
                 courseSet = studentCourseDAO.getAllCoursesByStudent(user);
         }
@@ -66,14 +63,6 @@ public class StudentServiceImpl implements StudentService {
         Set<Course> courseSet = new HashSet<>();
         for (Course course : studentCourseDAO.getAllCoursesByStudent(user)) {
             if (course.getStatus() == CourseStatus.FINISHED) courseSet.add(course);
-        }
-        return courseSet;
-    }
-
-    private Set<Course> getMyActiveCourses(User user) {
-        Set<Course> courseSet = new HashSet<>();
-        for (Course course : studentCourseDAO.getAllCoursesByStudent(user)) {
-            if (course.getStatus() == CourseStatus.ACTIVE) courseSet.add(course);
         }
         return courseSet;
     }
