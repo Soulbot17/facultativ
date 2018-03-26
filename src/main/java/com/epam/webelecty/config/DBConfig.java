@@ -1,0 +1,60 @@
+package com.epam.webelecty.config;
+
+import com.epam.webelecty.persistence.database.ConnectionPool;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.epam.webelecty.persistence.dao.ExecuterSQLDAO.executeSqlStatement;
+
+@Log4j2
+@Configuration
+@PropertySource("classpath:db.properties")
+public class DBConfig {
+
+    @Value("${db.driver}")
+    private String driverName;
+    @Value("${db.user}")
+    private String user;
+    @Value("${db.url}")
+    private String url;
+    @Value("${db.password}")
+    private String password;
+    @Value("${db.poolsize}")
+    private int poolSize;
+    @Value("${db.InitDBScript}")
+    String sqlBaseInit;
+    @Value("${db.FillDBScript}")
+    String sqlFillDB;
+
+    @Bean
+    public ConnectionPool connectionPool() {
+        return new ConnectionPool(
+                driverName, url, user, password, poolSize);
+    }
+
+//    @PostConstruct
+//    public void runScript() {
+//        executeSqlStatement(connectionPool(), getSQLFromFile(sqlBaseInit));
+//        executeSqlStatement(connectionPool(), getSQLFromFile(sqlFillDB));
+//    }
+//
+//    private String getSQLFromFile(String file) {
+//        String sql = "";
+//        try (Stream<String> stream = Files.lines(Paths.get(file))) {
+//            sql = stream.collect(Collectors.joining());
+//        } catch (IOException e) {
+//            log.error(e);
+//        }
+//        return sql;
+//    }
+}
