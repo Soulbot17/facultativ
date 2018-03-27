@@ -63,7 +63,6 @@
                             <button class="buttons long_button" type="submit"><spring:message
                                     code="label.add_feedback"/></button>
                         </td>
-
                     </form:form>
                 </tr>
             </c:forEach>
@@ -76,7 +75,6 @@
                     <td></td>
                 </tr>
             </c:forEach>
-
         </table>
         <form id="studentListDirect" method="get" action="/user_tutor">
             <button class="buttons" type="submit"><spring:message code="label.show_courses"/></button>
