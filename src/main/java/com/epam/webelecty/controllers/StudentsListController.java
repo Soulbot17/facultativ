@@ -4,9 +4,9 @@ package com.epam.webelecty.controllers;
 import com.epam.webelecty.models.Course;
 import com.epam.webelecty.models.StudentCourse;
 import com.epam.webelecty.models.User;
+import com.epam.webelecty.services.UserService;
 import com.epam.webelecty.services.tutor_services.StudentsListService;
 import com.epam.webelecty.services.tutor_services.TutorService;
-import com.epam.webelecty.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,6 +48,7 @@ public class StudentsListController {
         modelAndView.addObject("CourseName", course.getCourseName());
         modelAndView.addObject("CourseId", course.getCourseId());
         modelAndView.addObject("UserLastName", tutor.getLastName());
+        modelAndView.addObject("UserName", tutor.getName());
         modelAndView.addObject("course", new UserFeedback());
         if (!withFeedback.isEmpty()) {
             modelAndView.addObject("WithFeedback", withFeedback);

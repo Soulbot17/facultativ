@@ -13,8 +13,8 @@
 </head>
 <body>
 <div class="change_language">
-    <a href="?lang=ru"><img src="/resource/images/ru.png"></a>
-    <a href="?lang=en"><img src="/resource/images/en.png"></a>
+    <a href="?lang=ru&course=${CourseId}"><img src="/resource/images/ru.png"></a>
+    <a href="?lang=en&course=${CourseId}"><img src="/resource/images/en.png"></a>
 </div>
 <div class="center_field">
     <div class="user_info">
@@ -42,7 +42,8 @@
                     <form:form modelAttribute="course" id="studentListDirect" method="post"
                                action="/student_list">
                         <td>
-                            <input class="login_fields" maxlength="1" type="text" name="mark" placeholder="<spring:message
+                            <input class="login_fields student_list_text" maxlength="1" type="text" name="mark"
+                                   placeholder="<spring:message
                                     code="label.mark"/>"
                                    required>
                             <input type="text" hidden name="courseId" value="${CourseId}">
@@ -50,11 +51,11 @@
 
                         </td>
                         <td>
-                            <textarea class="login_fields" name="feedback" placeholder="<spring:message
+                            <textarea class="login_fields student_list_text" name="feedback" placeholder="<spring:message
                                     code="label.feedback"/>" required></textarea>
                         </td>
                         <td>
-                            <button class="buttons" type="submit"><spring:message
+                            <button class="buttons long_button" type="submit"><spring:message
                                     code="label.add_feedback"/></button>
                         </td>
 
