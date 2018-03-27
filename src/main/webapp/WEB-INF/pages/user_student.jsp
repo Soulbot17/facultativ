@@ -35,7 +35,7 @@
             </form>
         </div>
         <div class="ended_courses_info">
-            <h4><spring:message code="label.ended_courses"/></h4>
+            <h4><spring:message code="label.finished_courses"/></h4>
             <table>
                 <tr>
                     <th><spring:message code="label.course_name"/></th>
@@ -93,7 +93,8 @@
                 </c:forEach>
             </table>
             <div class="switcher">
-                <input type="button" class="buttons" onclick="change_tables()" value="<spring:message code="label.ended_courses"/>">
+                <input type="button" class="buttons" onclick="change_tables()"
+                       value="<spring:message code="label.finished_courses"/>">
             </div>
         </div>
     </div>

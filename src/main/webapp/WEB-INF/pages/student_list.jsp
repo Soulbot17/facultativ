@@ -3,46 +3,35 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/"/>
-<html>
-<head>
-    <title>Student info</title>
-</head>
-<body>
 
-<h1>${StudentLastName}</h1>
-</body>
-</html>
-
-<%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <head>
-    <title>Student list</title>
+    <title><spring:message code="label.student_list"/></title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link type="text/css" href="/resource/css/style.css" rel="stylesheet">
     <meta charset="utf-8">
-    <head>
-        <meta charset="utf-8">
-        <title><spring:message code="label.auth_page"/></title>
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-        <link type="text/css" href="/resource/css/style.css" rel="stylesheet">
-    </head>
-
 </head>
 <body>
+<div class="change_language">
+    <a href="?lang=ru"><img src="/resource/images/ru.png"></a>
+    <a href="?lang=en"><img src="/resource/images/en.png"></a>
+</div>
 <div class="center_field">
     <div class="user_info">
         <p>${UserName} ${UserLastName}</p>
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
-            <button class="buttons" type="submit">Logout</button>
+            <button class="buttons" type="submit"><spring:message code="label.logout"/></button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 
     <div class="courses_info">
-        <h4>Student list</h4>
+        <h4><spring:message code="label.student_list"/></h4>
         <table>
             <tr>
-                <th>Student name</th>
-                <th>Mark</th>
-                <th>Feedback</th>
+                <th><spring:message code="label.student_name"/></th>
+                <th><spring:message code="label.mark"/></th>
+                <th><spring:message code="label.feedback"/></th>
                 <th></th>
             </tr>
 
@@ -53,17 +42,20 @@
                     <form:form modelAttribute="course" id="studentListDirect" method="post"
                                action="/student_list">
                         <td>
-                            <input class="login_fields" maxlength="1" type="text" name="mark" placeholder="Mark"
+                            <input class="login_fields" maxlength="1" type="text" name="mark" placeholder="<spring:message
+                                    code="label.mark"/>"
                                    required>
                             <input type="text" hidden name="courseId" value="${CourseId}">
                             <input type="text" hidden name="studentId" value="${cur.key.userId}">
 
                         </td>
                         <td>
-                            <textarea class="login_fields" name="feedback" placeholder="feedback" required></textarea>
+                            <textarea class="login_fields" name="feedback" placeholder="<spring:message
+                                    code="label.feedback"/>" required></textarea>
                         </td>
                         <td>
-                            <button class="buttons" type="submit">add feedback</button>
+                            <button class="buttons" type="submit"><spring:message
+                                    code="label.add_feedback"/></button>
                         </td>
 
                     </form:form>
@@ -81,7 +73,7 @@
 
         </table>
         <form id="studentListDirect" method="get" action="/user_tutor">
-            <button class="buttons" type="submit">Show courses</button>
+            <button class="buttons" type="submit"><spring:message code="label.show_courses"/></button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
