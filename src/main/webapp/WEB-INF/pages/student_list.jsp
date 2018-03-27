@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link type="text/css" href="/resource/css/style.css" rel="stylesheet">
     <meta charset="utf-8">
+
 </head>
 <body>
 <div class="change_language">
@@ -42,10 +43,14 @@
                     <form:form modelAttribute="course" id="studentListDirect" method="post"
                                action="/student_list">
                         <td>
-                            <input class="login_fields student_list_text" maxlength="1" type="text" name="mark"
-                                   placeholder="<spring:message
-                                    code="label.mark"/>"
-                                   required>
+
+                            <select size="1" name="mark">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
                             <input type="text" hidden name="courseId" value="${CourseId}">
                             <input type="text" hidden name="studentId" value="${cur.key.userId}">
 
