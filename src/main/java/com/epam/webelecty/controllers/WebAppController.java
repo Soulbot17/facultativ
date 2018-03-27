@@ -77,10 +77,19 @@ public class WebAppController {
     }
 
     @GetMapping(value = EndPointsAPI.LOGIN_PAGE)
-    public ModelAndView getLoginPage(Authentication authentication) {
+    public ModelAndView getLoginPage(Authentication authentication, String error, String logout) {
         if (authentication != null) {
             return new ModelAndView("redirect:/index");
         }
-        return new ModelAndView("login");
+        ModelAndView modelAndView = new ModelAndView("login");
+        if (error != null) {
+            modelAndView.addObject("error", "Username or password is incorrect.");
+        }
+
+        if (logout != null) {
+            modelAndView.addObject("message", "Logged out successfully.");
+        }
+
+        return modelAndView;
     }
 }
