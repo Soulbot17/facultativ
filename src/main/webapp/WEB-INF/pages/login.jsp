@@ -28,7 +28,9 @@
             <form name='loginForm'
                   action="<c:url value='/login' />" method='POST'>
 
-                <div class="form-group">
+                <div class="form-group ${error != null ? 'has-error' : ''}">
+                    <span>${message}</span>
+                    <span>${error}</span>
                     <input name="email" type="text" class="login_fields" placeholder="Email"/>
                     <input name="password" type="password" class="login_fields"
                            placeholder="<spring:message code="label.password" />"/>

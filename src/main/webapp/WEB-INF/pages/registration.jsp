@@ -34,6 +34,10 @@
                 alert("Passwords doesnt match");
                 document.getElementById("repeat_pass").value = '';
             }
+            if(firstPassword.toString().length<5){
+                alert("Passwords should be more 5 symbols");
+                document.getElementById("repeat_pass").value = '';
+            }
         }
 
         function check_email(){
@@ -46,6 +50,7 @@
                 document.getElementById("email").value = '';
             }
         }
+
     </script>
 </head>
 <body>
