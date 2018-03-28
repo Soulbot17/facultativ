@@ -75,9 +75,11 @@ html{
     transition: ease-in 500ms;
 }
 .logo{
+    user-select: none;
     margin-top: 250px;
 }
 p{
+    user-select: none;
     color: #fff;
 }
 .right_main_area{
@@ -98,6 +100,7 @@ p{
     padding: 10px;
 }
 table, th, td {
+    user-select: none;
     border: thin solid rgba(0, 0, 0, 0);
 }
 table {
@@ -116,6 +119,7 @@ tr:nth-child(even) {
     background-color: #ffffff33;
 }
 th {
+    user-select: none;
     padding-top: 12px;
     padding-bottom: 12px;
     /*background-color: darkorange;*/
@@ -131,6 +135,7 @@ th {
     position: relative;
 }
 h3, p {
+    user-select: none;
     margin: 0;
     display: inline-block;
 }
@@ -161,6 +166,7 @@ h3, p {
     transition: ease-in 500ms;
 }
 h4 {
+    user-select: none;
     margin-bottom: 18px;
 }
 .new_course_inputs {
