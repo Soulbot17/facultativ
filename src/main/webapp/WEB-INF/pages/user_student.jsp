@@ -85,9 +85,10 @@
                         <td>${waited.courseName}</td>
                         <td>${waited.annotation}</td>
                         <td>
-                            <form class="go_to_course">
-                                <input type="submit" class="buttons" value="<spring:message code="label.signup"/>" disabled>
-                            </form>
+                            <form:form class="go_to_course" modelAttribute="course" method="post">
+                                <input type="hidden" name="course" value="${waited.courseId}">
+                                <input type="submit" class="buttons" value="<spring:message code="label.onroll"/>">
+                            </form:form>
                         </td>
                     </tr>
                 </c:forEach>

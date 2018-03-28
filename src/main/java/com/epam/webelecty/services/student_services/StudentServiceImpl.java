@@ -69,7 +69,17 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentCourse joinCourse(User user, int courseId) {
-        return studentCourseDAO.insert(user, courseDAO.getById(courseId));
+        if(studentCourseDAO.getByUserIdAndCourseID(user.getUserId(), courseId) == null){
+            return studentCourseDAO.insert(user, courseDAO.getById(courseId));
+        }else {
+            studentCourseDAO.removeByStudentIdAndCourseId(user, courseDAO.getById(courseId));
+            return null;
+        }
+
+    }
+
+    public void unrollCourse(User student, int courseId) {
+        studentCourseDAO.removeByStudentIdAndCourseId(student, courseDAO.getById(courseId));
     }
 
     public Map<Course, StudentCourse> getFinishedCoursesMap(User user) {

@@ -144,6 +144,14 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         executeSqlStatement(connectionPool, sql);
     }
 
+
+    public void removeByStudentIdAndCourseId(User student, Course course) {
+        String sql = String.format("DELETE FROM %s.student_course " +
+                "WHERE studentId=%d AND courseId=%d",
+                databaseName, student.getUserId(), course.getCourseId());
+        executeSqlStatement(connectionPool, sql);
+    }
+
     public Map<Course, StudentCourse> getFinishedCoursesMap(User user) {
         Connection connection = connectionPool.getConnection();
         Map<Course, StudentCourse> finishedMap = new HashMap<>();
@@ -240,6 +248,23 @@ public class StudentCourseDAO implements DAO<StudentCourse> {
         Connection connection = connectionPool.getConnection();
         String sql = String.format("SELECT id, courseId, studentId, studentMark, studentFeedback FROM %s.student_course WHERE id=%d",
                 databaseName, id);
+        StudentCourse sc = null;
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            if (rs.next()) sc = parseStudentCourse(rs);
+        } catch (SQLException e) {
+            log.error(e);
+            throw new NoStudentCourseFoundException(e);
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+        return sc;
+    }
+
+    public StudentCourse getByUserIdAndCourseID(int studentId, int courseId) {
+        Connection connection = connectionPool.getConnection();
+        String sql = String.format("SELECT id, courseId, studentId, studentMark, studentFeedback" +
+                        " FROM %s.student_course WHERE studentId=%d AND courseId=%d",
+                databaseName, studentId, courseId);
         StudentCourse sc = null;
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             if (rs.next()) sc = parseStudentCourse(rs);

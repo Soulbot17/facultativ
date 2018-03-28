@@ -37,11 +37,13 @@ public class StudentController {
     }
 
 
-    @RequestMapping(value = "/user_student", method = RequestMethod.POST)
+    @RequestMapping(value = EndPointsAPI.STUDENT_PAGE, method = RequestMethod.POST)
     public ModelAndView addUserCourse(@ModelAttribute("course") Integer id) {
         studentService.joinCourse(userService.getCurrentUser(), id);
         return getDefaultModelAndView();
     }
+
+
 
     private ModelAndView getDefaultModelAndView() {
         ModelAndView modelAndView = new ModelAndView("user_student");
