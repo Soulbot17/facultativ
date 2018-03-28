@@ -49,7 +49,7 @@
                     <td>
                         <form:form class="go_to_course" modelAttribute="course" method="post">
                             <input type="hidden" name="course" value="${course.courseId}">
-                            <input type="submit" class="finish_button buttons" value="<spring:message
+                            <input type="submit" class="finish_button buttons red_button" value="<spring:message
                                     code="label.close_course"/>">
                         </form:form>
                     </td>
