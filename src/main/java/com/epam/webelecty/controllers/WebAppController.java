@@ -7,17 +7,24 @@ import com.epam.webelecty.services.UserService;
 import com.epam.webelecty.services.exeptions.EmailIsUsedException;
 import com.epam.webelecty.services.exeptions.RegisterDataException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 @Controller
 public class WebAppController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @GetMapping(value = "/")
     public String redirectUserPage() {
@@ -77,17 +84,17 @@ public class WebAppController {
     }
 
     @GetMapping(value = EndPointsAPI.LOGIN_PAGE)
-    public ModelAndView getLoginPage(Authentication authentication, String error, String logout) {
+    public ModelAndView getLoginPage(Authentication authentication, String error, String logout, Locale locale) {
         if (authentication != null) {
             return new ModelAndView("redirect:/index");
         }
         ModelAndView modelAndView = new ModelAndView("login");
         if (error != null) {
-            modelAndView.addObject("error", "Username or password is incorrect.");
+            modelAndView.addObject("error", messageSource.getMessage("label.error", new Object[]{}, locale));
         }
 
         if (logout != null) {
-            modelAndView.addObject("message", "Logged out successfully.");
+            modelAndView.addObject("message", messageSource.getMessage("label.log_out", new Object[]{}, locale));
         }
 
         return modelAndView;
